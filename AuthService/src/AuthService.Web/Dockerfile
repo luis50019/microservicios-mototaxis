@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Puerto que exponemos (ajusta si es necesario)
-EXPOSE 80
+EXPOSE 5000
 
 # Comando para ejecutar la app
 ENTRYPOINT ["dotnet", "AuthService.Web.dll"]
