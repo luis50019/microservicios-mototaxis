@@ -108,6 +108,9 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Urls.Add($"http://*;{port}");
+
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
