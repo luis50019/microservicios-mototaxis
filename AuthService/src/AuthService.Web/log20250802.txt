@@ -1,0 +1,82 @@
+2025-08-02 11:28:38.820 -06:00 [INF] Registered 5 endpoints in 270 milliseconds.
+2025-08-02 11:28:39.863 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA journal_mode = 'wal';
+2025-08-02 11:28:40.067 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Contributors" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Contributors" PRIMARY KEY AUTOINCREMENT,
+    "Name" TEXT NOT NULL,
+    "Status" INTEGER NOT NULL,
+    "PhoneNumber_CountryCode" TEXT NULL,
+    "PhoneNumber_Number" TEXT NULL,
+    "PhoneNumber_Extension" TEXT NULL
+);
+2025-08-02 11:28:40.382 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Contributors" AS "c")
+2025-08-02 11:28:40.650 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[@p0='?' (Size = 7), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Contributors" ("Name", "Status")
+VALUES (@p0, @p1)
+RETURNING "Id";
+2025-08-02 11:28:40.672 -06:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 8), @p1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Contributors" ("Name", "Status")
+VALUES (@p0, @p1)
+RETURNING "Id";
+2025-08-02 11:28:40.943 -06:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2025-08-02 11:28:40.964 -06:00 [INF] Now listening on: https://localhost:57679
+2025-08-02 11:28:40.964 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-02 11:28:40.964 -06:00 [INF] Hosting environment: Development
+2025-08-02 11:28:40.965 -06:00 [INF] Content root path: /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web
+2025-08-02 11:28:54.774 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:28:54.815 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 41.8245ms
+2025-08-02 11:28:54.827 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:28:56.556 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:28:56.557 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 0.9891ms
+2025-08-02 11:28:56.558 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:28:57.138 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:28:57.139 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 0.9787ms
+2025-08-02 11:28:57.140 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:28:57.661 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:28:57.662 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 0.9357ms
+2025-08-02 11:28:57.663 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:29:01.786 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:29:01.787 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 0.6409ms
+2025-08-02 11:29:01.788 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:29:03.702 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/ - null null
+2025-08-02 11:29:03.702 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/ - 404 0 null 0.6282ms
+2025-08-02 11:29:03.703 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/, Response status code: 404
+2025-08-02 11:29:51.621 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/weatherforecast - null null
+2025-08-02 11:29:51.622 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/weatherforecast - 404 0 null 0.7879ms
+2025-08-02 11:29:51.623 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/weatherforecast, Response status code: 404
+2025-08-02 11:36:28.124 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/weatherforecast - null null
+2025-08-02 11:36:28.125 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/weatherforecast - 404 0 null 0.4122ms
+2025-08-02 11:36:28.125 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/weatherforecast, Response status code: 404
+2025-08-02 11:36:51.140 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/api - null null
+2025-08-02 11:36:51.141 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/api - 404 0 null 0.8057ms
+2025-08-02 11:36:51.142 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/api, Response status code: 404
+2025-08-02 11:37:46.284 -06:00 [INF] Application is shutting down...
+2025-08-02 11:40:27.829 -06:00 [INF] Registered 5 endpoints in 247 milliseconds.
+2025-08-02 11:40:28.382 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "type" = 'table' AND "rootpage" IS NOT NULL;
+2025-08-02 11:40:28.582 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Contributors" AS "c")
+2025-08-02 11:40:28.767 -06:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2025-08-02 11:40:28.779 -06:00 [INF] Now listening on: https://localhost:57679
+2025-08-02 11:40:28.780 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-02 11:40:28.780 -06:00 [INF] Hosting environment: Development
+2025-08-02 11:40:28.780 -06:00 [INF] Content root path: /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web
+2025-08-02 11:40:34.656 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/api - null null
+2025-08-02 11:40:34.690 -06:00 [INF] Executing endpoint 'AuthService.Web.Controllers.ApiController.Get (AuthService.Web)'
+2025-08-02 11:40:34.700 -06:00 [INF] Route matched with {action = "Get", controller = "Api"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Get() on controller AuthService.Web.Controllers.ApiController (AuthService.Web).
+2025-08-02 11:40:34.706 -06:00 [INF] Executing action method AuthService.Web.Controllers.ApiController.Get (AuthService.Web) - Validation state: "Valid"
+2025-08-02 11:40:34.709 -06:00 [INF] Executed action method AuthService.Web.Controllers.ApiController.Get (AuthService.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 0.1914ms.
+2025-08-02 11:40:34.725 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2025-08-02 11:40:34.732 -06:00 [INF] Executed action AuthService.Web.Controllers.ApiController.Get (AuthService.Web) in 27.3381ms
+2025-08-02 11:40:34.732 -06:00 [INF] Executed endpoint 'AuthService.Web.Controllers.ApiController.Get (AuthService.Web)'
+2025-08-02 11:40:34.736 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/api - 200 null text/plain; charset=utf-8 81.1837ms
+2025-08-02 11:40:34.759 -06:00 [INF] Request starting HTTP/2 GET https://localhost:57679/favicon.ico - null null
+2025-08-02 11:40:34.761 -06:00 [INF] Request finished HTTP/2 GET https://localhost:57679/favicon.ico - 404 0 null 2.3437ms
+2025-08-02 11:40:34.764 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:57679/favicon.ico, Response status code: 404
+2025-08-02 11:40:52.460 -06:00 [INF] Application is shutting down...

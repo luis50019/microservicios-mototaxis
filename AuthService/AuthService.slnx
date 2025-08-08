@@ -1,0 +1,30 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="CleanArchitecture.nuspec" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/AuthService.AspireHost/AuthService.AspireHost.csproj" />
+    <Project Path="src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj" />
+    <Project Path="src/AuthService.Core/AuthService.Core.csproj" />
+    <Project Path="src/AuthService.Infrastructure/AuthService.Infrastructure.csproj" />
+    <Project Path="src/AuthService.UseCases/AuthService.UseCases.csproj" />
+    <Project Path="src/AuthService.Web/AuthService.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AuthService.FunctionalTests/AuthService.FunctionalTests.csproj">
+      <BuildDependency Project="src/AuthService.Web/AuthService.Web.csproj" />
+    </Project>
+    <Project Path="tests/AuthService.IntegrationTests/AuthService.IntegrationTests.csproj">
+      <BuildDependency Project="src/AuthService.Infrastructure/AuthService.Infrastructure.csproj" />
+    </Project>
+    <Project Path="tests/AuthService.UnitTests/AuthService.UnitTests.csproj" />
+  </Folder>
+</Solution>

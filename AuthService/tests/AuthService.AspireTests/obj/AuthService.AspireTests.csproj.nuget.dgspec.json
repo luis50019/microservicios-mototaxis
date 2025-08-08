@@ -1,0 +1,451 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/tests/AuthService.AspireTests/AuthService.AspireTests.csproj": {}
+  },
+  "projects": {
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/AuthService.AspireHost.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/AuthService.AspireHost.csproj",
+        "projectName": "AuthService.AspireHost",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/AuthService.AspireHost.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/obj/",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/nuget.config",
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/c:\\LocalNuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj": {
+                "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Aspire.Dashboard.Sdk.linux-x64": {
+              "target": "Package",
+              "version": "[9.0.0, )",
+              "autoReferenced": true
+            },
+            "Aspire.Hosting.AppHost": {
+              "target": "Package",
+              "version": "[9.0.0, )",
+              "versionCentrallyManaged": true
+            },
+            "Aspire.Hosting.Orchestration.linux-x64": {
+              "target": "Package",
+              "version": "[9.0.0, )",
+              "autoReferenced": true
+            }
+          },
+          "centralPackageVersions": {
+            "Ardalis.GuardClauses": "5.0.0",
+            "Ardalis.HttpClientTestExtensions": "4.2.0",
+            "Ardalis.ListStartupServices": "1.1.4",
+            "Ardalis.Result": "10.1.0",
+            "Ardalis.Result.AspNetCore": "10.1.0",
+            "Ardalis.SharedKernel": "3.0.1",
+            "Ardalis.SmartEnum": "8.2.0",
+            "Ardalis.Specification": "9.2.0",
+            "Ardalis.Specification.EntityFrameworkCore": "9.2.0",
+            "Aspire.Hosting.AppHost": "9.0.0",
+            "Aspire.Hosting.Testing": "9.0.0",
+            "Azure.Identity": "1.13.1",
+            "BCrypt.Net-Next": "4.0.3",
+            "coverlet.collector": "6.0.4",
+            "FastEndpoints": "6.2.0",
+            "FastEndpoints.ApiExplorer": "2.2.0",
+            "FastEndpoints.Swagger": "6.2.0",
+            "FastEndpoints.Swagger.Swashbuckle": "2.2.0",
+            "MailKit": "4.13.0",
+            "MediatR": "12.5.0",
+            "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.8",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.6",
+            "Microsoft.EntityFrameworkCore.InMemory": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Relational": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
+            "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
+            "Microsoft.Extensions.Configuration": "9.0.6",
+            "Microsoft.Extensions.Http.Resilience": "9.6.0",
+            "Microsoft.Extensions.Logging": "9.0.6",
+            "Microsoft.Extensions.Logging.Abstractions": "9.0.6",
+            "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.6",
+            "Microsoft.Extensions.ServiceDiscovery": "9.3.1",
+            "Microsoft.NET.Test.Sdk": "17.14.1",
+            "MongoDB.Bson": "3.4.2",
+            "MongoDB.Driver": "3.4.2",
+            "NSubstitute": "5.3.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
+            "OpenTelemetry.Extensions.Hosting": "1.12.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.12.0",
+            "OpenTelemetry.Instrumentation.Http": "1.12.0",
+            "OpenTelemetry.Instrumentation.Runtime": "1.12.0",
+            "ReportGenerator": "5.4.8",
+            "Serilog.AspNetCore": "9.0.0",
+            "Shouldly": "4.3.0",
+            "SQLite": "3.13.0",
+            "Swashbuckle.AspNetCore": "6.5.0",
+            "Swashbuckle.AspNetCore.Annotations": "6.5.0",
+            "System.IdentityModel.Tokens.Jwt": "8.13.0",
+            "xunit": "2.9.3",
+            "xunit.runner.visualstudio": "3.0.2"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj",
+        "projectName": "AuthService.ServiceDefaults",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/AuthService.ServiceDefaults.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.ServiceDefaults/obj/",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/nuget.config",
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/c:\\LocalNuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Extensions.Http.Resilience": {
+              "target": "Package",
+              "version": "[9.6.0, )",
+              "versionCentrallyManaged": true
+            },
+            "Microsoft.Extensions.ServiceDiscovery": {
+              "target": "Package",
+              "version": "[9.3.1, )",
+              "versionCentrallyManaged": true
+            },
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+              "target": "Package",
+              "version": "[1.12.0, )",
+              "versionCentrallyManaged": true
+            },
+            "OpenTelemetry.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[1.12.0, )",
+              "versionCentrallyManaged": true
+            },
+            "OpenTelemetry.Instrumentation.AspNetCore": {
+              "target": "Package",
+              "version": "[1.12.0, )",
+              "versionCentrallyManaged": true
+            },
+            "OpenTelemetry.Instrumentation.Http": {
+              "target": "Package",
+              "version": "[1.12.0, )",
+              "versionCentrallyManaged": true
+            },
+            "OpenTelemetry.Instrumentation.Runtime": {
+              "target": "Package",
+              "version": "[1.12.0, )",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Ardalis.GuardClauses": "5.0.0",
+            "Ardalis.HttpClientTestExtensions": "4.2.0",
+            "Ardalis.ListStartupServices": "1.1.4",
+            "Ardalis.Result": "10.1.0",
+            "Ardalis.Result.AspNetCore": "10.1.0",
+            "Ardalis.SharedKernel": "3.0.1",
+            "Ardalis.SmartEnum": "8.2.0",
+            "Ardalis.Specification": "9.2.0",
+            "Ardalis.Specification.EntityFrameworkCore": "9.2.0",
+            "Aspire.Hosting.AppHost": "9.0.0",
+            "Aspire.Hosting.Testing": "9.0.0",
+            "Azure.Identity": "1.13.1",
+            "BCrypt.Net-Next": "4.0.3",
+            "coverlet.collector": "6.0.4",
+            "FastEndpoints": "6.2.0",
+            "FastEndpoints.ApiExplorer": "2.2.0",
+            "FastEndpoints.Swagger": "6.2.0",
+            "FastEndpoints.Swagger.Swashbuckle": "2.2.0",
+            "MailKit": "4.13.0",
+            "MediatR": "12.5.0",
+            "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.8",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.6",
+            "Microsoft.EntityFrameworkCore.InMemory": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Relational": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
+            "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
+            "Microsoft.Extensions.Configuration": "9.0.6",
+            "Microsoft.Extensions.Http.Resilience": "9.6.0",
+            "Microsoft.Extensions.Logging": "9.0.6",
+            "Microsoft.Extensions.Logging.Abstractions": "9.0.6",
+            "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.6",
+            "Microsoft.Extensions.ServiceDiscovery": "9.3.1",
+            "Microsoft.NET.Test.Sdk": "17.14.1",
+            "MongoDB.Bson": "3.4.2",
+            "MongoDB.Driver": "3.4.2",
+            "NSubstitute": "5.3.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
+            "OpenTelemetry.Extensions.Hosting": "1.12.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.12.0",
+            "OpenTelemetry.Instrumentation.Http": "1.12.0",
+            "OpenTelemetry.Instrumentation.Runtime": "1.12.0",
+            "ReportGenerator": "5.4.8",
+            "Serilog.AspNetCore": "9.0.0",
+            "Shouldly": "4.3.0",
+            "SQLite": "3.13.0",
+            "Swashbuckle.AspNetCore": "6.5.0",
+            "Swashbuckle.AspNetCore.Annotations": "6.5.0",
+            "System.IdentityModel.Tokens.Jwt": "8.13.0",
+            "xunit": "2.9.3",
+            "xunit.runner.visualstudio": "3.0.2"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/tests/AuthService.AspireTests/AuthService.AspireTests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/tests/AuthService.AspireTests/AuthService.AspireTests.csproj",
+        "projectName": "AuthService.AspireTests",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/tests/AuthService.AspireTests/AuthService.AspireTests.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/tests/AuthService.AspireTests/obj/",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "configFilePaths": [
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/nuget.config",
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/c:\\LocalNuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/AuthService.AspireHost.csproj": {
+                "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.AspireHost/AuthService.AspireHost.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Aspire.Hosting.Testing": {
+              "target": "Package",
+              "version": "[9.0.0, )",
+              "versionCentrallyManaged": true
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.14.1, )",
+              "versionCentrallyManaged": true
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.4, )",
+              "versionCentrallyManaged": true
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.3, )",
+              "versionCentrallyManaged": true
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[3.0.2, )",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Ardalis.GuardClauses": "5.0.0",
+            "Ardalis.HttpClientTestExtensions": "4.2.0",
+            "Ardalis.ListStartupServices": "1.1.4",
+            "Ardalis.Result": "10.1.0",
+            "Ardalis.Result.AspNetCore": "10.1.0",
+            "Ardalis.SharedKernel": "3.0.1",
+            "Ardalis.SmartEnum": "8.2.0",
+            "Ardalis.Specification": "9.2.0",
+            "Ardalis.Specification.EntityFrameworkCore": "9.2.0",
+            "Aspire.Hosting.AppHost": "9.0.0",
+            "Aspire.Hosting.Testing": "9.0.0",
+            "Azure.Identity": "1.13.1",
+            "BCrypt.Net-Next": "4.0.3",
+            "coverlet.collector": "6.0.4",
+            "FastEndpoints": "6.2.0",
+            "FastEndpoints.ApiExplorer": "2.2.0",
+            "FastEndpoints.Swagger": "6.2.0",
+            "FastEndpoints.Swagger.Swashbuckle": "2.2.0",
+            "MailKit": "4.13.0",
+            "MediatR": "12.5.0",
+            "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.8",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.6",
+            "Microsoft.EntityFrameworkCore.InMemory": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Relational": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.6",
+            "Microsoft.EntityFrameworkCore.SqlServer": "9.0.6",
+            "Microsoft.EntityFrameworkCore.Tools": "9.0.6",
+            "Microsoft.Extensions.Configuration": "9.0.6",
+            "Microsoft.Extensions.Http.Resilience": "9.6.0",
+            "Microsoft.Extensions.Logging": "9.0.6",
+            "Microsoft.Extensions.Logging.Abstractions": "9.0.6",
+            "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.6",
+            "Microsoft.Extensions.ServiceDiscovery": "9.3.1",
+            "Microsoft.NET.Test.Sdk": "17.14.1",
+            "MongoDB.Bson": "3.4.2",
+            "MongoDB.Driver": "3.4.2",
+            "NSubstitute": "5.3.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.12.0",
+            "OpenTelemetry.Extensions.Hosting": "1.12.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.12.0",
+            "OpenTelemetry.Instrumentation.Http": "1.12.0",
+            "OpenTelemetry.Instrumentation.Runtime": "1.12.0",
+            "ReportGenerator": "5.4.8",
+            "Serilog.AspNetCore": "9.0.0",
+            "Shouldly": "4.3.0",
+            "SQLite": "3.13.0",
+            "Swashbuckle.AspNetCore": "6.5.0",
+            "Swashbuckle.AspNetCore.Annotations": "6.5.0",
+            "System.IdentityModel.Tokens.Jwt": "8.13.0",
+            "xunit": "2.9.3",
+            "xunit.runner.visualstudio": "3.0.2"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

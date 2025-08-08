@@ -1,0 +1,12 @@
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/bin/Debug/net9.0/AuthService.Core.deps.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/bin/Debug/net9.0/AuthService.Core.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/bin/Debug/net9.0/AuthService.Core.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.csproj.AssemblyReference.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.AssemblyInfoInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.AssemblyInfo.cs
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.csproj.CoreCompileInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/refint/AuthService.Core.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/ref/AuthService.Core.dll

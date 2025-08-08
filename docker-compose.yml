@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  authservice:
+    build:
+      context: ./AuthService
+      dockerfile: src/AuthService.Web/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MONGO__CONNECTION_STRING=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&w=majority
+      - MONGO__DATABASE=nombre_de_tu_bd
+    depends_on: []
+
+  # (opcional) mongo local para pruebas futuras
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
