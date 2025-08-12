@@ -16,17 +16,6 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactNative",
-        policy =>
-        {
-            policy.AllowAnyOrigin()  // Ojo: en producción puedes limitar a tu dominio/app
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
-
 
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddEndpointsApiExplorer();
@@ -123,9 +112,11 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-app.Urls.Add($"http://*;{port}");
+//var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+//app.Urls.Add($"http://*;{port}");
 
 app.Run();
 

@@ -17,3 +17,4 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Infrastructure/obj/Debug/net9.0/AuthService.Infrastructure.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Infrastructure/obj/Debug/net9.0/AuthService.Infrastructure.genruntimeconfig.cache
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Infrastructure/obj/Debug/net9.0/ref/AuthService.Infrastructure.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Infrastructure/obj/Debug/net9.0/AuthService.Infrastructure.sourcelink.json

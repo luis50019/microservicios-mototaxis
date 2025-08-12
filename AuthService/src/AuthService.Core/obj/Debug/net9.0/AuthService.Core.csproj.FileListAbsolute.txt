@@ -10,3 +10,4 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/refint/AuthService.Core.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/ref/AuthService.Core.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Core/obj/Debug/net9.0/AuthService.Core.sourcelink.json

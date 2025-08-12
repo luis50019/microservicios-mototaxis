@@ -566,3 +566,4 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web/bin/Debug/net9.0/BCrypt.Net-Next.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.Web/obj/Debug/net9.0/AuthService.Web.sourcelink.json

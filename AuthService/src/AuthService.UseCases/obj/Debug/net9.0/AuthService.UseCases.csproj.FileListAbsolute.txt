@@ -13,3 +13,4 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.UseCases/obj/Debug/net9.0/refint/AuthService.UseCases.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.UseCases/obj/Debug/net9.0/AuthService.UseCases.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.UseCases/obj/Debug/net9.0/ref/AuthService.UseCases.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/AuthService/src/AuthService.UseCases/obj/Debug/net9.0/AuthService.UseCases.sourcelink.json

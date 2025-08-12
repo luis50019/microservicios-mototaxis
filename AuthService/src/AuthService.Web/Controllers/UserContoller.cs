@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AuthService.Web.Controllers
 {
 	[ApiController]
-	[Route("api/register")]
+	[Route("api")]
 	public class UserContoller : ControllerBase
 	{
 		private readonly IUserService _userService;
@@ -29,6 +29,7 @@ namespace AuthService.Web.Controllers
 			try
 			{
 				//!Pasar esta validacion a useCases
+				Console.WriteLine("data" + dto.password);
 				if (!ModelState.IsValid)
 				{
 					var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -77,6 +78,7 @@ namespace AuthService.Web.Controllers
 		{
 			try
 			{
+				Console.WriteLine("data: " + dto.password);
 				if (!ModelState.IsValid)
 				{
 					var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
