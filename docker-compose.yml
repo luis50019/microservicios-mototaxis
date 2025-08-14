@@ -11,17 +11,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_ENVIRONMENT=Development
-      - MONGO__CONNECTION_STRING=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&w=majority
-      - MONGO__DATABASE=nombre_de_tu_bd
+      - MONGO__CONNECTION_STRING=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&w=majoritmongodb+srv://luis019dell:U3TMdejvVgx7Ju6U@cluster0.epql6ez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGO__DATABASE=mototaxi
     depends_on: []
-
-  # (opcional) mongo local para pruebas futuras
-  mongo:
-    image: mongo:6.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
 volumes:
   mongo_data:
