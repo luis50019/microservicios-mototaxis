@@ -91,7 +91,7 @@ namespace AuthService.Web.Controllers
 			}
 			catch (LoginException ex)
 			{
-				return BadRequest(new { error = "Usuario no encontrado", detail = ex.Message });
+				return BadRequest(new { error = "El telefono o la contraseña son incorrectos", detail = ex.Message });
 			}
 			catch (Exception ex)
 			{
