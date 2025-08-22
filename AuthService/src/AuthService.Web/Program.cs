@@ -1,5 +1,4 @@
 ﻿
-
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,9 +14,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar CORS
-
+//?Añadiendo el servicio de usuarios
 builder.Services.AddScoped<IUserService, UserServices>();
+
+//?Aladiendo swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -46,10 +46,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-//valiadciones
+//?valiadciones
 builder.Services.AddScoped<PhoneValidate>();
 
-//añadiendo JWT
+//?añadiendo JWT
 var JwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(JwtSettingsSection);
 builder.Services.AddScoped<ITokenGenerator,JwtTokenGenerator>();

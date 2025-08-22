@@ -1,0 +1,16 @@
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/bin/Debug/net9.0/ServiceLocation.Application.deps.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/bin/Debug/net9.0/ServiceLocation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/bin/Debug/net9.0/ServiceLocation.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/bin/Debug/net9.0/ServiceLocation.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/bin/Debug/net9.0/ServiceLocation.Domain.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.csproj.AssemblyReference.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.AssemblyInfoInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.AssemblyInfo.cs
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.csproj.CoreCompileInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.sourcelink.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceL.4C2732CF.Up2Date
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/refint/ServiceLocation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ServiceLocation.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/Debug/net9.0/ref/ServiceLocation.Application.dll

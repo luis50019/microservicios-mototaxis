@@ -1,0 +1,13 @@
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/bin/Debug/net9.0/ServiceLocation.Domain.deps.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/bin/Debug/net9.0/ServiceLocation.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/bin/Debug/net9.0/ServiceLocation.Domain.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.csproj.AssemblyReference.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.AssemblyInfoInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.AssemblyInfo.cs
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.csproj.CoreCompileInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.sourcelink.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/refint/ServiceLocation.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ServiceLocation.Domain.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/Debug/net9.0/ref/ServiceLocation.Domain.dll

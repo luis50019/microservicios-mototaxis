@@ -1,0 +1,220 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Infrastructure/ServiceLocation.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/ServiceLocation.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/ServiceLocation.Application.csproj",
+        "projectName": "ServiceLocation.Application",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/ServiceLocation.Application.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj": {
+                "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj",
+        "projectName": "ServiceLocation.Domain",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Infrastructure/ServiceLocation.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Infrastructure/ServiceLocation.Infrastructure.csproj",
+        "projectName": "ServiceLocation.Infrastructure",
+        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Infrastructure/ServiceLocation.Infrastructure.csproj",
+        "packagesPath": "/home/luis/.nuget/packages/",
+        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/luis/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/ServiceLocation.Application.csproj": {
+                "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Application/ServiceLocation.Application.csproj"
+              },
+              "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj": {
+                "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Configuration.Binder": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

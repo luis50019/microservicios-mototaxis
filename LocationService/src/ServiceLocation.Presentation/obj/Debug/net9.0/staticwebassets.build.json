@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "UMEOe91aOEPcsTBuv3AKphUtwUcDMnb1RTw3DhauS9k=",
+  "Source": "ServiceLocation.Presentation",
+  "BasePath": "_content/ServiceLocation.Presentation",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

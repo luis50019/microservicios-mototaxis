@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "eSvGT3PoUn0=",
+  "success": true,
+  "projectFilePath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/LocationService/src/ServiceLocation.Domain/ServiceLocation.Domain.csproj",
+  "expectedPackageFiles": [
+    "/home/luis/.nuget/packages/mongodb.bson/3.4.3/mongodb.bson.3.4.3.nupkg.sha512",
+    "/home/luis/.nuget/packages/system.memory/4.5.5/system.memory.4.5.5.nupkg.sha512",
+    "/home/luis/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
