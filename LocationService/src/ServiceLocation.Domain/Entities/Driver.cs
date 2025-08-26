@@ -71,7 +71,6 @@ namespace ServiceLocation.Domain.Entities
         public int? RegularCommnets { get; set; }
         public int? BadComments { get; set; }
     }
-
     public class Unit
     {
         public string? Number { get; set; }

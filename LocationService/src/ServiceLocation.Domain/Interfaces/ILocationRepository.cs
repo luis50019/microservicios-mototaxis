@@ -8,8 +8,11 @@ namespace ServiceLocation.Domain.Interfaces
 {
     public interface ILocationRepository
     {
-        Task<List<User>> GetAllUSerAsync();
-        Task<User> GetUserByIdAsync(string id);
+
+        //?Los metodos para obtener la informacion de un usuario solo devuelven las coordenadas
+        Task<Coordinates> GetUserByIdAsync(string id);
+        Task<Coordinates> GetDriverByIsAsync(string id);
         Task UpdateLocationAsyn(string id, Coordinates coordinates);
+        Task UpdateDriverLocationAsync(string id, Coordinates coordinates);
     }
 }
