@@ -1,0 +1,117 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "ServiceReservation.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "ServiceReservation.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ServiceReservation.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ServiceReservation.Application.dll": {}
+        }
+      },
+      "ServiceReservation.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/ServiceReservation.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ServiceReservation.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ServiceReservation.Application/1.0.0": {
+      "type": "project",
+      "path": "../ServiceReservation.Application/ServiceReservation.Application.csproj",
+      "msbuildProject": "../ServiceReservation.Application/ServiceReservation.Application.csproj"
+    },
+    "ServiceReservation.Domain/1.0.0": {
+      "type": "project",
+      "path": "../ServiceReservation.Domain/ServiceReservation.Domain.csproj",
+      "msbuildProject": "../ServiceReservation.Domain/ServiceReservation.Domain.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "ServiceReservation.Application >= 1.0.0",
+      "ServiceReservation.Domain >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/home/luis/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Infrastructure/ServiceReservation.Infrastructure.csproj",
+      "projectName": "ServiceReservation.Infrastructure",
+      "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Infrastructure/ServiceReservation.Infrastructure.csproj",
+      "packagesPath": "/home/luis/.nuget/packages/",
+      "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Infrastructure/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/luis/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/ServiceReservation.Application.csproj": {
+              "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/ServiceReservation.Application.csproj"
+            },
+            "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/ServiceReservation.Domain.csproj": {
+              "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/ServiceReservation.Domain.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

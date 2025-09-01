@@ -1,0 +1,16 @@
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/bin/Debug/net9.0/ServicioTarifas.Application.deps.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/bin/Debug/net9.0/ServicioTarifas.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/bin/Debug/net9.0/ServicioTarifas.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/bin/Debug/net9.0/ServicioTarifas.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/bin/Debug/net9.0/ServicioTarifas.Domain.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.csproj.AssemblyReference.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.AssemblyInfoInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.AssemblyInfo.cs
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.csproj.CoreCompileInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.sourcelink.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/Servicio.F669E4E0.Up2Date
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/refint/ServicioTarifas.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ServicioTarifas.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Application/obj/Debug/net9.0/ref/ServicioTarifas.Application.dll
