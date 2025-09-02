@@ -43,11 +43,13 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/Snappier.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/System.Diagnostics.EventLog.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/ZstdSharp.dll
-/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll
-/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/MicroSer.60E117D9.Up2Date
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/MicroServicio.Tarifas.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/refint/MicroServicio.Tarifas.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/MicroServicio.Tarifas.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/MicroServicio.Tarifas.genruntimeconfig.cache
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/obj/Debug/net9.0/ref/MicroServicio.Tarifas.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/RabbitMQ.Client.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/System.Threading.RateLimiting.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Diagnostics.EventLog.Messages.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Tarifas/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll

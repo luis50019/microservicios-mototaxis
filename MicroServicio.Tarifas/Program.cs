@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using MicroServicio.Tarifas.Services;
 using MicroServicio.Tarifas.Models;
 using MicroServicio.Tarifas.Workers;
+using MicroServicio.Tarifas.Config;
 
 class Program
 {
-  static async Task Main(string[] args)
+    static async Task Main(string[] args)
     {
         // Creamos el host
         var host = Host.CreateDefaultBuilder(args)
@@ -21,20 +22,25 @@ class Program
             })
             .ConfigureServices((context, services) =>
             {
-              // Inyectamos la configuración de MongoDB
-              services.Configure<MongoDBSettings>(
-                  context.Configuration.GetSection("MongoDb"));
+                // Inyectamos la configuración de MongoDB
+                services.Configure<MongoDBSettings>(
+                    context.Configuration.GetSection("MongoDb"));
 
-              // Registramos MongoDbContext
-              services.AddSingleton<MongoDBContext>();
+                // Registramos MongoDbContext
+                services.AddSingleton<MongoDBContext>();
 
-              // Registramos el servicio que hace operaciones en la DB
-              services.AddSingleton<RideFaresService>();
+                // Registramos el servicio que hace operaciones en la DB
+                services.AddSingleton<RideFaresService>();
 
-              services.AddSingleton<IMongoService, RideFaresService>();
+                services.AddSingleton<IMongoService, RideFaresService>();
 
-              // Registramos el Worker que estará escuchando siempre
-              services.AddHostedService <Worker>();
+                //?añadimos RabbitMQ
+                services.Configure<RabbitMQSettings>(context.Configuration.GetSection("RabbitMQ"));
+
+                services.AddSingleton<RabbitMQService>();
+
+                // Registramos el Worker que estará escuchando siempre
+                services.AddHostedService<Worker>();
             })
             .Build();
 
