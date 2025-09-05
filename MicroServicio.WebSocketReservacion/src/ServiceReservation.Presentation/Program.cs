@@ -1,3 +1,9 @@
+using ServiceReservation.Infrastructure.Configurations;
+using ServiceReservation.Infrastructure.Messaging;
+using ServiceReservation.Infrastructure.Messaging.Consumers;
+using ServiceReservation.Infrastructure.Messaging.Producers;
+using ServiceReservation.Presentation.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +13,17 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//?añadimos signalR
+builder.Services.AddSignalR();
+
+//?configuramos RabbitMQ
+builder.Services.Configure<RabbitMqSettings>(
+    builder.Configuration.GetSection("RabbitMQ")
+);
+builder.Services.AddSingleton <RabbitMqService>();
+builder.Services.AddSingleton<RabbitMqRideFarePublisher>();
+builder.Services.AddSingleton<RabbitMqRideFareConsumer>();
+//builder.Services.AddSingleton<>();
 //!Anadimos los controladores
 builder.Services.AddControllers();
 
@@ -16,9 +33,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-//!Le indicamos que mape los controladores
+//!Le indicamos que use el hub
+app.MapHub<ReservationHub>("/reservations");
 
 app.UseHttpsRedirection();
 app.Run();

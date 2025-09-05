@@ -38,7 +38,7 @@ namespace MicroServicio.Tarifas.Models
     //?IsActive( si esta activa o no)
     public class GlobalFare
     {
-        public double? Price { get; set; }
+        public double Price { get; set; }
         public bool IsActive { get; set; } = false;
     }
 

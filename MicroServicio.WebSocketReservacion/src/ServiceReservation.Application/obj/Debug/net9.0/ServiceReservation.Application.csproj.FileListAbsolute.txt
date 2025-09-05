@@ -1,0 +1,16 @@
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/bin/Debug/net9.0/ServiceReservation.Application.deps.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/bin/Debug/net9.0/ServiceReservation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/bin/Debug/net9.0/ServiceReservation.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/bin/Debug/net9.0/ServiceReservation.Domain.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/bin/Debug/net9.0/ServiceReservation.Domain.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.csproj.AssemblyReference.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.AssemblyInfoInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.AssemblyInfo.cs
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.csproj.CoreCompileInputs.cache
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.sourcelink.json
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceR.395EE2A2.Up2Date
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/refint/ServiceReservation.Application.dll
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ServiceReservation.Application.pdb
+/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Application/obj/Debug/net9.0/ref/ServiceReservation.Application.dll

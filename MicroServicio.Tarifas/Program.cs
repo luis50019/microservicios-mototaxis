@@ -5,7 +5,6 @@ using MiMicroservicio.Data;
 using System;
 using System.Threading.Tasks;
 using MicroServicio.Tarifas.Services;
-using MicroServicio.Tarifas.Models;
 using MicroServicio.Tarifas.Workers;
 using MicroServicio.Tarifas.Config;
 

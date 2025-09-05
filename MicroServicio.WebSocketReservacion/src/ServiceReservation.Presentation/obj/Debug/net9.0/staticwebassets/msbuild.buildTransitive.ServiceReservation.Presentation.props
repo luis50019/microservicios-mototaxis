@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/ServiceReservation.Presentation.props" />
+</Project>
