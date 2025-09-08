@@ -53,7 +53,7 @@ namespace AuthService.UseCases.Services
         //*Metodo para registrar a un conductor
         public async Task<RegisterResponse> RegisterDriver(RegisterRequest dto)
         {
-            var newDriver = CreateDriver.NewDriver(dto.Name, dto.Phone, dto.password);
+            var newDriver = CreateDriver.NewDriver(dto.Name, dto.Phone, dto.password,"Disponible");
             var isExist = await _phoneValidate.PhoneExist(dto.Phone.Number);
             if (isExist)
             {

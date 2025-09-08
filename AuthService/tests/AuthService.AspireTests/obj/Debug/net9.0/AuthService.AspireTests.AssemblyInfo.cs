@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AuthService.AspireTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6bf16b802ad9bdf45818ed868bcbe9922f46817")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+638dd9d4e7c32c055b2aa6402884e5249200d1a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuthService.AspireTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuthService.AspireTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -37,7 +37,7 @@ namespace ServiceReservation.Infrastructure.Messaging
 
             await _channel.BasicPublishAsync(
                 exchange: string.Empty,
-                routingKey: "solicitud_viaje", //se coloca el nombre de la cola
+                routingKey: queue, //se coloca el nombre de la cola
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body

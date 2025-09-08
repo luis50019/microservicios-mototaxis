@@ -14,10 +14,12 @@ namespace ServiceReservation.Presentation.Hubs
     {
         //!debemos de crear los servicios que vamos a utilizar
         private readonly RabbitMqRideFarePublisher _publisherRideFare;
+        private readonly RabbitMQFindDriver _publisherFindDriver;
         private readonly RabbitMqRideFareConsumer _consumerRideFare;
-        public ReservationHub(RabbitMqRideFarePublisher publisherRideFare, RabbitMqRideFareConsumer consumerRideFare)
+        public ReservationHub(RabbitMqRideFarePublisher publisherRideFare, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver)
         {
             _publisherRideFare = publisherRideFare;
+            _publisherFindDriver = finDriver;
             _consumerRideFare = consumerRideFare;
         }
 
@@ -31,6 +33,25 @@ namespace ServiceReservation.Presentation.Hubs
             //?notificar al usuario que su tarifa esta siendo calculada
             await _consumerRideFare.ConsumerRideAsync();
         }
+
+        public async Task FindDriverAsync(RequestFindDriver infoTraveled)
+        {
+            if (infoTraveled == null)
+            {
+                Console.WriteLine("❌ infoTraveled llegó nulo");
+                return;
+            }
+
+            if (_publisherFindDriver == null)
+            {
+                Console.WriteLine("❌ _publisherFindDriver es nulo (no fue inyectado)");
+                return;
+            }
+
+            Console.WriteLine($"✅ info recibida: {infoTraveled.priceTraveled} = {infoTraveled.idUser}");
+            await _publisherFindDriver.PublicAsync(infoTraveled);
+        }
+
 
         public async Task ReceiveDistance()
         {

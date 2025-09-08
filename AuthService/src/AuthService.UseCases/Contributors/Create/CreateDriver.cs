@@ -8,7 +8,7 @@ namespace AuthService.UseCases.Contributors.Create
 {
     public static class CreateDriver
     {
-        public static Driver NewDriver(String name, Phone phone, string password)
+        public static Driver NewDriver(String name, Phone phone, string password,string stateDriver)
         {
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             var newDriver = new Driver
@@ -19,6 +19,7 @@ namespace AuthService.UseCases.Contributors.Create
                     Password = passwordHash,
                     Phone = phone
                 },
+                StateDriver = stateDriver,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

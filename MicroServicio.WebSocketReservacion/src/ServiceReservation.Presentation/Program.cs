@@ -22,6 +22,7 @@ builder.Services.Configure<RabbitMqSettings>(
 );
 builder.Services.AddSingleton <RabbitMqService>();
 builder.Services.AddSingleton<RabbitMqRideFarePublisher>();
+builder.Services.AddSingleton<RabbitMQFindDriver>();
 builder.Services.AddSingleton<RabbitMqRideFareConsumer>();
 //builder.Services.AddSingleton<>();
 //!Anadimos los controladores
