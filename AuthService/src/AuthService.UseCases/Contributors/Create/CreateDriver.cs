@@ -19,6 +19,16 @@ namespace AuthService.UseCases.Contributors.Create
                     Password = passwordHash,
                     Phone = phone
                 },
+                Performance = new Performance
+                {
+                    AcceptanceRate = 0,
+                    TotalTrips = 0,
+                    CanceledTrips = 0,
+                    AverageResponseTime = 0,
+                    CompletedTrips = 0,
+                    HistoricalAvailability = 0,
+                    TotalEarnings = 0
+                },
                 StateDriver = stateDriver,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
