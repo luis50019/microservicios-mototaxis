@@ -52,7 +52,23 @@ namespace ServiceReservation.Presentation.Hubs
             await _publisherFindDriver.PublicAsync(infoTraveled);
         }
 
+        public async Task AcceptedTrip(RequestAcceptTrip infoDriver)
+        {
+            if (infoDriver == null)
+            {
+                Console.WriteLine("❌ infoTraveled llegó nulo");
+                return;
+            }
 
+            if (_publisherFindDriver == null)
+            {
+                Console.WriteLine("❌ _publisherFindDriver es nulo (no fue inyectado)");
+                return;
+            }
+
+            Console.WriteLine($"✅ info recibida: {infoDriver.idDriver}");
+            await _publisherFindDriver.PublicAceptTripAsync(infoDriver);
+        }
         public async Task ReceiveDistance()
         {
             await _consumerRideFare.ConsumerRideAsync();

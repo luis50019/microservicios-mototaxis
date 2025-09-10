@@ -9,5 +9,7 @@ namespace MicroServicio.Conductores.Config
     {
         public string url { get; set; } = string.Empty;
         public string QueueName { get; set; } = string.Empty;
+        public string QueueAcceptTrip { get; set; } = string.Empty;
+        public string QueueRejectTrip { get; set; } = string.Empty;
     }
 }

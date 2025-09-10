@@ -16,6 +16,8 @@ namespace MicroServicio.Conductores.Services
         private readonly IConnection _connection;
         private readonly IChannel _channel;
         private readonly string _queueName;
+        private readonly string _queueAccept;
+        private readonly string _queueReject;
         private readonly DriverService _service;
 
         public RabbitMQServices(IOptions<RabbitMQSettings> settings, DriverService service)
@@ -32,11 +34,14 @@ namespace MicroServicio.Conductores.Services
             _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
             _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
             _queueName = settings.Value.QueueName;
+            _queueAccept = settings.Value.QueueAcceptTrip;
+            _queueReject = settings.Value.QueueRejectTrip;
 
             Task.Run(async () =>
             {
-                await _channel.QueueDeclareAsync(_queueName, false, false, false, null);
-                await _channel.QueueDeclareAsync("accepted_rate", false, false, false, null);
+                await _channel.QueueDeclareAsync(_queueName, false, false, false, null);//!tarifa aceptada
+                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//!viaje aceptado
+                await _channel.QueueDeclareAsync(_queueAccept, false, false, false, null);//!viaje rechazado
             }).Wait();
 
             _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
@@ -62,8 +67,14 @@ namespace MicroServicio.Conductores.Services
                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {rideFareMessage.idUser}");
 
                     var driver = await _service.FoundConductorAsync();
-                    Console.WriteLine($"Conductor asignado: {driver.id}");
-
+                    if (driver.id != "")
+                    {
+                        Console.WriteLine($"Conductor asignado: {driver.id}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no se encontro otro conductoro");
+                    }
                     //await PublishDriverFoundAsync(driver);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
@@ -83,7 +94,89 @@ namespace MicroServicio.Conductores.Services
             );
         }
 
+        //TODO: metodo que escucha el mensaje de conductor asignado
+        public async Task AcceptedTrip()
+        {
+            await _channel.BasicQosAsync(0, 1, false);
+            Console.WriteLine($"Esperando mensajes en la cola {_queueAccept}...");
 
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+
+            consumer.ReceivedAsync += async (sender, ea) =>
+            {
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
+                    Console.WriteLine("metodo de aceptacion");
+                    Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.idDriver}");
+
+                    var driver = await _service.AcceptRideAsync(driverInfo.idDriver);
+                    if (driver != "")
+                    {
+                        Console.WriteLine($"Conductor asignado: {driver}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no se encontro otro conductoro");
+                    }
+                    //await PublishDriverFoundAsync(driver);
+
+                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error procesando mensaje: {ex}");
+                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                }
+            };
+
+            // 🔥 Aquí conectamos el consumer a la cola
+            await _channel.BasicConsumeAsync(
+                queue: _queueAccept, // la cola donde llegan los mensajes
+                autoAck: false,
+                consumer: consumer
+            );
+        }
+
+        ///! Publica un evento cuando el conductor acepta el viaje
+        public async Task PublishDriverAcceptedAsync(string driverId)
+        {
+            var result = await _service.AcceptRideAsync(driverId);
+            var message = JsonSerializer.Serialize(new
+            {
+                Event = "DriverAccepted",
+                Data = result
+            });
+
+            var body = Encoding.UTF8.GetBytes(message);
+
+            await _channel.BasicPublishAsync(
+                exchange: "",
+                routingKey: "fare_response_queue",
+                body: body
+            );
+        }
+
+        //! Publica un evento cuando el conductor rechaza el viaje
+        public async Task PublishDriverRejectedAsync(string driverId)
+        {
+            var result = await _service.RejectRideAsync(driverId);
+            var message = JsonSerializer.Serialize(new
+            {
+                Event = "DriverRejected",
+                Data = result
+            });
+
+            var body = Encoding.UTF8.GetBytes(message);
+
+            await _channel.BasicPublishAsync(
+                exchange: "",
+                routingKey: "fare_response_queue",
+                body: body
+            );
+        }
 
         //! Encuentra un conductor disponible y publica el evento en la cola
         public async Task PublishDriverFoundAsync(DriverFound driver)
@@ -104,43 +197,6 @@ namespace MicroServicio.Conductores.Services
             await _channel.BasicPublishAsync(
                 exchange: "",
                 routingKey: "driverFound",
-                body: body
-            );
-        }
-        //! Publica un evento cuando el conductor rechaza el viaje
-        public async Task PublishDriverRejectedAsync(string driverId)
-        {
-            var result = await _service.RejectRideAsync(driverId);
-            var message = JsonSerializer.Serialize(new
-            {
-                Event = "DriverRejected",
-                Data = result
-            });
-
-            var body = Encoding.UTF8.GetBytes(message);
-
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: "fare_response_queue",
-                body: body
-            );
-        }
-
-        ///! Publica un evento cuando el conductor acepta el viaje
-        public async Task PublishDriverAcceptedAsync(string driverId)
-        {
-            var result = await _service.AcceptRideAsync(driverId);
-            var message = JsonSerializer.Serialize(new
-            {
-                Event = "DriverAccepted",
-                Data = result
-            });
-
-            var body = Encoding.UTF8.GetBytes(message);
-
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: "fare_response_queue",
                 body: body
             );
         }

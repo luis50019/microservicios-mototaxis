@@ -26,6 +26,7 @@ namespace MicroServicio.Conductores.Workers
 
                 // Iniciar consumo UNA SOLA VEZ
                 _rabbitService.ConsumingRideFareReady();
+                _rabbitService.AcceptedTrip();
                 
                 Console.WriteLine("✅ Consumidor de RabbitMQ iniciado correctamente");
                 

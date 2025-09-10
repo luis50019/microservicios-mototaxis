@@ -16,10 +16,8 @@ namespace MicroServicio.Conductores.Services
             _context = context;
         }
 
-        /// <summary>
-        /// Conductor acepta un viaje. Cambia el estado a "Ocupado".
-        /// </summary>
-        public async Task<object> AcceptRideAsync(string driverId)
+        ///! Conductor acepta un viaje. Cambia el estado a "Ocupado".
+        public async Task<string> AcceptRideAsync(string driverId)
         {
             var filter = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse(driverId));
             var update = Builders<Driver>.Update
@@ -31,9 +29,7 @@ namespace MicroServicio.Conductores.Services
             return result.ModifiedCount > 0 ? "Viaje aceptado" : "Conductor no encontrado";
         }
 
-        /// <summary>
-        /// Encuentra un conductor disponible cerca del punto de recogida.
-        /// </summary>
+        ///! Encuentra un conductor disponible cerca del punto de recogida.
         public async Task<object> FindAvailableStateAsync(Coordinates pickupLocation)
         {
             // 📍 Para algo real, deberías usar un cálculo de distancia (Haversine).
@@ -52,9 +48,7 @@ namespace MicroServicio.Conductores.Services
             };
         }
 
-        /// <summary>
-        /// Simula asignar un conductor a un cliente (encontrado en cola principal).
-        /// </summary>
+        ///! Simula asignar un conductor a un cliente (encontrado en cola principal).
         public async Task<DriverFound> FoundConductorAsync()
         {
             var filter = Builders<Driver>.Filter.Eq(d => d.StateDriver, "Disponible");
@@ -64,10 +58,10 @@ namespace MicroServicio.Conductores.Services
                 return new DriverFound
                 {
                     succes = false,
-                    id = driver.Id.ToString(),
-                    coordinates = driver.Location.Current.Coordinates,
-                    infoBasic = driver.BasicInfo,
-                    unit = driver.Unit,
+                    id = "",
+                    coordinates = null,
+                    infoBasic = null,
+                    unit = null,
                     State = "No hay conductores disponibles"
                     
                 }; 
@@ -91,9 +85,7 @@ namespace MicroServicio.Conductores.Services
             };
         }
 
-        /// <summary>
-        /// Conductor rechaza el viaje. Estado vuelve a "Disponible".
-        /// </summary>
+        //! Conductor rechaza el viaje. Estado vuelve a "Disponible".
         public async Task<object> RejectRideAsync(string driverId)
         {
             var filter = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse(driverId));

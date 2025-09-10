@@ -11,6 +11,7 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
     {
         private readonly RabbitMqService _rabbitMQ;
         private readonly string _exchangeName = "calculated_rate";
+        private readonly string _queueAccepTraveled = "accept_trip";
 
         public RabbitMQFindDriver(RabbitMqService rabbitMq)
         {
@@ -21,7 +22,14 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
         {
             Console.WriteLine("llegue al publisher");
             var json = JsonSerializer.Serialize<RequestFindDriver>(data);
-            await _rabbitMQ.PublicAsync(_exchangeName,json);
+            await _rabbitMQ.PublicAsync(_exchangeName, json);
+        }
+
+        public async Task PublicAceptTripAsync(RequestAcceptTrip data)
+        {
+            Console.WriteLine("Llegue al publisher");
+            var json = JsonSerializer.Serialize<RequestAcceptTrip>(data);
+            await _rabbitMQ.PublicAsync(_queueAccepTraveled, json);          
         }
     }
 }
