@@ -12,7 +12,7 @@ namespace MicroServicio.CodigoVerificacion.models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; set; } //!esto lee para generera codigo verificacion
 
         [BsonElement("passage")]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -133,3 +133,13 @@ namespace MicroServicio.CodigoVerificacion.models
     }
 
 }
+// public class Reservation
+// public class Route
+// public class Coordinate
+// public class State
+// public class StateDetails
+// public class Security
+// public class Comments
+// public class Rating
+// public class RatingCategories
+// public class Pay
