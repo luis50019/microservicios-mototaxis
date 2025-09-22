@@ -1,0 +1,6 @@
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.csproj.AssemblyReference.cache
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.AssemblyInfoInputs.cache
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.AssemblyInfo.cs
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.csproj.CoreCompileInputs.cache
+C:\Users\dwayn\Documents\ProyectoMototaxis\microservicios-mototaxis\MicroServicio.Reservaciones\obj\Debug\net9.0\MicroServicio.Reservaciones.sourcelink.json

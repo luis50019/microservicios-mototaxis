@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Reservaciones/MicroServicio.Reservaciones.csproj": {}
+    "C:\\Users\\dwayn\\Documents\\ProyectoMototaxis\\microservicios-mototaxis\\MicroServicio.Reservaciones\\MicroServicio.Reservaciones.csproj": {}
   },
   "projects": {
-    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Reservaciones/MicroServicio.Reservaciones.csproj": {
+    "C:\\Users\\dwayn\\Documents\\ProyectoMototaxis\\microservicios-mototaxis\\MicroServicio.Reservaciones\\MicroServicio.Reservaciones.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Reservaciones/MicroServicio.Reservaciones.csproj",
+        "projectUniqueName": "C:\\Users\\dwayn\\Documents\\ProyectoMototaxis\\microservicios-mototaxis\\MicroServicio.Reservaciones\\MicroServicio.Reservaciones.csproj",
         "projectName": "MicroServicio.Reservaciones",
-        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Reservaciones/MicroServicio.Reservaciones.csproj",
-        "packagesPath": "/home/luis/.nuget/packages/",
-        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Reservaciones/obj/",
+        "projectPath": "C:\\Users\\dwayn\\Documents\\ProyectoMototaxis\\microservicios-mototaxis\\MicroServicio.Reservaciones\\MicroServicio.Reservaciones.csproj",
+        "packagesPath": "C:\\Users\\dwayn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dwayn\\Documents\\ProyectoMototaxis\\microservicios-mototaxis\\MicroServicio.Reservaciones\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/luis/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\dwayn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -36,17 +43,57 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
             "MongoDb.Bson": {
               "target": "Package",
               "version": "[3.4.3, )"
+            },
+            "MongoDb.Driver": {
+              "target": "Package",
+              "version": "[3.4.3, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.1.2, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.5, )"
             }
           },
           "imports": [
@@ -65,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
