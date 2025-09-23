@@ -8,5 +8,6 @@ namespace MicroServicio.Conductores.DTOs
     public class RequestAcceptTrip
     {
         public string idDriver { get; set; } = string.Empty;
+        public string idClient { get; set; } = string.Empty;
     }
 }

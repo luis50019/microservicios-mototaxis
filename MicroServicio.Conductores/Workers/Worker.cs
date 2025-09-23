@@ -27,7 +27,7 @@ namespace MicroServicio.Conductores.Workers
                 // Iniciar consumo UNA SOLA VEZ
                 _rabbitService.ConsumingRideFareReady();
                 _rabbitService.AcceptedTrip();
-                
+                _rabbitService.RejectTrip();
                 Console.WriteLine("✅ Consumidor de RabbitMQ iniciado correctamente");
                 
                 // Mantener el worker activo sin bloquear

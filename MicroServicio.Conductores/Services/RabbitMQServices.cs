@@ -39,16 +39,16 @@ namespace MicroServicio.Conductores.Services
 
             Task.Run(async () =>
             {
-                await _channel.QueueDeclareAsync(_queueName, false, false, false, null);//!tarifa aceptada
-                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//!viaje aceptado
-                await _channel.QueueDeclareAsync(_queueAccept, false, false, false, null);//!viaje rechazado
+                await _channel.QueueDeclareAsync(_queueName, false, false, false, null);//?tarifa aceptada
+                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//?viaje aceptado
+                await _channel.QueueDeclareAsync(_queueAccept, false, false, false, null);//?viaje rechazado
             }).Wait();
 
             _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
             _service = service;
         }
 
-        ///TODO: metodo que escuha el mensaje tarifa calculada
+        ///!!metodo que escuha el mensaje tarifa calculada
         public async Task ConsumingRideFareReady()
         {
             await _channel.BasicQosAsync(0, 1, false);
@@ -66,6 +66,7 @@ namespace MicroServicio.Conductores.Services
 
                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {rideFareMessage.idUser}");
 
+                    //* llamamos al metodo que se encarga de buscar a un conductor
                     var driver = await _service.FoundConductorAsync();
                     if (driver.id != "")
                     {
@@ -75,7 +76,9 @@ namespace MicroServicio.Conductores.Services
                     {
                         Console.WriteLine("no se encontro otro conductoro");
                     }
-                    //await PublishDriverFoundAsync(driver);
+                    
+                    //* publica al conductor encontrado para que despues el Hub le notitifica al dicho conductor, pero tambien le enviamos el id del cliente que realizo el viaje
+                    await PublishDriverFoundAsync(driver, rideFareMessage.idUser);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
@@ -86,7 +89,7 @@ namespace MicroServicio.Conductores.Services
                 }
             };
 
-            // 🔥 Aquí conectamos el consumer a la cola
+            //! Aquí conectamos el consumer a la cola
             await _channel.BasicConsumeAsync(
                 queue: _queueName, // la cola donde llegan los mensajes
                 autoAck: false,
@@ -112,6 +115,7 @@ namespace MicroServicio.Conductores.Services
                     Console.WriteLine("metodo de aceptacion");
                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.idDriver}");
 
+                    //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
                     var driver = await _service.AcceptRideAsync(driverInfo.idDriver);
                     if (driver != "")
                     {
@@ -121,7 +125,9 @@ namespace MicroServicio.Conductores.Services
                     {
                         Console.WriteLine("no se encontro otro conductoro");
                     }
-                    //await PublishDriverFoundAsync(driver);
+                    //TODO: agregar el meotodo que publica que el conductor acepto el viaje
+                    //* recibe el id del conductor y el id del cliente al que se le debe de notificar
+                    await PublishDriverAcceptedAsync(driver, driverInfo.idClient);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
@@ -140,53 +146,109 @@ namespace MicroServicio.Conductores.Services
             );
         }
 
+        //TODO: metodo que escucha el mensaje de conductor asignado
+        public async Task RejectTrip()
+        {
+            await _channel.BasicQosAsync(0, 1, false);
+            Console.WriteLine($"Esperando mensajes en la cola {_queueReject}...");
+
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+
+            consumer.ReceivedAsync += async (sender, ea) =>
+            {
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var driverInfo = JsonSerializer.Deserialize<RequestRejectTrip>(message);
+                    Console.WriteLine("metodo de aceptacion");
+                    Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.idDriver}");
+
+                    var driver = await _service.RejectRideAsync(driverInfo.idDriver);
+                    if (driver != "")
+                    {
+                        Console.WriteLine($"Conductor asignado: {driver}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no se encontro otro conductoro");
+                    }
+                    //TODO: agregar el método para indicar que el registro de viaje se realizo de una forma exitosa, y si no entonces notificar que el viaje no se registro de forma correcta
+
+                    //*Metodo que plublica que el conductor rechazo el viaje
+                    await PublishDriverRejectedAsync(driverInfo.idDriver, driverInfo.idClient);
+
+                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error procesando mensaje: {ex}");
+                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                }
+            };
+
+            // Aquí conectamos el consumer a la cola
+            await _channel.BasicConsumeAsync(
+                queue: _queueReject, // la cola donde llegan los mensajes
+                autoAck: false,
+                consumer: consumer
+            );
+        }
+
         ///! Publica un evento cuando el conductor acepta el viaje
-        public async Task PublishDriverAcceptedAsync(string driverId)
+        //? este metodo recibe el id del conductor que acepto el viaje demas del id del cliente del viaje
+        public async Task PublishDriverAcceptedAsync(string driverId,string idClient)
         {
             var result = await _service.AcceptRideAsync(driverId);
             var message = JsonSerializer.Serialize(new
             {
                 Event = "DriverAccepted",
-                Data = result
+                Data = result,
+                client = idClient
             });
 
             var body = Encoding.UTF8.GetBytes(message);
 
             await _channel.BasicPublishAsync(
                 exchange: "",
-                routingKey: "fare_response_queue",
+                routingKey: "tripAccept",
                 body: body
             );
         }
 
         //! Publica un evento cuando el conductor rechaza el viaje
-        public async Task PublishDriverRejectedAsync(string driverId)
+        //? este metodo recibe el id del conductor que rechazo el viaje demas del id del cliente del viaje
+        public async Task PublishDriverRejectedAsync(string driverId, string idClient)
         {
             var result = await _service.RejectRideAsync(driverId);
             var message = JsonSerializer.Serialize(new
             {
                 Event = "DriverRejected",
-                Data = result
+                Data = result,
+                Client = idClient
             });
 
             var body = Encoding.UTF8.GetBytes(message);
 
             await _channel.BasicPublishAsync(
                 exchange: "",
-                routingKey: "fare_response_queue",
+                routingKey: "tripReject",
                 body: body
             );
         }
 
         //! Encuentra un conductor disponible y publica el evento en la cola
-        public async Task PublishDriverFoundAsync(DriverFound driver)
+        //? este metodo recibe el id del conductor que fue asignado el viaje demas del id del cliente del viaje
+        public async Task PublishDriverFoundAsync(DriverFound driver, string idClient)
         {
+            //* El mensaje contiene el id del conducto y sus coordenadas
             var message = JsonSerializer.Serialize(new
             {
                 Event = "DriverFound",
                 Data = new
                 {
                     id = driver.id,
+                    client = idClient,
                     coordinates = driver.coordinates
                 }
             });

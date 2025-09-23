@@ -7,7 +7,7 @@ namespace ServiceReservation.Application.DTOs
 {
     public class RequestFindDriver
     {
-        public string idUser { get; set; }
+        public string idUser { get; set; } // id del cliente que solicita el viaje
         public Coordinates locationStart { get; set; }
         public Coordinates locationEnd { get; set; }
         public double priceTraveled { get; set; }

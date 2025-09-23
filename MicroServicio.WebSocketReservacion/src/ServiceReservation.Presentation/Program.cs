@@ -13,17 +13,27 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//?añadimos signalR
+//!añadimos signalR
 builder.Services.AddSignalR();
 
-//?configuramos RabbitMQ
+//!configuramos RabbitMQ
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection("RabbitMQ")
 );
-builder.Services.AddSingleton <RabbitMqService>();
+
+//!Añadimos el servicio de RabbitMQ
+builder.Services.AddSingleton<RabbitMqService>();
+
+//!Añadimos todos los consumidores y publicadores de RabbitMQ
 builder.Services.AddSingleton<RabbitMqRideFarePublisher>();
 builder.Services.AddSingleton<RabbitMQFindDriver>();
 builder.Services.AddSingleton<RabbitMqRideFareConsumer>();
+builder.Services.AddSingleton<RabbitMQDriverConsumer>();
+
+//!Añadimos el userconnectionManager
+
+builder.Services.AddSingleton<UserConnectionManager>();
+
 //builder.Services.AddSingleton<>();
 //!Anadimos los controladores
 builder.Services.AddControllers();
