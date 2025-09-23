@@ -44,9 +44,25 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[9.0.9, )"
+            },
             "MongoDb.Bson": {
               "target": "Package",
-              "version": "[3.4.3, )"
+              "version": "[3.5.0, )"
+            },
+            "MongoDb.Driver": {
+              "target": "Package",
+              "version": "[3.5.0, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[7.1.2, )"
             }
           },
           "imports": [
