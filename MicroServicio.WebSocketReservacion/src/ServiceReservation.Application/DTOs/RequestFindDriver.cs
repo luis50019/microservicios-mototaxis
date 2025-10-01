@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 namespace ServiceReservation.Application.DTOs
 {
     public class RequestFindDriver
-    {
-        public string idUser { get; set; } // id del cliente que solicita el viaje
+    { 
         public Coordinates locationStart { get; set; }
         public Coordinates locationEnd { get; set; }
         public double priceTraveled { get; set; }
+        public InfoRideFare fare { get; set; } = new InfoRideFare();
+    }
+
+    public class InfoRideFare
+    {
+        public string idUser { get; set; } = string.Empty;// id del cliente que solicita el viaje
+        public FareInfo fareinfo { get; set; } = new FareInfo();    
     }
 
      public class Coordinates

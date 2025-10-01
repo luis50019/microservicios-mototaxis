@@ -25,5 +25,7 @@ namespace MicroServicio.Reservaciones.Data
         }
 
         public IMongoCollection<Reservation> RidesFares => _database.GetCollection<Reservation>("reservations");
+
+        public IMongoCollection<Driver> drivers => _database.GetCollection<Driver>("drivers");
     }
 }

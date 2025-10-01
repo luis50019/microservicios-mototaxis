@@ -24,7 +24,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AuthService.AspireHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c2edd0b5835784a1f35b96b52c721854701bf32")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+696272ff496108dc221d87dcf0d54e453c962ada")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuthService.AspireHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuthService.AspireHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

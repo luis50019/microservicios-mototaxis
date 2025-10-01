@@ -29,6 +29,7 @@ builder.Services.AddSingleton<RabbitMqRideFarePublisher>();
 builder.Services.AddSingleton<RabbitMQFindDriver>();
 builder.Services.AddSingleton<RabbitMqRideFareConsumer>();
 builder.Services.AddSingleton<RabbitMQDriverConsumer>();
+builder.Services.AddSingleton<RabbitMQCodeSecurity>();
 
 //!Añadimos el userconnectionManager
 

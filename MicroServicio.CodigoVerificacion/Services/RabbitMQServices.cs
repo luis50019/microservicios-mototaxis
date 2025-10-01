@@ -1,91 +1,101 @@
+using System.Text;
+using System.Text.Json;
 using MicroServicio.CodigoVerificacion.Configurations;
+using MicroServicio.CodigoVerificacion.DTOs;
+using MicroServicio.CodigoVerificacion.models;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MicroServicio.Tarifas.Services
+public class RabbitMQService : IDisposable
 {
-    public class RabbitMQService : IDisposable
+    private readonly IConnection _connection;
+    private readonly IChannel _channel;
+    private readonly string _queueNameConsume;
+
+    public delegate Task MessageReceivedHandler(RequestCode message);
+    public event MessageReceivedHandler OnMessageReceived;
+
+    public RabbitMQService(IOptions<RabbitMQSettings> settings)
     {
-        private readonly IConnection _connection;
-        private readonly IChannel _channel;
-        private readonly string _queueNameConsume;
-
-        public delegate Task MessageReceivedHandler(string message);
-        public event MessageReceivedHandler OnMessageReceived;
-
-        public RabbitMQService(IOptions<RabbitMQSettings> settings)
+        var factory = new ConnectionFactory()
         {
-            var factory = new ConnectionFactory()
-            {
-                Uri = new Uri("amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
+            Uri = new Uri("amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
+            RequestedHeartbeat = TimeSpan.FromSeconds(60),
+            RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
+            AutomaticRecoveryEnabled = true,
+            NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
+        };
 
-                RequestedHeartbeat = TimeSpan.FromSeconds(60),
-                RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
-                AutomaticRecoveryEnabled = true,
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
-            };
-            _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
+         _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
             _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
 
-            _queueNameConsume = settings.Value.QueueNameConsume;
+        _queueNameConsume = settings.Value.QueueNameConsume;
 
-            _channel.QueueDeclareAsync(queue: _queueNameConsume,
-                                  durable: true,
-                                  exclusive: false,
-                                  autoDelete: false,
-                                  arguments: null);
+        // Bloqueante en el ctor
+        _channel.QueueDeclareAsync(_queueNameConsume, durable: false, exclusive: false, autoDelete: false, arguments: null)
+                .GetAwaiter().GetResult();
 
-            _channel.QueueDeclareAsync(queue: "codigo_generado",
-                                  durable: false,
-                                  exclusive: false,
-                                  autoDelete: false,
-                                  arguments: null);
-        }
+        _channel.QueueDeclareAsync("codigo_generado", durable: false, exclusive: false, autoDelete: false, arguments: null)
+                .GetAwaiter().GetResult();
+    }
 
-        public async Task StartConsumingAsync()
+    public async Task StartConsumingAsync()
+    {
+        Console.WriteLine("🐇 Iniciando consumo de mensajes...");
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+
+        consumer.ReceivedAsync += async (_, ea) =>
         {
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += async (_, ea) =>
+            try
             {
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+                var data = JsonSerializer.Deserialize<RequestCode>(message);
+
+                Console.WriteLine($"📩 Mensaje recibido: {data?.idReservations}");
 
                 if (OnMessageReceived != null)
-                    await OnMessageReceived.Invoke(message);
+                    await OnMessageReceived.Invoke(data);
 
-                _channel.BasicAckAsync(ea.DeliveryTag, false);
-            };
+                await _channel.BasicAckAsync(ea.DeliveryTag, false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error procesando mensaje: {ex.Message}");
+                await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+            }
+        };
 
-            _channel.BasicConsumeAsync(queue: _queueNameConsume,
-                                  autoAck: false,
-                                  consumer: consumer);
+        await _channel.BasicConsumeAsync(
+            queue: _queueNameConsume,
+            autoAck: false,
+            consumer: consumer
+        );
 
-            await Task.CompletedTask;
-        }
+        Console.WriteLine($"✅ Consumidor escuchando en '{_queueNameConsume}'...");
+    }
 
-        public async Task PublishAsync(string message)
-        {
-            var body = Encoding.UTF8.GetBytes(message);
+    public async Task PublishAsync(CodigoGeneradoMessage message)
+    {
+        Console.WriteLine($"📤 Publicando mensaje: {message}");
+        string json = JsonSerializer.Serialize(message);
+        var body = Encoding.UTF8.GetBytes(json);
+        Console.WriteLine("Mensaje publicado.");
 
-            await _channel.BasicPublishAsync(
-                exchange: string.Empty,
-                routingKey: "codigo_generado",
-                mandatory:true,
-                basicProperties: new BasicProperties { Persistent = true },
-                body: body
-            );
-        }
+        await _channel.BasicPublishAsync(
+            exchange: string.Empty,
+            routingKey: "codigo_generado",
+            mandatory: true,
+            basicProperties: new BasicProperties { Persistent = true },
+            body: body
+        );
+    }
 
-
-        public void Dispose()
-        {
-            _channel?.CloseAsync();
-            _connection.CloseAsync();
-            _channel?.Dispose();
-            _connection?.Dispose();
-        }
+    public void Dispose()
+    {
+        _channel?.CloseAsync().GetAwaiter().GetResult();
+        _connection?.CloseAsync().GetAwaiter().GetResult();
+        _channel?.Dispose();
+        _connection?.Dispose();
     }
 }

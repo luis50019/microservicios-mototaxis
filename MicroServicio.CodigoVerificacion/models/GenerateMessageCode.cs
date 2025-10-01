@@ -9,5 +9,7 @@ namespace MicroServicio.CodigoVerificacion.models
     {
         public string Code { get; set; }
         public string IdViaje { get; set; }
+        public string IdClient { get; set; }
+        public string IdDriver { get; set; }
     }
 }

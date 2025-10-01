@@ -1,7 +1,6 @@
 ﻿﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using MicroServicio.Tarifas.Services;
 using MicroServicio.CodigoVerificacion.Data;
 using MicroServicio.CodigoVerificacion.Configurations;
 

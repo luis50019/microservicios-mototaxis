@@ -15,7 +15,7 @@ namespace ServiceReservation.Application.DTOs
 
   public class FareInfo
   {
-    public string FareID { get; set; } = string.Empty;
+    public string FareId { get; set; } = string.Empty;
     public double Price { get; set; } = 0;
     public double StopFarePrice { get; set; } = 0;
     public double MaxStopsAllowed { get; set; } = 0;

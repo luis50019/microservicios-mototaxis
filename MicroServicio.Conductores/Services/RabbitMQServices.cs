@@ -19,9 +19,10 @@ namespace MicroServicio.Conductores.Services
         private readonly string _queueAccept;
         private readonly string _queueReject;
         private readonly DriverService _service;
-
+        private readonly string QueueName = "accept_trip";
         public RabbitMQServices(IOptions<RabbitMQSettings> settings, DriverService service)
         {
+
             var factory = new ConnectionFactory()
             {
                 Uri = new Uri("amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
@@ -40,8 +41,10 @@ namespace MicroServicio.Conductores.Services
             Task.Run(async () =>
             {
                 await _channel.QueueDeclareAsync(_queueName, false, false, false, null);//?tarifa aceptada
-                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//?viaje aceptado
-                await _channel.QueueDeclareAsync(_queueAccept, false, false, false, null);//?viaje rechazado
+                await _channel.ExchangeDeclareAsync(_queueAccept, ExchangeType.Fanout, durable: false); ;//?viaje aceptado
+                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//?viaje rechazado
+                await _channel.QueueBindAsync(queue: QueueName, exchange: _queueAccept, routingKey: string.Empty);
+
             }).Wait();
 
             _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
@@ -76,8 +79,10 @@ namespace MicroServicio.Conductores.Services
                     {
                         Console.WriteLine("no se encontro otro conductoro");
                     }
-                    
+
+                    Console.WriteLine("--- Publicando conductor encontrado ---");
                     //* publica al conductor encontrado para que despues el Hub le notitifica al dicho conductor, pero tambien le enviamos el id del cliente que realizo el viaje
+                    Console.WriteLine(driver.id);
                     await PublishDriverFoundAsync(driver, rideFareMessage.idUser);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
@@ -98,10 +103,80 @@ namespace MicroServicio.Conductores.Services
         }
 
         //TODO: metodo que escucha el mensaje de conductor asignado
+         public async Task AcceptedTrip()
+         {
+             await _channel.BasicQosAsync(0, 1, false);
+             Console.WriteLine($"Esperando mensajes en la cola {_queueAccept}...");
+
+             var consumer = new AsyncEventingBasicConsumer(_channel);
+
+             consumer.ReceivedAsync += async (sender, ea) =>
+             {
+                 try
+                 {
+                     var body = ea.Body.ToArray();
+                     var message = Encoding.UTF8.GetString(body);
+                     var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
+                     Console.WriteLine("metodo de aceptacion");
+                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.infoDriver.data.id}");
+
+                     //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
+                     var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
+                     if (driver != "")
+                     {
+                         Console.WriteLine($"Conductor asignado: {driver}");
+                     }
+                     else
+                     {
+                         Console.WriteLine("no se encontro otro conductoro");
+                     }
+                     //TODO: agregar el meotodo que publica que el conductor acepto el viaje
+                     //* recibe el id del conductor y el id del cliente al que se le debe de notificar
+                     await PublishDriverAcceptedAsync(driver, driverInfo.infoDriver.data.client);
+
+                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.WriteLine($"Error procesando mensaje: {ex}");
+                     await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                 }
+             };
+
+             // 🔥 Aquí conectamos el consumer a la cola
+             await _channel.BasicConsumeAsync(
+                 queue: _queueAccept, // la cola donde llegan los mensajes
+                 autoAck: false,
+                 consumer: consumer
+             );
+         }
+/*
         public async Task AcceptedTrip()
         {
+            // Declarar el exchange (fanout)
+            await _channel.ExchangeDeclareAsync(
+                exchange: "accept_trip",
+                type: ExchangeType.Fanout,
+                durable: true
+            );
+
+            // Crear una cola única por servicio
+            var queueName = await _channel.QueueDeclareAsync(
+                queue: "", // nombre vacío = RabbitMQ genera un nombre único
+                durable: false,
+                exclusive: true,
+                autoDelete: true
+            );
+
+            // Vincular la cola al exchange
+            await _channel.QueueBindAsync(
+                queue: queueName.QueueName,
+                exchange: "accept_trip",
+                routingKey: ""
+            );
+
             await _channel.BasicQosAsync(0, 1, false);
-            Console.WriteLine($"Esperando mensajes en la cola {_queueAccept}...");
+            Console.WriteLine($"👂 Escuchando mensajes en la cola {queueName.QueueName}...");
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
@@ -112,39 +187,37 @@ namespace MicroServicio.Conductores.Services
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
-                    Console.WriteLine("metodo de aceptacion");
-                    Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.idDriver}");
 
-                    //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
-                    var driver = await _service.AcceptRideAsync(driverInfo.idDriver);
-                    if (driver != "")
+                    Console.WriteLine($"🚖 Mensaje recibido: ClienteID={driverInfo.infoDriver.data.client}, ConductorID={driverInfo.infoDriver.data.id}");
+
+                    var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
+
+                    if (!string.IsNullOrEmpty(driver))
                     {
-                        Console.WriteLine($"Conductor asignado: {driver}");
+                        Console.WriteLine($"✅ Conductor asignado: {driver}");
                     }
                     else
                     {
-                        Console.WriteLine("no se encontro otro conductoro");
+                        Console.WriteLine("⚠️ No se encontró conductor disponible");
                     }
-                    //TODO: agregar el meotodo que publica que el conductor acepto el viaje
-                    //* recibe el id del conductor y el id del cliente al que se le debe de notificar
-                    await PublishDriverAcceptedAsync(driver, driverInfo.idClient);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error procesando mensaje: {ex}");
+                    Console.WriteLine($"❌ Error procesando mensaje: {ex}");
                     await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
                 }
             };
 
-            // 🔥 Aquí conectamos el consumer a la cola
             await _channel.BasicConsumeAsync(
-                queue: _queueAccept, // la cola donde llegan los mensajes
+                queue: queueName.QueueName,
                 autoAck: false,
                 consumer: consumer
             );
-        }
+        }*/
+
+
 
         //TODO: metodo que escucha el mensaje de conductor asignado
         public async Task RejectTrip()
@@ -197,7 +270,7 @@ namespace MicroServicio.Conductores.Services
 
         ///! Publica un evento cuando el conductor acepta el viaje
         //? este metodo recibe el id del conductor que acepto el viaje demas del id del cliente del viaje
-        public async Task PublishDriverAcceptedAsync(string driverId,string idClient)
+        public async Task PublishDriverAcceptedAsync(string driverId, string idClient)
         {
             var result = await _service.AcceptRideAsync(driverId);
             var message = JsonSerializer.Serialize(new
@@ -242,6 +315,7 @@ namespace MicroServicio.Conductores.Services
         public async Task PublishDriverFoundAsync(DriverFound driver, string idClient)
         {
             //* El mensaje contiene el id del conducto y sus coordenadas
+            Console.WriteLine("Publicando conductor encontrado...{driverFound}");
             var message = JsonSerializer.Serialize(new
             {
                 Event = "DriverFound",
@@ -257,7 +331,7 @@ namespace MicroServicio.Conductores.Services
             Console.WriteLine("Enviando mensaje");
 
             await _channel.BasicPublishAsync(
-                exchange: "",
+                exchange: string.Empty,
                 routingKey: "driverFound",
                 body: body
             );

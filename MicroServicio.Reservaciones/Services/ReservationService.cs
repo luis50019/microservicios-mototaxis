@@ -3,8 +3,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MicroServicio.Reservaciones.Config;
 using MicroServicio.Reservaciones.Data;
+using MicroServicio.Reservaciones.DTOs;
 using MicroServicio.Reservaciones.models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using RabbitMQ.Client;
 
@@ -13,6 +15,7 @@ namespace MicroServicio.Reservaciones.Services
     public class ReservationService : IDisposable
     {
         private readonly IMongoCollection<Reservation> _reservationsCollection;
+        private readonly IMongoCollection<Driver> _driver;
         private readonly IConnection _connection;
         private readonly IChannel _channel;
         private readonly string _queueName;
@@ -21,10 +24,15 @@ namespace MicroServicio.Reservaciones.Services
             IOptions<MongoDBSettings> mongoSettings,
             IOptions<RabbitMQSettings> rabbitSettings)
         {
+            //TODO: separar esta logica para obtener las bases de datos observa como se realiza en los demas servicio y guiate con eso
+
             var mongoClient = new MongoClient(mongoSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(mongoSettings.Value.Database);
             _reservationsCollection = mongoDatabase.GetCollection<Reservation>("reservationsPrivate");
+            _driver = mongoDatabase.GetCollection<Driver>("drivers");
 
+            //* Esta logica si se queda aqui la de rabbitMQ
+            //?O si puedes separar la logica para que queda mas limpio el constructor y la logica de conexion a rabbit quede en otro metodo
             _queueName = rabbitSettings.Value.QueueName;
 
             var factory = new ConnectionFactory()
@@ -59,40 +67,117 @@ namespace MicroServicio.Reservaciones.Services
             _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
         }
 
-        // Registra la reserva y publica mensaje en cola
-        public async Task RegisterReservationAsync(Reservation reservation)
+        //!Registra la reserva y publica mensaje en cola
+        public async Task RegisterReservationAsync(RequestReservations reservation)
         {
-            if (reservation.Route == null)
+            Console.WriteLine("Iniciando registro de reservación...");
+            Console.WriteLine(JsonSerializer.Serialize(reservation));
+            /*if (reservation.origin == null)
+            {
+                Console.WriteLine(reservation.origin);
                 throw new ArgumentException("La ruta no puede ser nula.");
+            }
 
-            if (reservation.Route.Distance < 0)
+            if (reservation.destination  == null){
+                Console.WriteLine(reservation.destination);
                 throw new ArgumentException("La distancia no puede ser negativa.");
-
+            }*/
+            
+            //?Cres que haga falta validar una distancia maxima entre origen y destino en este servicio?
+            //? o eso se deberia de validar en el servicio que calcula la tarifa?
             const double maxDistanceMeters = 500000; // 500 km max
 
-            if (reservation.Route.Distance > maxDistanceMeters)
-                throw new ArgumentException("La distancia es excesivamente grande.");
+            //*Acutalizamos el estado del conductor a "Ocupado" y aumentamos su tasa de aceptación
+            var filter = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse(reservation.infoDriver.data.id));
+            var update = Builders<Driver>.Update
+                .Set(d => d.StateDriver, "Ocupado")
+                .Inc(d => d.Performance.AcceptanceRate, 1) // ajusta tasa de aceptación
+                .CurrentDate(d => d.UpdatedAt);
 
-            reservation.CreatedAt = DateTime.UtcNow;
-            reservation.UpdatedAt = DateTime.UtcNow;
+            var result = await _driver.UpdateOneAsync(filter, update);
 
-            await _reservationsCollection.InsertOneAsync(reservation);
-
-            var message = new
+            //*Creamos la reservacion
+            //TODO: separar esta logica a un metodo aparte
+            //? la idea es que al metodo solo le pases la variaable reservation y este metodo te regresa el objeto de Reservation ya creado
+            var newReservation = new Reservation
             {
-                IdReservation = reservation.Id,
-                IdClient = reservation.Passage,
-                IdDriver = reservation.Driver,
-                IdRideFare = reservation.Rate,
-                Distance = reservation.Route.Distance
+                Driver = reservation.infoDriver.data.id,
+                Rate = reservation.fareInfo.fareinfo.FareId,
+                Route = new Route
+                {
+                    Start = new Coordinate
+                    {
+                        Lat = reservation.origin.Lat,
+                        Lng = reservation.origin.Lng
+                    },
+                    Destination = new Coordinate
+                    {
+                        Lat = reservation.origin.Lat,
+                        Lng = reservation.origin.Lng
+                    },
+                    Distance = reservation.fareInfo.fareinfo.distanceMax
+                },
+                NumberPassage = 1,//TODO: falta enviar como una opcion desde que se crea la reservacion
+                Passage = reservation.fareInfo.idUser,
+                State = new State
+                {
+                    General = "En curso",
+                    Details = new StateDetails
+                    {
+                        Detail = "Conductor en camino",
+                        SpacenNumber = 0,
+                    }
+                },
+                Security = new Security
+                {
+                    CodeVerification ="", 
+                    IsVerified = false
+                },
+                Comments = new Comments
+                {
+                    Rating = new Rating //* Despues se creara un servicio para modificar estas estadisticas 
+                    //* por el momento se dejan con valores base
+                    {
+                        Overall = 2,
+                        Categories = new RatingCategories
+                        {
+                            Punctuality = 2,
+                            Driving = 2,
+                            Vehicle= 2
+                        }
+                    }
+                },
+                Pay = new Pay
+                {
+                    Methodo = "efectivo",
+                     State="Pendiente"
+                },
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
-            string messageJson = JsonSerializer.Serialize(message);
+            //* insertamos la nueva tarifa
+            await _reservationsCollection.InsertOneAsync(newReservation);
+
+            Console.WriteLine("Reservación registrada con éxito.");
+            Console.WriteLine(JsonSerializer.Serialize(newReservation));
+            Console.WriteLine("======================================================");
+            Console.WriteLine("\nPublicando mensaje en la cola...");
+
+            //! crear respuesta para devolver el mensaje
+            var messageResponse = new
+            {
+                idReservations = newReservation.Id,
+                idClient = newReservation.Passage,
+                idDriver = newReservation.Driver,
+            };
+
+            string messageJson = JsonSerializer.Serialize(messageResponse);
             var body = System.Text.Encoding.UTF8.GetBytes(messageJson);
 
             await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: _queueName,
+                exchange: string.Empty,
+                routingKey: "viaje_registrado_queue",
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body);

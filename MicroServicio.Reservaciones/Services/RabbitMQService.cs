@@ -17,6 +17,7 @@ namespace MicroServicio.Reservaciones.Services
         private readonly IChannel _channel;
         private readonly string _queueName;
         private readonly ReservationService _reservationService;
+        private readonly string _queueNameResponse = "viaje_registrado_queue";
 
         public RabbitMQService(IOptions<RabbitMQSettings> settings, ReservationService reservationService)
         {
@@ -36,7 +37,7 @@ namespace MicroServicio.Reservaciones.Services
             Task.Run(async () =>
             {
                 await _channel.QueueDeclareAsync(_queueName, durable: false, exclusive: false, autoDelete: false);
-                await _channel.QueueDeclareAsync("viaje_registrado_queue", durable: false, exclusive: false, autoDelete: false);
+                await _channel.QueueDeclareAsync(_queueNameResponse, durable: false, exclusive: false, autoDelete: false);
             }).Wait();
 
             _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
@@ -64,21 +65,21 @@ namespace MicroServicio.Reservaciones.Services
                 {
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
-                    var reservationRequest = JsonSerializer.Deserialize<ReservationMessage>(message);
+                    var reservationRequest = JsonSerializer.Deserialize<RequestReservations>(message);
 
                     if (reservationRequest == null)
                         throw new Exception("Mensaje de reserva inválido");
 
-                    var reservation = new Reservation
+                    /*var reservation = new Reservation
                     {
                         Passage = reservationRequest.IdClient,
                         Driver = reservationRequest.IdDriver,
                         Rate = reservationRequest.IdRideFare,
                         Route = new Route { Distance = reservationRequest.Distance },
                         State = new State { General = "Reservado" }
-                    };
+                    };*/
 
-                    await _reservationService.RegisterReservationAsync(reservation);
+                    await _reservationService.RegisterReservationAsync(reservationRequest);
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
                 catch (Exception ex)

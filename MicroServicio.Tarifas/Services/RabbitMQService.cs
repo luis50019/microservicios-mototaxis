@@ -42,7 +42,7 @@ namespace MicroServicio.Tarifas.Services
             Task.Run(async () =>
             {
                 await _channel.QueueDeclareAsync(
-                    queue: _queueName,
+                    queue: "solicitud_viaje",
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -90,41 +90,54 @@ namespace MicroServicio.Tarifas.Services
         public async Task StartConsuming()
         {
 
-            // Configurar QoS antes de consumir
-            await _channel.BasicQosAsync(0, 1, false);
-            Console.WriteLine("consumiendo");
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-
-            consumer.ReceivedAsync += async (sender, ea) =>
+            try
             {
-                try
+                // Configurar QoS antes de consumir
+                Console.WriteLine("comenzando a consumir");
+                await _channel.BasicQosAsync(0, 1, false);
+                Console.WriteLine("consumiendo");
+                var consumer = new AsyncEventingBasicConsumer(_channel);
+
+                consumer.ReceivedAsync += async (sender, ea) =>
                 {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    var rideFareMessage = JsonSerializer.Deserialize<RideFareMessage>(message);
-                    Console.WriteLine($" 📩 Mensaje: {message}");
+                    try
+                    {
+                        var body = ea.Body.ToArray();
+                        var message = Encoding.UTF8.GetString(body);
+                        var rideFareMessage = JsonSerializer.Deserialize<RideFareMessage>(message);
+                        if (rideFareMessage == null)
+                        {
+                            Console.WriteLine("Mensaje deserializado es null");
+                            await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                            return;
+                        }
+                        await ProcessMessage(rideFareMessage);
 
-                    // Procesar mensaje aquí
-                    await ProcessMessage(rideFareMessage);
 
-                    // Confirmar procesamiento
-                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
-                }
-                catch (Exception ex)
-                {
-                    // Rechazar mensaje y no reintentar
-                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
-                }
-            };
+                        // Confirmar procesamiento
+                        await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Rechazar mensaje y no reintentar
+                        await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                    }
+                };
 
-            // Iniciar consumo
-            await _channel.BasicConsumeAsync(
-                queue: _queueName,
-                autoAck: false,  // Importante: autoAck = false
-                consumer: consumer
-            );
+                // Iniciar consumo
+                await _channel.BasicConsumeAsync(
+                    queue: _queueName,
+                    autoAck: false,  // Importante: autoAck = false
+                    consumer: consumer
+                );
 
-            Console.WriteLine($" [*] Esperando mensajes en '{_queueName}'...");
+                Console.WriteLine($" [*] Esperando mensajes en '{_queueName}'...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al iniciar el consumo: {ex.Message}");
+                throw;
+            }
         }
 
         //!metodo que se encarga de procesar el mensaje recibido
@@ -132,6 +145,8 @@ namespace MicroServicio.Tarifas.Services
         {
             try
             {
+                Console.WriteLine("Procesando mensaje...");
+                Console.WriteLine($"Mensaje recibido: {JsonSerializer.Serialize(message)}");
                 //?el mensaje lo transformacmos a un objeto
                 if (message == null)
                 {

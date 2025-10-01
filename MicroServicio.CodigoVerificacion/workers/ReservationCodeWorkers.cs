@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using MicroServicio.Tarifas.Services;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MicroServicio.CodigoVerificacion.models;
 using MicroServicio.CodigoVerificacion.Configurations;
+using MicroServicio.CodigoVerificacion.DTOs;
 
 public class ReservationWorker : BackgroundService
 {
@@ -23,34 +23,44 @@ public class ReservationWorker : BackgroundService
         _rabbitService.OnMessageReceived += HandleMessageAsync;
     }
 
-    private async Task HandleMessageAsync(string mensaje)
+    private async Task HandleMessageAsync(RequestCode mensaje)
     {
+        try
+        {
+            Console.WriteLine("🔔 Manejo de mensaje iniciado.");
         // Deserializar mensaje recibido
-        var viaje = JsonSerializer.Deserialize<Reservation>(mensaje);
-        if (viaje == null) return;
 
         // Validar viaje
-        if (!await _mongoService.ExisteViaje(viaje.Id))
+        if (await _mongoService.ExisteViaje(mensaje.idReservations))
             return;
 
         // Generar codigo de verificación
         string codigo = CodigoVerificacion.GenerarCodigo();
-
+        Console.WriteLine($"✅ Código generado: {codigo}");
         // Guardar en mongo
-        await _mongoService.GuardarCodigoVerificacion(viaje.Id, codigo);
+        await _mongoService.GuardarCodigoVerificacion(mensaje.idReservations, codigo);
 
         // Publicar mensaje y codigo
         var codigoMsg = new CodigoGeneradoMessage
         {
             Code = codigo,
-            IdViaje = viaje.Id
+            IdViaje = mensaje.idReservations,
+            IdClient = mensaje.idClient,
+            IdDriver = mensaje.idDriver
         };
-        string json = JsonSerializer.Serialize(codigoMsg);
-        await _rabbitService.PublishAsync(json);
+        
+        await _rabbitService.PublishAsync(codigoMsg);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error al manejar el mensaje: {ex.Message}");
+            throw;
+        }
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        Console.WriteLine("ReservationWorker iniciado.");
         // Iniciar consumo
         await _rabbitService.StartConsumingAsync();
 

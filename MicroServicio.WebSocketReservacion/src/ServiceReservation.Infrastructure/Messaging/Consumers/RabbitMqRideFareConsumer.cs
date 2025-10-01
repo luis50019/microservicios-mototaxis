@@ -17,6 +17,7 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
             _rabbitMQ = rabbitMq;
         }
 
+        //*Medod que coonsume el mensaje de que la tarifa fue calculada y devuelve la informacion al usuario que lo solicito
         public async Task<ResponseConsumerRideFare> ConsumerRideAsync()
         {
             var tcs = new TaskCompletionSource<ResponseConsumerRideFare>();

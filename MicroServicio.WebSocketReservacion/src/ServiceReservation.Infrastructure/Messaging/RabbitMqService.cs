@@ -27,17 +27,34 @@ namespace ServiceReservation.Infrastructure.Messaging
 
         //?Metodo para realizar publicaciones
         //!recibe el nombre de la cola y el mensaje a enviar
-        public async Task PublicAsync(string queue, string message)
+        public async Task PublicAsync(string exchange, string message)
         {
 
-            await _channel.QueueDeclareAsync(queue, durable: false, exclusive: false, autoDelete: false);
+            await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
             var body = Encoding.UTF8.GetBytes(message);
 
-            Console.WriteLine("ahora estoy aqui");
+            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
 
             await _channel.BasicPublishAsync(
                 exchange: string.Empty,
-                routingKey: queue, //se coloca el nombre de la cola
+                routingKey: exchange, //se coloca el nombre de la cola
+                mandatory: true,
+                basicProperties: new BasicProperties { Persistent = true },
+                body: body
+            );
+        }
+
+        public async Task PulblicExchangeAsync(string exchange, string message)
+        {
+
+            await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
+
+            await _channel.BasicPublishAsync(
+                exchange: exchange,
+                routingKey: string.Empty, //se coloca el nombre de la cola
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body

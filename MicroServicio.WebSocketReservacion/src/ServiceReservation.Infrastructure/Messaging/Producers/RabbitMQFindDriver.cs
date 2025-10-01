@@ -28,9 +28,11 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
 
         public async Task PublicAceptTripAsync(RequestAcceptTrip data)
         {
+            //TODO: modificar la logica de aceptar viaje
+            //?Ahora el mensaje solo lo recibiara el servicio de reservations
             Console.WriteLine("Llegue al publisher");
             var json = JsonSerializer.Serialize<RequestAcceptTrip>(data);
-            await _rabbitMQ.PublicAsync(_queueAccepTraveled, json);
+            await _rabbitMQ.PulblicExchangeAsync(_queueAccepTraveled, json);
         }
         
         public async Task PublicRejectTripAsync(RequestRejectTrip data)
