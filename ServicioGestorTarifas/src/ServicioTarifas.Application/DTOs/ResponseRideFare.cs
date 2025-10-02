@@ -11,6 +11,8 @@ namespace ServicioTarifas.Application.DTOs
         public string Id { get; set; }
 
         public double? Price { get; set; } = 0;
+        public double PricePrivate { get; set; } = 0;
+        public string locality { get; set; } = string.Empty;
 
         public double DistanceMin { get; set; }
         public double DistanceMax { get; set; }

@@ -40,12 +40,18 @@ namespace ServicioTarifas.Domain
         public double? Price { get; set; }
         public bool IsActive { get; set; } = false;
     }
+    public class PrivateFare
+    {
+        public double Price { get; set; }
+        public bool isActive { get; set; } = true;
+    }
 
     //!Agrupa los tipos de tarifa que puedan existir
     //?Tarifas personalizadas, una tarifa global
     public class FareType
     {
         public GlobalFare Global { get; set; } = new GlobalFare();
+        public PrivateFare Private { get; set; } = new PrivateFare();
         //!Despues en un futuro se añadira esta opcion
         //public List<CustomFare> Customized { get; set; } = new List<CustomFare>();
     }
@@ -59,8 +65,8 @@ namespace ServicioTarifas.Domain
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; } 
-
+        public string Id { get; set; }
+        public string locality { get; set; } = string.Empty;
         public FareType FareType { get; set; } = new FareType();
         public StopFare StopFare { get; set; } = new StopFare();
 

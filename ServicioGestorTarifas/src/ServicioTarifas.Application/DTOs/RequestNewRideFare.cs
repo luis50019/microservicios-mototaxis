@@ -12,6 +12,9 @@ namespace ServicioTarifas.Application.DTOs
         public double price { get; set; } = 0;
         public int stopLimit { get; set; } = 0;
         public double stopLimitPrice { get; set; } = 0;
+        public string nameLocality { get; set; } = string.Empty;
 
+        public double priceServicePrivate { get; set; } = 0;
+        
     }
 }
