@@ -24,7 +24,7 @@ namespace AuthService.Web.Controllers
 
 		//*Metodo para el registro de usuarios
 		[Microsoft.AspNetCore.Mvc.HttpPost("/user")]
-		public async Task<IActionResult> Register([Microsoft.AspNetCore.Mvc.FromBody] RegisterRequest dto)
+		public async Task<IActionResult> Register([Microsoft.AspNetCore.Mvc.FromBody] RegisterRequestClient dto)
 		{
 			try
 			{
@@ -50,7 +50,7 @@ namespace AuthService.Web.Controllers
 
 		//*Metodo par el registro de conductores
 		[Microsoft.AspNetCore.Mvc.HttpPost("/driver")]
-		public async Task<IActionResult> RegisterDriver([Microsoft.AspNetCore.Mvc.FromBody] RegisterRequest dto)
+		public async Task<IActionResult> RegisterDriver([Microsoft.AspNetCore.Mvc.FromBody] RegisterRequestDriver dto)
 		{
 			try
 			{
@@ -84,8 +84,6 @@ namespace AuthService.Web.Controllers
 					var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 					return BadRequest(new { error = "Datos invalidos", detail = errors });
 				}
-				Console.WriteLine("usuario" + dto.password);
-				Console.WriteLine("usuario" + dto.Phone.Number);
 				var infoLogin = await _userService.LoginUser(dto);
 				return Ok(infoLogin);
 			}
