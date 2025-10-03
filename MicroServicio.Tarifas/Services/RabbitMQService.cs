@@ -155,7 +155,7 @@ namespace MicroServicio.Tarifas.Services
                 }
 
                 //?buscamos la tarifa
-                var response = await _service.GetRideFareAsync(message.distanceTraveled);
+                var response = await _service.GetRideFareAsync(message.distanceTraveled,message.locality);
 
                 if (response == null)
                 {

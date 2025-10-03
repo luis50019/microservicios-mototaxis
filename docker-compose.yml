@@ -1,32 +1,89 @@
+version: "3.9"
 services:
   authservice:
     build:
       context: ./AuthService
       dockerfile: src/AuthService.Web/Dockerfile
-    ports:
-      - "5000:80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
       - MONGO__CONNECTION_STRING=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>?retryWrites=true&w=majority
       - MONGO__DATABASE=mototaxi
+    restart: always
+    networks:
+      - mototaxi-net
 
   tarifaservice:
     build:
       context: ./MicroServicio.Tarifas
       dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    restart: always
+    networks:
+      - mototaxi-net
 
   conductoresservice:
     build:
       context: ./MicroServicio.Conductores
       dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    restart: always
+    networks:
+      - mototaxi-net
 
   reservasservice:
     build:
       context: ./MicroServicio.Reservaciones
       dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    restart: always
+    networks:
+      - mototaxi-net
 
   codigoverificacionservice:
     build:
       context: ./MicroServicio.CodigoVerificacion
       dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    restart: always
+    networks:
+      - mototaxi-net
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - authservice
+      - tarifaservice
+      - conductoresservice
+      - reservasservice
+      - codigoverificacionservice
+    restart: always
+    networks:
+      - mototaxi-net
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: >
+      sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done"
+
+networks:
+  mototaxi-net:
+    driver: bridge

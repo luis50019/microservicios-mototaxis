@@ -19,18 +19,14 @@ namespace MicroServicio.Tarifas.Services
         }
 
         //TODO: método que buscara la tarifa por medio de la distancia a recorrer|
-        public async Task<ResponseRideFare?> GetRideFareAsync(double distanceTraveled)
+        public async Task<ResponseRideFare?> GetRideFareAsync(double distanceTraveled,string locality)
         {
-            
-                Console.WriteLine("hola getRideFare");
-            Console.WriteLine("distancia" + distanceTraveled);
-            //!lo que esta mal es la consulta, no se porque, pero debemos de investigar
+        
             var fare = await _context.RidesFares
                     .AsQueryable()
-                    .Where(f => distanceTraveled >= f.DistanceMin && distanceTraveled <= f.DistanceMax)
+                    .Where(f => distanceTraveled >= f.DistanceMin && distanceTraveled <= f.DistanceMax
+                    && f.locality == locality && f.IsActive == true)
                     .FirstOrDefaultAsync();
-
-
             if (fare == null)
             {
                 Console.WriteLine("entro qui");
@@ -44,7 +40,9 @@ namespace MicroServicio.Tarifas.Services
                 DistanceMax = fare.DistanceMax,
                 StopFarePrice = fare.StopFare.PricePerStop,
                 MaxStopsAllowed = fare.StopFare.MaxStopsAllowed,
-                AcceptedPaymentMethods = fare.AcceptedPaymentMethods
+                AcceptedPaymentMethods = fare.AcceptedPaymentMethods,
+                PricePrivate = fare.FareType.Private.Price,
+                locality = fare.locality
             };
         }
     }
