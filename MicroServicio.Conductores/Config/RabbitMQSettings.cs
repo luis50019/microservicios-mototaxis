@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MicroServicio.Conductores.Config
+{
+    public class RabbitMQSettings
+    {
+        public string url { get; set; } = string.Empty;
+        public string QueueName { get; set; } = string.Empty;
+        public string QueueAcceptTrip { get; set; } = string.Empty;
+        public string QueueRejectTrip { get; set; } = string.Empty;
+    }
+}

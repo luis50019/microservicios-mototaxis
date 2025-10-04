@@ -65,10 +65,10 @@ namespace MicroServicio.Reservaciones.models
     public class Coordinate
     {
         [BsonElement("lat")]
-        public double Lat { get; set; }
+        public double Lat { get; set; } = 0.0;
 
         [BsonElement("lng")]
-        public double Lng { get; set; }
+        public double Lng { get; set; } = 0.0;
     }
 
     public class State
@@ -93,6 +93,7 @@ namespace MicroServicio.Reservaciones.models
     {
         [BsonElement("codeVerification")]
         public string CodeVerification { get; set; }
+        public bool IsVerified { get; set; }
     }
 
     public class Comments

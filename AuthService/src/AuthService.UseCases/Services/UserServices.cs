@@ -30,7 +30,7 @@ namespace AuthService.UseCases.Services
 
 
         //*Metodo para registrar un usuario
-        public async Task<RegisterResponse> RegisterUser(RegisterRequest dto)
+        public async Task<RegisterResponse> RegisterUser(RegisterRequestClient dto)
         {
             var newUser = CreateUser.NewUSer(dto.Name, dto.Phone, dto.password);
             var isExist = await _phoneValidate.PhoneExist(dto.Phone.Number);
@@ -40,7 +40,12 @@ namespace AuthService.UseCases.Services
             }
             await _userRepository.AddAsync(newUser);
 
-            var token = _tokenGenerator.GenerateToken(dto);
+            var token = _tokenGenerator.GenerateToken(new RegisterRequest
+            {
+                Name = dto.Name,
+                password = dto.password,
+                Phone = dto.Phone
+            });
 
             return new RegisterResponse
             {
@@ -51,16 +56,21 @@ namespace AuthService.UseCases.Services
         }
 
         //*Metodo para registrar a un conductor
-        public async Task<RegisterResponse> RegisterDriver(RegisterRequest dto)
+        public async Task<RegisterResponse> RegisterDriver(RegisterRequestDriver dto)
         {
-            var newDriver = CreateDriver.NewDriver(dto.Name, dto.Phone, dto.password);
+            var newDriver = CreateDriver.NewDriver(dto.Name, dto.Phone, dto.password,"Disponible",dto.urlPhoto,dto.numberUnit,dto.LicensePlate);
             var isExist = await _phoneValidate.PhoneExist(dto.Phone.Number);
             if (isExist)
             {
                 throw new PhoneAlreadyExistException(dto.Phone.Number);
             }
             await _userRepository.AddAsyncDriver(newDriver);
-            var token = _tokenGenerator.GenerateToken(dto);
+            var token = _tokenGenerator.GenerateToken(new RegisterRequest
+            {
+                Name = dto.Name,
+                password = dto.password,
+                Phone = dto.Phone
+            });
             return new RegisterResponse
             {
                 Token = token.ToString(),

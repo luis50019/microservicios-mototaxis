@@ -8,8 +8,8 @@ namespace AuthService.UseCases.Interfaces
 {
     public interface IUserService
     {
-        Task<RegisterResponse> RegisterUser(RegisterRequest dto);
-        Task<RegisterResponse> RegisterDriver(RegisterRequest dto);
+        Task<RegisterResponse> RegisterUser(RegisterRequestClient dto);
+        Task<RegisterResponse> RegisterDriver(RegisterRequestDriver dto);
         Task<LoginResponse> LoginUser(LoginRequest dto);
     }
 }

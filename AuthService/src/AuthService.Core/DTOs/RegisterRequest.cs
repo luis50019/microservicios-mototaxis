@@ -7,13 +7,38 @@ using AuthService.Core.Entities;
 
 namespace AuthService.Core.DTOs
 {
-    public class RegisterRequest
+    public class RegisterRequestDriver
     {
-        [MinLength(6,ErrorMessage = "EL nombre debe tener al menos 6 caracteres"),MaxLength(15,ErrorMessage ="EL maximo de caracteres es de 15")]
+        [MinLength(6, ErrorMessage = "EL nombre debe tener al menos 6 caracteres"), MaxLength(15, ErrorMessage = "EL maximo de caracteres es de 15")]
         public string Name { get; set; } = string.Empty;
         public Phone Phone { get; set; } = new Phone();
 
-        [MinLength(6,ErrorMessage ="La contraseña debe tener almenos 6 caracteres"),MaxLength(15,ErrorMessage ="El maximo de caracteres es de 15")]
+        [MinLength(6, ErrorMessage = "La contraseña debe tener almenos 6 caracteres"), MaxLength(15, ErrorMessage = "El maximo de caracteres es de 15")]
+        public string password { get; set; } = string.Empty;
+        public string urlPhoto { get; set; } = string.Empty;
+        public string LicensePlate { get; set; } = string.Empty;
+        public double numberUnit { get; set; } = 0;
+
+    }
+
+    public class RegisterRequest
+    {
+        [MinLength(6, ErrorMessage = "EL nombre debe tener al menos 6 caracteres"), MaxLength(15, ErrorMessage = "EL maximo de caracteres es de 15")]
+        public string Name { get; set; } = string.Empty;
+        public Phone Phone { get; set; } = new Phone();
+
+        [MinLength(6, ErrorMessage = "La contraseña debe tener almenos 6 caracteres"), MaxLength(15, ErrorMessage = "El maximo de caracteres es de 15")]
+        public string password { get; set; } = string.Empty;
+
+    }
+
+   public class RegisterRequestClient
+    {
+        [MinLength(6, ErrorMessage = "EL nombre debe tener al menos 6 caracteres"), MaxLength(15, ErrorMessage = "EL maximo de caracteres es de 15")]
+        public string Name { get; set; } = string.Empty;
+        public Phone Phone { get; set; } = new Phone();
+
+        [MinLength(6, ErrorMessage = "La contraseña debe tener almenos 6 caracteres"), MaxLength(15, ErrorMessage = "El maximo de caracteres es de 15")]
         public string password { get; set; } = string.Empty;
 
     }

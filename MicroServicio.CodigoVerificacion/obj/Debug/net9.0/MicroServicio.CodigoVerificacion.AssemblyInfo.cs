@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MicroServicio.CodigoVerificacion")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df1b6d2d32fa69765f509e63e5a6b81f890b4ecb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+696272ff496108dc221d87dcf0d54e453c962ada")]
 [assembly: System.Reflection.AssemblyProductAttribute("MicroServicio.CodigoVerificacion")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MicroServicio.CodigoVerificacion")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

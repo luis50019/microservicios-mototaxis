@@ -26,11 +26,13 @@ namespace ServicioTarifas.Application.Services
             {
                 var newRideFare = new Fare
                 {
+                    locality = newFare.nameLocality,
                     DistanceMax = newFare.distanceMax,
                     DistanceMin = newFare.distamceMin,
                     FareType = new FareType
                     {
-                        Global = new GlobalFare { Price = newFare.price, IsActive = true }
+                        Global = new GlobalFare { Price = newFare.price, IsActive = true },
+                        Private = new PrivateFare{ Price = newFare.priceServicePrivate,isActive = true}
                     },
                     StopFare = new StopFare
                     {
@@ -50,6 +52,8 @@ namespace ServicioTarifas.Application.Services
                 {
                     Id = result.Id,
                     CreatedAt = result.CreatedAt,
+                    locality = result.locality,
+                    PricePrivate = result.FareType.Private.Price,
                     DistanceMax = result.DistanceMax,
                     DistanceMin = result.DistanceMin,
                     Price = result.FareType.Global.Price,

@@ -28,15 +28,7 @@ namespace ServicioTarifas.Presentation.Controllers
             try
             {
                 var result = await _rideFareService.AddRideFare(newFare);
-                return Ok(new ResponseRideFare
-                {
-                    Id = result.Id,
-                    DistanceMax = result.DistanceMax,
-                    DistanceMin = result.DistanceMin,
-                    Price = result.Price,
-                    IsActive = result.IsActive,
-                    CreatedAt = result.CreatedAt
-                });
+                return Ok(result);
 
             }
             catch (ExceptionRideFare ex)

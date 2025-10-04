@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using ServiceReservation.Application.DTOs;
 
 namespace ServiceReservation.Infrastructure.Messaging.Consumers
 {
@@ -15,17 +17,22 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
             _rabbitMQ = rabbitMq;
         }
 
-        public async Task ConsumerRideAsync()
+        //*Medod que coonsume el mensaje de que la tarifa fue calculada y devuelve la informacion al usuario que lo solicito
+        public async Task<ResponseConsumerRideFare> ConsumerRideAsync()
         {
-            Console.WriteLine("llegue al publisher");
+            var tcs = new TaskCompletionSource<ResponseConsumerRideFare>();
 
-            await _rabbitMQ.ConsumeAsync(_exchangeName,async(msg)=>
+            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg) =>
             {
-                Console.WriteLine("mensaje recibido:" + msg);
+                var message = JsonSerializer.Deserialize<ResponseConsumerRideFare>(msg);
+                tcs.SetResult(message); // completamos la tarea
             });
+
+            return await tcs.Task; // esperamos a que llegue el mensaje
         }
 
-        public void handlerMessage(string message) {
+        public void handlerMessage(string message)
+        {
             Console.WriteLine(message);
         }
     }

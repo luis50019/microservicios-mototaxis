@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DnsClient.Protocol;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace MicroServicio.Tarifas.Models
@@ -42,11 +43,18 @@ namespace MicroServicio.Tarifas.Models
         public bool IsActive { get; set; } = false;
     }
 
+    public class PrivateFare
+    {
+        public double Price { get; set; }
+        public bool isActive { get; set; } = true;
+    }
+
     //!Agrupa los tipos de tarifa que puedan existir
     //?Tarifas personalizadas, una tarifa global
     public class FareType
     {
         public GlobalFare Global { get; set; } = new GlobalFare();
+        public PrivateFare Private { get; set; } = new PrivateFare();
         //!Despues en un futuro se añadira esta opcion
         //public List<CustomFare> Customized { get; set; } = new List<CustomFare>();
     }
@@ -61,6 +69,8 @@ namespace MicroServicio.Tarifas.Models
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
+
+        public string locality { get; set; } = string.Empty;
 
         public FareType FareType { get; set; } = new FareType();
         public StopFare StopFare { get; set; } = new StopFare();
