@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MicroServicio.Reservaciones.models
+namespace MicroServicio.Conductores.Data
 {
     public class Driver
     {
@@ -17,7 +17,7 @@ namespace MicroServicio.Reservaciones.models
         public BasicInfo BasicInfo { get; set; } = new();
         public string? StateDriver { get; set; }
 
-        public Security Security { get; set; } = new();
+        public SecurityData Security { get; set; } = new();
 
         public double? Rating { get; set; }
         public TypesComment TypesComment { get; set; } = new();
@@ -67,6 +67,18 @@ namespace MicroServicio.Reservaciones.models
         public string LanguagePreference { get; set; } = "es_MX";
     }
 
+    public class SecurityData
+    {
+        public List<AuthenticationMethod> AuthenticationMethods { get; set; } = new();
+        public EmergencyContact? EmergencyContact { get; set; }
+    }
+
+    public class AuthenticationMethod
+    {
+        public AuthType Type { get; set; }
+        public string? ExternalId { get; set; }
+    }
+
 
     public class Email
     {
@@ -79,12 +91,6 @@ namespace MicroServicio.Reservaciones.models
         public string Number { get; set; } = null!;
         public string CountryCode { get; set; } = "+52";
         public bool Verified { get; set; }
-    }
-
-    public class AuthenticationMethod
-    {
-        public AuthType Type { get; set; }
-        public string? ExternalId { get; set; }
     }
 
     public enum AuthType
@@ -135,8 +141,8 @@ namespace MicroServicio.Reservaciones.models
 
     public class Coordinates
     {
-        public double Lat { get; set; } = 0.0;
-        public double Lng { get; set; } = 0.0;
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
     }
 
     public class BackgroundCheck

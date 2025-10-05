@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MicroServicio.Reservaciones")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+716d57c0225f760667787d7d0e92964ed71de908")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+555bf9b44e317b52a311b85ff86550027fffaf4b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MicroServicio.Reservaciones")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MicroServicio.Reservaciones")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

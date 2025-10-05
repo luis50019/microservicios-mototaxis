@@ -17,7 +17,7 @@ namespace AuthService.Core.Entities
         public BasicInfo BasicInfo { get; set; } = new();
         public string? StateDriver { get; set; }
 
-        public Security Security { get; set; } = new();
+        public SecurityData Security { get; set; } = new();
 
         public double? Rating { get; set; }
         public TypesComment TypesComment { get; set; } = new();

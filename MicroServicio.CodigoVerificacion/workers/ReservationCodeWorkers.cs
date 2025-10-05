@@ -38,7 +38,7 @@ public class ReservationWorker : BackgroundService
         string codigo = CodigoVerificacion.GenerarCodigo();
         Console.WriteLine($"✅ Código generado: {codigo}");
         // Guardar en mongo
-        await _mongoService.GuardarCodigoVerificacion(mensaje.idReservations, codigo);
+        var InfoDriver = await _mongoService.GuardarCodigoVerificacion(mensaje.idReservations, codigo,mensaje.idDriver);
 
         // Publicar mensaje y codigo
         var codigoMsg = new CodigoGeneradoMessage
@@ -46,7 +46,7 @@ public class ReservationWorker : BackgroundService
             Code = codigo,
             IdViaje = mensaje.idReservations,
             IdClient = mensaje.idClient,
-            IdDriver = mensaje.idDriver
+            DataDriver = InfoDriver
         };
         
         await _rabbitService.PublishAsync(codigoMsg);

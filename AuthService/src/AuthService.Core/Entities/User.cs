@@ -12,7 +12,7 @@ namespace AuthService.Core.Entities
         public ObjectId Id { get; set; }
 
         public BasicInfo BasicInfo { get; set; } = new BasicInfo();
-        public Security Security { get; set; } = new Security();
+        public SecurityData Security { get; set; } = new SecurityData();
         public RidePreferences RidePreferences { get; set; } = new RidePreferences();
         public Location Location { get; set; } = new Location();
         public Reservations Reservations { get; set; } = new Reservations();
@@ -51,7 +51,7 @@ namespace AuthService.Core.Entities
         public bool Verified { get; set; }
     }
 
-    public class Security
+    public class SecurityData
     {
         public List<AuthenticationMethod> AuthenticationMethods { get; set; } = new();
         public EmergencyContact? EmergencyContact { get; set; }

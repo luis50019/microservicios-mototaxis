@@ -19,7 +19,7 @@ namespace MicroServicio.Tarifas.Services
         }
 
         //TODO: método que buscara la tarifa por medio de la distancia a recorrer|
-        public async Task<ResponseRideFare?> GetRideFareAsync(double distanceTraveled,string locality)
+        public async Task<ResponseRideFare> GetRideFareAsync(double distanceTraveled,string locality)
         {
         
             var fare = await _context.RidesFares

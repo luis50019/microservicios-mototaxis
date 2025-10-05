@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MicroServicio.Conductores.Data;
 using MicroServicio.Reservaciones.Config;
 using MicroServicio.Reservaciones.Data;
 using MicroServicio.Reservaciones.DTOs;
@@ -107,13 +108,13 @@ namespace MicroServicio.Reservaciones.Services
                 {
                     Start = new Coordinate
                     {
-                        Lat = reservation.origin.Lat,
-                        Lng = reservation.origin.Lng
+                        Lat = reservation.origin.Lat.Value,
+                        Lng = reservation.origin.Lng!.Value
                     },
                     Destination = new Coordinate
                     {
-                        Lat = reservation.origin.Lat,
-                        Lng = reservation.origin.Lng
+                        Lat = reservation.origin.Lat!.Value,
+                        Lng = reservation.origin.Lng!.Value
                     },
                     Distance = reservation.fareInfo.fareinfo.distanceMax
                 },

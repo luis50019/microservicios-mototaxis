@@ -61,7 +61,7 @@ public class RabbitMQService : IDisposable
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error procesando mensaje: {ex.Message}");
+                Console.WriteLine($"❌ Error procesando mensaje: {ex}");
                 await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
             }
         };
@@ -78,7 +78,7 @@ public class RabbitMQService : IDisposable
     public async Task PublishAsync(CodigoGeneradoMessage message)
     {
         Console.WriteLine($"📤 Publicando mensaje: {message}");
-        string json = JsonSerializer.Serialize(message);
+        string json = JsonSerializer.Serialize<CodigoGeneradoMessage>(message);
         var body = Encoding.UTF8.GetBytes(json);
         Console.WriteLine("Mensaje publicado.");
 

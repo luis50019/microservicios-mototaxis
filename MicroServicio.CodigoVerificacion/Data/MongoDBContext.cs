@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using MicroServicio.CodigoVerificacion.Configurations;
 using MicroServicio.CodigoVerificacion.models;
 using MongoDB.Driver;
-using Microsoft.Extensions.Options; // 🔹 Importar este
+using Microsoft.Extensions.Options;
+using MicroServicio.Conductores.Data;
 
 namespace MicroServicio.CodigoVerificacion.Data
 {
@@ -24,6 +25,13 @@ namespace MicroServicio.CodigoVerificacion.Data
             get
             {
                 return _database.GetCollection<Reservation>("Reservations");
+            }
+        }
+        public IMongoCollection<Driver> Drivers
+        {
+            get
+            {
+                return _database.GetCollection<Driver>("drivers");
             }
         }
     }

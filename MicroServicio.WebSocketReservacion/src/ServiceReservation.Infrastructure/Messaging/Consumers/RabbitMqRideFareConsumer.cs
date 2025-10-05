@@ -24,7 +24,9 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
 
             await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg) =>
             {
+
                 var message = JsonSerializer.Deserialize<ResponseConsumerRideFare>(msg);
+                Console.WriteLine("-----------> tarifa" + msg);
                 tcs.SetResult(message); // completamos la tarea
             });
 

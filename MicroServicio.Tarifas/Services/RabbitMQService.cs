@@ -162,7 +162,7 @@ namespace MicroServicio.Tarifas.Services
                     Console.WriteLine("entro al null del response");
                     throw new Exception("No se encontro la tarifa");
                 }
-                Console.WriteLine($"info: {response.DistanceMin}");
+                Console.WriteLine($"info: {response.PricePrivate}");
 
                 //?Preparamos el mensaje que sera la respuesta
                 var responseMessage = new FareResponseMessage

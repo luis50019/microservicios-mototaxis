@@ -10,6 +10,14 @@ namespace ServiceReservation.Application.DTOs
         public string Code { get; set; }
         public string IdViaje { get; set; }
         public string IdClient { get; set; }
-        public string IdDriver { get; set; }
+        public infoDriverCode DataDriver { get; set; }
+    }
+    public class infoDriverCode
+    {
+        public string idDriver { get; set; }
+        public string PhotoDriver { get; set; }
+        public string LicensePlate { get; set; }
+        public string Phone { get; set; }
+        public double? numberUnit { get; set; } = 0;
     }
 }

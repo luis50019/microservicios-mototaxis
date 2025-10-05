@@ -53,7 +53,7 @@ namespace ServiceReservation.Presentation.Hubs
                 //!notificar al usuario que su tarifa esta siendo calculada
                 var response = await _consumerRideFare.ConsumerRideAsync();
                 Console.WriteLine("---------- tarifa recibida -------------");
-                Console.WriteLine(response.Fare.FareId);
+                Console.WriteLine(response.Fare.PricePrivate);
                 Console.WriteLine("-----------------------");
                 //? reenviar el mensaje de la tarifa al usurio que le corresponde
                 var connections = _userConnectionManager.GetConnections(data.IdUser);
@@ -104,7 +104,7 @@ namespace ServiceReservation.Presentation.Hubs
                     return;
                 }
                 //! falta logica para enviar la informacion del conductor al usuario que lo solicito
-                var connections = _userConnectionManager.GetConnections("68d72860e0429a307d8bfc94");
+                var connections = _userConnectionManager.GetConnections("68e1d0578907dc2bb1aa07f5");
                 if (connections == null || !connections.Any())
                 {
                     Console.WriteLine("⚠️ No se encontraron conexiones activas para el conductor asignado");
