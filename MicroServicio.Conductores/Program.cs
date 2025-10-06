@@ -27,10 +27,8 @@ class Program
                 // Registramos MongoDbContext
                 services.AddSingleton<MongoDBContext>();
 
-                // Registramos el servicio que hace operaciones en la DB
-                services.AddSingleton<DriverService>();
-
-                services.AddSingleton<IServiceDriver, DriverService>();
+                // Registramos el servicio que hace operaciones en la DB usando la interfaz
+                services.AddSingleton<MicroServicio.Conductores.Interfaces.IServiceDriver, MicroServicio.Conductores.Services.DriverService>();
 
                 //?añadimos RabbitMQ
                 services.Configure<RabbitMQSettings>(context.Configuration.GetSection("RabbitMQ"));

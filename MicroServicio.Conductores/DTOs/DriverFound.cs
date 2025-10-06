@@ -13,7 +13,9 @@ namespace MicroServicio.Conductores.DTOs
         public string? id { get; set; } = string.Empty;
         public BasicInfo? infoBasic { get; set; } = new BasicInfo();
         public Unit? unit { get; set; } = new Unit();
-        public string State { get; set; }
-        public bool succes { get; set; }
+        // Estado descriptivo del flujo (por ejemplo: "Conductor encontrado, esperando aceptacion")
+        public string State { get; set; } = string.Empty;
+        // Indica si fue posible encontrar/asignar un conductor
+        public bool succes { get; set; } = false;
     }
 }
