@@ -18,9 +18,12 @@ namespace MicroServicio.Conductores.Services
         private readonly string _queueName;
         private readonly string _queueAccept;
         private readonly string _queueReject;
-        private readonly DriverService _service;
+    private readonly MicroServicio.Conductores.Interfaces.IServiceDriver _service;
+        private readonly int _maxRetry;
+        private readonly int _retryDelayMs;
         private readonly string QueueName = "accept_trip";
-        public RabbitMQServices(IOptions<RabbitMQSettings> settings, DriverService service)
+
+    public RabbitMQServices(IOptions<RabbitMQSettings> settings, MicroServicio.Conductores.Interfaces.IServiceDriver service)
         {
 
             var factory = new ConnectionFactory()
@@ -37,6 +40,8 @@ namespace MicroServicio.Conductores.Services
             _queueName = settings.Value.QueueName;
             _queueAccept = settings.Value.QueueAcceptTrip;
             _queueReject = settings.Value.QueueRejectTrip;
+            _maxRetry = settings.Value.MaxRetryAttempts;
+            _retryDelayMs = settings.Value.RetryDelayMs;
 
             Task.Run(async () =>
             {
@@ -66,6 +71,12 @@ namespace MicroServicio.Conductores.Services
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     var rideFareMessage = JsonSerializer.Deserialize<RequestRideFareReady>(message);
+                    if (rideFareMessage == null)
+                    {
+                        Console.WriteLine("Mensaje inválido en calculated_rate: deserialización fallida");
+                        await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                        return;
+                    }
 
                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {rideFareMessage.idUser}");
 
@@ -116,9 +127,15 @@ namespace MicroServicio.Conductores.Services
                  {
                      var body = ea.Body.ToArray();
                      var message = Encoding.UTF8.GetString(body);
-                     var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
-                     Console.WriteLine("metodo de aceptacion");
-                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.infoDriver.data.id}");
+                    var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
+                    if (driverInfo == null)
+                    {
+                        Console.WriteLine("Mensaje inválido en accept_trip: deserialización fallida");
+                        await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                        return;
+                    }
+                    Console.WriteLine("metodo de aceptacion");
+                    Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.infoDriver?.data?.id}");
 
                      //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
                      var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
@@ -234,21 +251,60 @@ namespace MicroServicio.Conductores.Services
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     var driverInfo = JsonSerializer.Deserialize<RequestRejectTrip>(message);
-                    Console.WriteLine("metodo de aceptacion");
-                    Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.idDriver}");
-
-                    var driver = await _service.RejectRideAsync(driverInfo.idDriver);
-                    if (driver != "")
+                    if (driverInfo == null)
                     {
-                        Console.WriteLine($"Conductor asignado: {driver}");
+                        Console.WriteLine("Mensaje inválido en reject_trip: deserialización fallida");
+                        await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                        return;
+                    }
+                    Console.WriteLine("metodo de rechazo");
+                    Console.WriteLine($"Mensaje recibido: DriverID = {driverInfo.idDriver}, ClientID = {driverInfo.idClient}, Retry = {driverInfo.retryCount}");
+
+                    // Marcar conductor como disponible y registrar rechazo
+                    var rejectResult = await _service.RejectRideAsync(driverInfo.idDriver);
+                    Console.WriteLine($"Resultado de RejectRideAsync: {rejectResult}");
+
+                    // Incrementamos el contador de reintentos
+                    driverInfo.retryCount++;
+
+                    if (driverInfo.retryCount <= _maxRetry)
+                    {
+                        Console.WriteLine($"Intento {driverInfo.retryCount}/{_maxRetry}: buscando nuevo conductor...");
+
+                        // Intentamos encontrar un nuevo conductor
+                        var newDriver = await _service.FoundConductorAsync();
+                        if (!string.IsNullOrEmpty(newDriver.id))
+                        {
+                            Console.WriteLine($"Nuevo conductor encontrado: {newDriver.id}");
+                            await PublishDriverFoundAsync(newDriver, driverInfo.idClient);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró conductor en este intento; republicando mensaje para reintento...");
+                            // Espera opcional antes de reintentar
+                            await Task.Delay(_retryDelayMs);
+
+                            // Re-publicar el mensaje incrementado para volver a procesar
+                            var requeue = JsonSerializer.Serialize(driverInfo);
+                            var requeueBody = Encoding.UTF8.GetBytes(requeue);
+                            await _channel.BasicPublishAsync(exchange: string.Empty, routingKey: _queueReject, body: requeueBody);
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("no se encontro otro conductoro");
-                    }
-                    //TODO: agregar el método para indicar que el registro de viaje se realizo de una forma exitosa, y si no entonces notificar que el viaje no se registro de forma correcta
+                        Console.WriteLine($"Se agotaron los reintentos ({_maxRetry}). Publicando DriverNotFound para cliente {driverInfo.idClient}...");
+                        var messageNoDriver = JsonSerializer.Serialize(new
+                        {
+                            Event = "DriverNotFound",
+                            Client = driverInfo.idClient,
+                            Attempts = driverInfo.retryCount
+                        });
 
-                    //*Metodo que plublica que el conductor rechazo el viaje
+                        var bodyNoDriver = Encoding.UTF8.GetBytes(messageNoDriver);
+                        await _channel.BasicPublishAsync(exchange: string.Empty, routingKey: "driverNotFound", body: bodyNoDriver);
+                    }
+
+                    // Publicamos el evento de que el conductor rechazó (registro)
                     await PublishDriverRejectedAsync(driverInfo.idDriver, driverInfo.idClient);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);

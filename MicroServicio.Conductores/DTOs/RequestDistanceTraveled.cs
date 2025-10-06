@@ -7,8 +7,8 @@ namespace MicroServicio.Conductores.DTOs
 {
     public class RequestDistanceTraveled
     {
-        public string idUser { get; set; }
+        public string idUser { get; set; } = string.Empty;
         public double distanceTraveled { get; set; }
-        public string typeUser { get; set; }
+        public string typeUser { get; set; } = string.Empty;
     }
 }

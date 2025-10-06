@@ -8,9 +8,9 @@ namespace MicroServicio.Conductores.DTOs
 {
     public class RequestRideFareReady
     {
-        public string idUser { get; set; }
-        public Coordinates locationStart { get; set; }
-        public Coordinates locationEnd { get; set; }
+        public string idUser { get; set; } = string.Empty;
+        public Coordinates locationStart { get; set; } = new Coordinates();
+        public Coordinates locationEnd { get; set; } = new Coordinates();
         public double priceTraveled { get; set; }
         
     }
