@@ -16,6 +16,6 @@ namespace MicroServicio.Tarifas.DTOs
     {
         public string IdUser { get; set; } = string.Empty;
         public double distanceTraveled { get; set; }
-        public string typeUSer { get; set; } = string.Empty;
+        public string typeUser { get; set; } = string.Empty;
     }
 }
