@@ -9,6 +9,6 @@ namespace MicroServicio.Tarifas.Services
 {
     public interface IMongoService
     {
-        Task<ResponseRideFare?> GetRideFareAsync(double distanceTraveled);
+        Task<ResponseRideFare?> GetRideFareAsync(double distanceTraveled,string locality);
     }
 }
