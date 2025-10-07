@@ -15,6 +15,10 @@ builder.Services.AddSwaggerGen();
 
 //!añadimos signalR
 builder.Services.AddSignalR();
+/*builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000);
+});*/
 
 //!configuramos RabbitMQ
 builder.Services.Configure<RabbitMqSettings>(

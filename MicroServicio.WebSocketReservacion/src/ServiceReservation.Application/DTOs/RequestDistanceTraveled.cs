@@ -9,7 +9,8 @@ namespace ServiceReservation.Application.DTOs
     {
         public string IdUser { get; set; } = string.Empty;
         public double distanceTraveled { get; set; } = 0;
-        public string typeUser { get; set; } = string.Empty;
+        public string locality { get; set; }
+        public string typeUSer { get; set; } = string.Empty;
     }
 
 }
