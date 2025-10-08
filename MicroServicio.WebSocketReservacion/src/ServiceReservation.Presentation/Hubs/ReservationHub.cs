@@ -54,7 +54,7 @@ namespace ServiceReservation.Presentation.Hubs
                 var response = await _consumerRideFare.ConsumerRideAsync();
                 Console.WriteLine("---------- tarifa recibida -------------");
                 Console.WriteLine(response.Fare.FareId);
-                Console.WriteLine("-----------------------");
+                Console.WriteLine("----------------------");
                 //? reenviar el mensaje de la tarifa al usurio que le corresponde
                 var connections = _userConnectionManager.GetConnections(data.IdUser);
                 foreach (var connectionId in connections)
