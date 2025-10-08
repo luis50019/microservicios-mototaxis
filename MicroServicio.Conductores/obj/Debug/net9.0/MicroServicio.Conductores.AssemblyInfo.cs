@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MicroServicio.Conductores")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+555bf9b44e317b52a311b85ff86550027fffaf4b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b33e87c144a3701ac7d067de8e9b18a29f7c33ab")]
 [assembly: System.Reflection.AssemblyProductAttribute("MicroServicio.Conductores")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MicroServicio.Conductores")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MicroServicio.Conductores.Config;
 using MicroServicio.Conductores.Data;
 using MicroServicio.Conductores.DTOs;
+using MicroServicio.Conductores.Erros;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -124,7 +125,7 @@ namespace MicroServicio.Conductores.Services
                      var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
                      if (driver != "")
                      {
-                         Console.WriteLine($"Conductor asignado: {driver}");
+                         throw new DriverNull("conductor vacio", "dsdsds");
                      }
                      else
                      {
@@ -135,6 +136,10 @@ namespace MicroServicio.Conductores.Services
                      await PublishDriverAcceptedAsync(driver, driverInfo.infoDriver.data.client);
 
                      await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                 }
+                 catch (DriverNull ex)
+                 {
+                    
                  }
                  catch (Exception ex)
                  {
@@ -336,7 +341,6 @@ namespace MicroServicio.Conductores.Services
                 body: body
             );
         }
-
         public void Dispose()
         {
             _channel?.CloseAsync();

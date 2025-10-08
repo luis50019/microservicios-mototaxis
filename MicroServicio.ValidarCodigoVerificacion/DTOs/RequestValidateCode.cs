@@ -7,6 +7,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.DTOs
 {
     public class RequestValidateCode
     {
+
         public string codeVerification { get; set; } = string.Empty;
         public string idDriver { get; set; } = string.Empty;
         public string idClient { get; set; } = string.Empty;
