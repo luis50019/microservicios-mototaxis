@@ -69,7 +69,7 @@ namespace MicroServicio.Tarifas.Services
                 exchange: string.Empty,
                 routingKey: "solicitud_viaje", //se coloca el nombre de la cola
                 mandatory: true,
-                basicProperties: new BasicProperties { Persistent = true }, //le decimos que el mensaje debe de persistir dentro de la cola
+                basicProperties: new BasicProperties { Persistent = false }, //le decimos que el mensaje debe de persistir dentro de la cola
                 body: body
             );
         }
@@ -112,10 +112,10 @@ namespace MicroServicio.Tarifas.Services
                             return;
                         }
                         await ProcessMessage(rideFareMessage);
+                        await _channel.BasicAckAsync(ea.DeliveryTag, false);
 
 
                         // Confirmar procesamiento
-                        await _channel.BasicAckAsync(ea.DeliveryTag, false);
                     }
                     catch (Exception ex)
                     {
@@ -170,7 +170,8 @@ namespace MicroServicio.Tarifas.Services
                     IdUser = message.IdUser,
                     Success = response != null,
                     Fare = response,
-                    ErrorMessage = response == null ? "No se encontro la tarifa" : string.Empty
+                    ErrorMessage = response == null ? "No se encontro la tarifa" : string.Empty,
+                    RequestId = message.RequestId
 
                 };
 

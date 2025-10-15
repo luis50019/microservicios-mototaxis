@@ -20,9 +20,10 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
         {
             var tcs = new TaskCompletionSource<ResponseCode>();
             Console.WriteLine("esperando mensaje de viaje aceptado");
-            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg) =>
+            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg,ea) =>
             {
-                var response = JsonSerializer.Deserialize<ResponseCode>(msg);
+                var body = ea.Body.ToArray();
+                var response = JsonSerializer.Deserialize<ResponseCode>(body);
                 tcs.TrySetResult(response);
             });
             return await tcs.Task;

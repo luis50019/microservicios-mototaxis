@@ -37,6 +37,7 @@ namespace AuthService.Core.DTOs
         [MinLength(6, ErrorMessage = "EL nombre debe tener al menos 6 caracteres"), MaxLength(15, ErrorMessage = "EL maximo de caracteres es de 15")]
         public string Name { get; set; } = string.Empty;
         public Phone Phone { get; set; } = new Phone();
+        public string urlPhoto { get; set; } = string.Empty;
 
         [MinLength(6, ErrorMessage = "La contraseña debe tener almenos 6 caracteres"), MaxLength(15, ErrorMessage = "El maximo de caracteres es de 15")]
         public string password { get; set; } = string.Empty;

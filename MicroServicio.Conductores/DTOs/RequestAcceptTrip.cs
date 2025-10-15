@@ -23,9 +23,11 @@ namespace MicroServicio.Conductores.DTOs
         public double price { get; set; }
         public double stopFarePrice { get; set; }
         public double maxStopsAllowed { get; set; }
+        public string locality { get; set; } = string.Empty;
         public double ditanceMax { get; set; }
         public double distanceMax { get; set; }
         public List<string> acceptedPaymentMethods { get; set; } = new List<string>();
+        public string RequestId { get; set; }
      }
     public class infoDriver
     {

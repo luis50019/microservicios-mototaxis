@@ -26,14 +26,15 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
             Console.WriteLine("Esperando al conductor asignado");
             var tcs = new TaskCompletionSource<ResponseDriverFound>();
 
-            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg) =>
+            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg,ea) =>
             {
                 Console.WriteLine("Se asignó un conductor");
                 Console.WriteLine("Datos del conductor: " + msg);
 
                 try
                 {
-                    var message = JsonSerializer.Deserialize<ResponseDriverFound>(msg, new JsonSerializerOptions
+                    var body = ea.Body.ToArray();
+                    var message = JsonSerializer.Deserialize<ResponseDriverFound>(body, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });
@@ -73,7 +74,7 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
         public async Task ConsumerAcceptTrip()
         {
             Console.WriteLine("esperando mensaje de viaje aceptado");
-            await _rabbitMQ.ConsumeAsync(_exchangeDriverAccepted, async (msg) =>
+            await _rabbitMQ.ConsumeAsync(_exchangeDriverAccepted, async (msg,ea) =>
             {
                 Console.WriteLine("==========================================");
                 Console.WriteLine("viaje aceptado: ");
@@ -85,7 +86,7 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
         public async Task ConsumerRejectTrip()
         {
             Console.WriteLine("esperando mensake de viaje rechazado");
-            await _rabbitMQ.ConsumeAsync(_exchageTripReject, async (msg) =>
+            await _rabbitMQ.ConsumeAsync(_exchageTripReject, async (msg,ea) =>
             {
                 Console.WriteLine("El conductor ha rechazado el viaje");
                 Console.WriteLine("viaje rechazado: ");

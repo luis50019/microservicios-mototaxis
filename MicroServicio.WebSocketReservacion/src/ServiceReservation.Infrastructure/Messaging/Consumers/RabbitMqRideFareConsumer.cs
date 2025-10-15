@@ -18,16 +18,18 @@ namespace ServiceReservation.Infrastructure.Messaging.Consumers
         }
 
         //*Medod que coonsume el mensaje de que la tarifa fue calculada y devuelve la informacion al usuario que lo solicito
-        public async Task<ResponseConsumerRideFare> ConsumerRideAsync()
+        public async Task<ResponseConsumerRideFare> ConsumerRideAsync(string requestId)
         {
             var tcs = new TaskCompletionSource<ResponseConsumerRideFare>();
 
-            await _rabbitMQ.ConsumeAsync(_exchangeName, async (msg) =>
+            await _rabbitMQ.ConsumeAsync("fare_response_queue", async (channel, ea) =>
             {
-
-                var message = JsonSerializer.Deserialize<ResponseConsumerRideFare>(msg);
-                Console.WriteLine("-----------> tarifa" + msg);
-                tcs.SetResult(message); // completamos la tarea
+                Console.WriteLine("===========================recibiendo informacion===============");
+                var body = ea.Body.ToArray();
+                var message = JsonSerializer.Deserialize<ResponseConsumerRideFare>(body);
+                tcs.TrySetResult(message);
+                channel.BasicAckAsync(ea.DeliveryTag, false); // Confirmar el mensaje
+                
             });
 
             return await tcs.Task; // esperamos a que llegue el mensaje

@@ -8,7 +8,7 @@ namespace AuthService.UseCases.Contributors.Create
 {
     public static class CreateDriver
     {
-        public static Driver NewDriver(String name, Phone phone, string password,string stateDriver,string urlPhoto,double numberUnit, string LicensePlate)
+        public static Driver NewDriver(String name, Phone phone, string password, string stateDriver, string urlPhoto, double numberUnit, string LicensePlate)
         {
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
             var newDriver = new Driver
@@ -38,6 +38,7 @@ namespace AuthService.UseCases.Contributors.Create
                     LuggageCapacity = "",
                     Status = "buen estado"
                 },
+                Location = { Current = { Coordinates = { Lat = 0, Lng = 0 } } },
                 StateDriver = stateDriver,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
