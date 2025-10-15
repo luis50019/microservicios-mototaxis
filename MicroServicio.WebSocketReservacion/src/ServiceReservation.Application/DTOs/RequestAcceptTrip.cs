@@ -8,9 +8,6 @@ namespace ServiceReservation.Application.DTOs
     public class RequestAcceptTrip
     {
         public InfoDriver infoDriver { get; set; }
-        public InfoRideFare fareInfo { get; set; }
-        public Coordinates origin { get; set; }
-        public Coordinates destination { get; set; }
     }
 
     public class InfoDriver

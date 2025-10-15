@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -39,7 +40,7 @@ namespace ServiceReservation.Infrastructure.Messaging
                 exchange: string.Empty,
                 routingKey: exchange, //se coloca el nombre de la cola
                 mandatory: true,
-                basicProperties: new BasicProperties { Persistent = true },
+                basicProperties: new BasicProperties { Persistent = false },
                 body: body
             );
         }
@@ -62,25 +63,33 @@ namespace ServiceReservation.Infrastructure.Messaging
         }
 
         //?Metodo para poder consumir una cola
-        public async Task ConsumeAsync(string queue, Func<string, Task> handler)
+        public async Task ConsumeAsync(string queue, Func<IChannel, BasicDeliverEventArgs, Task> handler)
         {
-            Console.WriteLine("se esta enviando el mensaje");
             await _channel.QueueDeclareAsync(queue, durable: false, exclusive: false, autoDelete: false);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            //?metodo encagado de consumir
             consumer.ReceivedAsync += async (model, ea) =>
             {
-                //!obtenemos el mensaje
-                var msg = Encoding.UTF8.GetString(ea.Body.ToArray());
-                //!lo mandamos ala funcion para poder procesar el mensaje
-                await handler(msg);
-                await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
+                await handler(_channel, ea); // <-- aquí sí hacemos await real
             };
 
             await _channel.BasicConsumeAsync(queue, autoAck: false, consumer: consumer);
         }
+
+
+        /*public async Task ConsumeAsync(string queue, Func<string, Task> handler)
+        {
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            consumer.ReceivedAsync += async (sender, ea) =>
+            {
+                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+                await handler(message);
+                await _channel.BasicAckAsync(ea.DeliveryTag, false);
+            };
+            await _channel.BasicConsumeAsync(queue, autoAck: false, consumer: consumer);
+        }*/
+
 
         public void Dispose()
         {

@@ -32,7 +32,6 @@ namespace MicroServicio.Conductores.Services
         ///! Encuentra un conductor disponible cerca del punto de recogida.
         public async Task<object> FindAvailableStateAsync(Coordinates pickupLocation)
         {
-            // 📍 Para algo real, deberías usar un cálculo de distancia (Haversine).
             var filter = Builders<Driver>.Filter.Eq(d => d.StateDriver, "Disponible");
             var driver = await _context.Drivers.Find(filter).FirstOrDefaultAsync();
 

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using RabbitMQ.Client.Events;
 using ServiceReservation.Application.DTOs;
+using ServiceReservation.Infrastructure.Messaging;
 using ServiceReservation.Infrastructure.Messaging.Consumers;
 using ServiceReservation.Infrastructure.Messaging.Producers;
 
@@ -24,7 +27,7 @@ namespace ServiceReservation.Presentation.Hubs
         private readonly RabbitMqRideFareConsumer _consumerRideFare;
         private readonly RabbitMQDriverConsumer _consumerDriverInfo;
         private readonly RabbitMQCodeSecurity _consumerCodeSecurity;
-        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity)
+        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity, RabbitMqService service)
         {
             _publisherRideFare = publisherRideFare;
             _consumerCodeSecurity = consumerCodeSecurity ?? throw new ArgumentNullException(nameof(consumerCodeSecurity));
@@ -32,11 +35,19 @@ namespace ServiceReservation.Presentation.Hubs
             _consumerRideFare = consumerRideFare ?? throw new ArgumentNullException(nameof(consumerRideFare));
             _userConnectionManager = UserConnectionManager;
             _consumerDriverInfo = consumerDriverInfo ?? throw new ArgumentNullException(nameof(consumerDriverInfo));
-        }
 
+        }
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.Caller.SendAsync("ReceiveConnectionId", Context.ConnectionId);
+            await base.OnConnectedAsync();
+        }
         public Task registerUSer(string idUser)
         {
             _userConnectionManager.AddConnection(idUser, Context.ConnectionId);
+            Console.WriteLine("\n=============== usuarios registrado ====================");
+            Console.WriteLine(idUser);
+            Console.WriteLine("===================================\n");
             return Task.CompletedTask;
         }
 
@@ -45,22 +56,9 @@ namespace ServiceReservation.Presentation.Hubs
         {
             try
             {
-                //?preparamos el mensaje a enviar
-                Console.WriteLine(" ------------------------------------------------------Recibiendo la distancia recorrida");
-                //! publicamos en RabbitMq
-                Console.WriteLine($"info recibida: {data.IdUser} = {data.distanceTraveled}");
+                Console.WriteLine("\n==============Publicando distancia...===============");
                 await _publisherRideFare.PublicAsync(data);
-                //!notificar al usuario que su tarifa esta siendo calculada
-                var response = await _consumerRideFare.ConsumerRideAsync();
-                Console.WriteLine("---------- tarifa recibida -------------");
-                Console.WriteLine(response.Fare.PricePrivate);
-                Console.WriteLine("-----------------------");
-                //? reenviar el mensaje de la tarifa al usurio que le corresponde
-                var connections = _userConnectionManager.GetConnections(data.IdUser);
-                foreach (var connectionId in connections)
-                {
-                    await Clients.Client(connectionId).SendAsync("ReceiveDistance", response);
-                }
+                Console.WriteLine("==================================\n");
             }
             catch (Exception ex)
             {
@@ -68,6 +66,7 @@ namespace ServiceReservation.Presentation.Hubs
                 throw;
             }
         }
+
 
         //* Metodo que se encarga de mandar el mensaje para que comiencen a buscar a un conductor
         public async Task FindDriverAsync(RequestFindDriver infoTraveled)
@@ -77,52 +76,20 @@ namespace ServiceReservation.Presentation.Hubs
                 Console.WriteLine("Iniciando la busqueda de un conductor");
                 if (infoTraveled == null)
                 {
-                    Console.WriteLine("❌ infoTraveled llegó nulo");
+                    Console.WriteLine("infoTraveled llegó nulo");
                     return;
                 }
 
                 if (_publisherFindDriver == null)
                 {
-                    Console.WriteLine("❌ _publisherFindDriver es nulo (no fue inyectado)");
+                    Console.WriteLine("_publisherFindDriver es nulo (no fue inyectado)");
                     return;
                 }
 
-                Console.WriteLine("----------------------bucsando conductor-------------------");
-                Console.WriteLine($"✅ info recibida websocket: {infoTraveled.priceTraveled} = {infoTraveled.fare.idUser}");
+                Console.WriteLine("\n===========================bucsando conductor-------------------");
+                Console.WriteLine($"info recibida websocket: {JsonSerializer.Serialize<RequestFindDriver>(infoTraveled)}");
                 await _publisherFindDriver.PublicAsync(infoTraveled);
-                //?Metodo que espera la informacion del conductor asignado
-
-                var responseDriver = await _consumerDriverInfo.ConsumerRideAsync();
-                if (responseDriver == null)
-                {
-                    Console.WriteLine("❌ responseDriver llegó nulo");
-                    return;
-                }
-                if (responseDriver.Data == null)
-                {
-                    Console.WriteLine("❌ responseDriver.data llegó nulo");
-                    return;
-                }
-                //! falta logica para enviar la informacion del conductor al usuario que lo solicito
-                var connections = _userConnectionManager.GetConnections("68e1d0578907dc2bb1aa07f5");
-                if (connections == null || !connections.Any())
-                {
-                    Console.WriteLine("⚠️ No se encontraron conexiones activas para el conductor asignado");
-                    return;
-                }
-
-                Console.WriteLine("------- conductor asignado -------");
-                Console.WriteLine(responseDriver.Data.id);
-                foreach (var connectionId in connections)
-                {
-                    await Clients.Client(connectionId).SendAsync("ReceiveDriver", new
-                    {
-                        infoDriver = responseDriver,
-                        fareinfo = infoTraveled.fare,
-                        origin = infoTraveled.locationStart,
-                        destination = infoTraveled.locationEnd
-                    });
-                }
+                Console.WriteLine("=========================================================\n");
             }
             catch (Exception ex)
             {
@@ -137,31 +104,29 @@ namespace ServiceReservation.Presentation.Hubs
         {
             try
             {
-                Console.WriteLine("------------------------------------------ Conductor aceptando el viaje");
+                Console.WriteLine(" ======================= Conductor aceptando el viaje =============");
                 if (driverInfo == null)
                 {
-                    Console.WriteLine("❌ infoTraveled llegó nulo");
+                    Console.WriteLine("infoTraveled llegó nulo");
                     return;
                 }
 
                 if (_publisherFindDriver == null)
                 {
-                    Console.WriteLine("❌ _publisherFindDriver es nulo (no fue inyectado)");
+                    Console.WriteLine("publisherFindDriver es nulo (no fue inyectado)");
                     return;
                 }
 
                 if (driverInfo.infoDriver == null || driverInfo.infoDriver.data == null)
                 {
-                    Console.WriteLine("❌ driverInfo.infoDriver.data llegó nulo");
+                    Console.WriteLine("driverInfo.infoDriver.data llegó nulo");
                     return;
                 }
 
-                Console.WriteLine($"✅ info recibida: {driverInfo.infoDriver.data.id}");
+                Console.WriteLine($"info recibida: {driverInfo.infoDriver}");
                 await _publisherFindDriver.PublicAceptTripAsync(driverInfo);
-                //!Escuchamos el mensaje del codigo de verificacion con esto nos damos cuento si se registro la reservacion o no
-                var code = await _consumerCodeSecurity.consumerCodeSecurity();
-                await CodeGenerate(code);
-                
+
+                Console.WriteLine(" ================================================================");
             }
             catch (Exception ex)
             {
@@ -190,31 +155,10 @@ namespace ServiceReservation.Presentation.Hubs
             //?Metodo que espera para notificar que su viaje fue rechazado
             await _consumerDriverInfo.ConsumerRejectTrip();
         }
-
-        //TODO: añadir la logica para que reciva el mensaje con el codigo generado y lo envie al usuario que le corresponde
-        public async Task CodeGenerate(ResponseCode code)
-        {
-            var connections = _userConnectionManager.GetConnections(code.IdClient);
-                if (connections == null || !connections.Any())
-                {
-                    Console.WriteLine("⚠️ No se encontraron conexiones activas para el conductor asignado");
-                    return;
-                }
-
-                Console.WriteLine("------- conductor asignado -------");
-                Console.WriteLine(code.Code);
-                foreach (var connectionId in connections)
-                {
-                    await Clients.Client(connectionId).SendAsync("CodeGenerate",code);
-                }
-
-        }
-
-
         //? Metodo que recibe la distancia que se le due enviada
         public async Task ReceiveDistance()
         {
-            await _consumerRideFare.ConsumerRideAsync();
+            await _consumerRideFare.ConsumerRideAsync("d");
         }
 
 

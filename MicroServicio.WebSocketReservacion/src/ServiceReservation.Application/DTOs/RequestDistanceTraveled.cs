@@ -11,6 +11,7 @@ namespace ServiceReservation.Application.DTOs
         public double distanceTraveled { get; set; } = 0;
         public string locality { get; set; } = string.Empty;
         public string typeUser { get; set; } = string.Empty;
+        public string RequestId { get; set; } = Guid.NewGuid().ToString();
     }
 
 }

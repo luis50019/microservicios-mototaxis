@@ -103,23 +103,23 @@ namespace MicroServicio.Reservaciones.Services
             var newReservation = new Reservation
             {
                 Driver = reservation.infoDriver.data.id,
-                Rate = reservation.fareInfo.fareinfo.FareId,
+                Rate = reservation.infoDriver.data.rideFare.fare.fareinfo.FareId,
                 Route = new Route
                 {
                     Start = new Coordinate
                     {
-                        Lat = reservation.origin.Lat.Value,
-                        Lng = reservation.origin.Lng!.Value
+                        Lat = reservation.infoDriver.data.rideFare.locationStart.Lat.Value,
+                        Lng = reservation.infoDriver.data.rideFare.locationStart.Lng.Value,
                     },
                     Destination = new Coordinate
                     {
-                        Lat = reservation.origin.Lat!.Value,
-                        Lng = reservation.origin.Lng!.Value
+                        Lat = reservation.infoDriver.data.rideFare.locationEnd.Lat.Value,
+                        Lng = reservation.infoDriver.data.rideFare.locationEnd.Lng.Value,
                     },
-                    Distance = reservation.fareInfo.fareinfo.distanceMax
+                    Distance = reservation.infoDriver.data.rideFare.fare.fareinfo.DistanceMax
                 },
                 NumberPassage = 1,//TODO: falta enviar como una opcion desde que se crea la reservacion
-                Passage = reservation.fareInfo.idUser,
+                Passage = reservation.infoDriver.data.rideFare.fare.idUser,
                 State = new State
                 {
                     General = "En curso",

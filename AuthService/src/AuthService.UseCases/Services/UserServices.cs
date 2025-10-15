@@ -32,7 +32,7 @@ namespace AuthService.UseCases.Services
         //*Metodo para registrar un usuario
         public async Task<RegisterResponse> RegisterUser(RegisterRequestClient dto)
         {
-            var newUser = CreateUser.NewUSer(dto.Name, dto.Phone, dto.password);
+            var newUser = CreateUser.NewUSer(dto.Name, dto.Phone, dto.password,dto.urlPhoto);
             var isExist = await _phoneValidate.PhoneExist(dto.Phone.Number);
             if (isExist)
             {
@@ -83,7 +83,6 @@ namespace AuthService.UseCases.Services
 
         public async Task<LoginResponse> LoginUser(LoginRequest dto)
         {
-            var newUser = CreateUser.NewUSer("usuario", dto.Phone, dto.password);
             var info = await _userRepository.GetUser(dto.Phone, dto.password);
 
             if (!info.State)
@@ -102,7 +101,10 @@ namespace AuthService.UseCases.Services
             {
                 Id = info.Id,
                 token = token,
-                Type = info.Type
+                Type = info.Type,
+                Nombre = info.nombre,
+                phone = info.phone,
+                urlPhoto = info.urlPhoto,
             };
 
         }

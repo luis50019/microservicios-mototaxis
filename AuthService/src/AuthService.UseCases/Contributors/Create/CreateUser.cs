@@ -9,7 +9,7 @@ namespace AuthService.UseCases.Contributors.Create
 {
     public static class CreateUser
     {
-        public static User NewUSer(string name, Phone phone, string password)
+        public static User NewUSer(string name, Phone phone, string password,string urlPhoto)
         {
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
@@ -20,7 +20,8 @@ namespace AuthService.UseCases.Contributors.Create
                 {
                     Name = name,
                     Phone = phone,
-                    Password = passwordHash
+                    Password = passwordHash,
+                    ProfilePicture = urlPhoto,
                 },
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now

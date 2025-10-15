@@ -11,5 +11,6 @@ namespace MicroServicio.Tarifas.DTOs
         public bool Success { get; set; }
         public ResponseRideFare? Fare { get; set; }
         public string ErrorMessage { get; set; } = string.Empty;
+        public string RequestId { get; set; } 
     }
 }

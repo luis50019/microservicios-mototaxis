@@ -87,7 +87,10 @@ namespace AuthService.Infrastructure.Data.Mongo
 						{
 							Type = "client",
 							Id = user.Id.ToString(),
-							State = true
+							State = true,
+							nombre = user.BasicInfo.Name,
+							phone = user.BasicInfo.Phone,
+							urlPhoto = user.BasicInfo.ProfilePicture!,
 						};
 					}
 				}
@@ -102,7 +105,10 @@ namespace AuthService.Infrastructure.Data.Mongo
 						{
 							Type = "driver",
 							Id = driver.Id.ToString(),
-							State = true
+							State = true,
+							nombre = driver.BasicInfo.Name,
+							phone = driver.BasicInfo.Phone,
+							urlPhoto = driver.BasicInfo.ProfilePicture!,
 						};
 					}
 				}

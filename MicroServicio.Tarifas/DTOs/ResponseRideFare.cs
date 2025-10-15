@@ -16,5 +16,6 @@ namespace MicroServicio.Tarifas.DTOs
         public double MaxStopsAllowed { get; set; } = 0;
         public string locality { get; set; } = string.Empty;
         public List<string> AcceptedPaymentMethods { get; set; } = new List<string>();
+        public string RequestId { get; set; }
     }
 }

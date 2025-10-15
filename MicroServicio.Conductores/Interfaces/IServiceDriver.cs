@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MicroServicio.Conductores.Data;
+using MicroServicio.Conductores.DTOs;
 
 namespace MicroServicio.Conductores.Interfaces
 {
@@ -11,7 +12,7 @@ namespace MicroServicio.Conductores.Interfaces
         Task<object> FindAvailableStateAsync(Coordinates pickupLocation);//* busca un conductor
         Task<string> AcceptRideAsync(string id);//* marca al conductor como ocupado
         Task<object> RejectRideAsync(string id);//* marca al conductor como disponible
-        Task<MicroServicio.Conductores.DTOs.DriverFound> FoundConductorAsync();
+        Task<DriverFound> FoundConductorAsync();
 
     }
 }

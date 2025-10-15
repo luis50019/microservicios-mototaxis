@@ -96,6 +96,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
   options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
   options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(3040);
+});
+
 // wire up commands
 //builder.Services.AddTransient<ICommandHandler<CreateContributorCommand2,Result<int>>, CreateContributorCommandHandler2>();
 
@@ -113,12 +119,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-//app.Urls.Add($"http://*;{port}");
+//builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 app.Run();
 
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program { }
