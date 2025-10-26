@@ -35,7 +35,7 @@ public class DriverListener:IHostedService
                 try
                 {
                     var response = JsonSerializer.Deserialize<ResponseDriverFound>(message);
-
+                    Console.WriteLine(response.Data.infoPassager.urlPhoto);
                     if (response != null)
                     {
                         var connections = _userConnectionManager.GetConnections(response.Data.id);

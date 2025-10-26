@@ -15,7 +15,7 @@ namespace ServiceReservation.Application.DTOs
     public class infoDriverCode
     {
         public string idDriver { get; set; }
-        public string nameDriver { get; set; }
+        public string name { get; set; }
         public double rating { get; set; }
         public string PhotoDriver { get; set; }
         public string LicensePlate { get; set; }

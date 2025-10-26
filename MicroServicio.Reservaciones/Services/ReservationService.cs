@@ -73,16 +73,6 @@ namespace MicroServicio.Reservaciones.Services
         {
             Console.WriteLine("Iniciando registro de reservación...");
             Console.WriteLine(JsonSerializer.Serialize(reservation));
-            /*if (reservation.origin == null)
-            {
-                Console.WriteLine(reservation.origin);
-                throw new ArgumentException("La ruta no puede ser nula.");
-            }
-
-            if (reservation.destination  == null){
-                Console.WriteLine(reservation.destination);
-                throw new ArgumentException("La distancia no puede ser negativa.");
-            }*/
             
             //?Cres que haga falta validar una distancia maxima entre origen y destino en este servicio?
             //? o eso se deberia de validar en el servicio que calcula la tarifa?
@@ -92,7 +82,7 @@ namespace MicroServicio.Reservaciones.Services
             var filter = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse(reservation.infoDriver.data.id));
             var update = Builders<Driver>.Update
                 .Set(d => d.StateDriver, "Ocupado")
-                .Inc(d => d.Performance.AcceptanceRate, 1) // ajusta tasa de aceptación
+                .Inc(d => d.Performance.AcceptanceRate, 1)
                 .CurrentDate(d => d.UpdatedAt);
 
             var result = await _driver.UpdateOneAsync(filter, update);
@@ -102,24 +92,24 @@ namespace MicroServicio.Reservaciones.Services
             //? la idea es que al metodo solo le pases la variaable reservation y este metodo te regresa el objeto de Reservation ya creado
             var newReservation = new Reservation
             {
-                Driver = reservation.infoDriver.data.id,
-                Rate = reservation.infoDriver.data.rideFare.fare.fareinfo.FareId,
+                Driver = ObjectId.Parse(reservation.infoDriver.data.id),
+                Rate = ObjectId.Parse(reservation.infoDriver.data.rideFare.fareinfo.FareId),
                 Route = new Route
                 {
                     Start = new Coordinate
                     {
-                        Lat = reservation.infoDriver.data.rideFare.locationStart.Lat.Value,
-                        Lng = reservation.infoDriver.data.rideFare.locationStart.Lng.Value,
+                        Lat = reservation.infoDriver.data.locationStart.Lat.Value,
+                        Lng = reservation.infoDriver.data.locationStart.Lng.Value,
                     },
                     Destination = new Coordinate
                     {
-                        Lat = reservation.infoDriver.data.rideFare.locationEnd.Lat.Value,
-                        Lng = reservation.infoDriver.data.rideFare.locationEnd.Lng.Value,
+                        Lat = reservation.infoDriver.data.locationEnd.Lat.Value,
+                        Lng = reservation.infoDriver.data.locationEnd.Lng.Value,
                     },
-                    Distance = reservation.infoDriver.data.rideFare.fare.fareinfo.DistanceMax
+                    Distance = reservation.infoDriver.data.rideFare.fareinfo.DistanceMax
                 },
                 NumberPassage = 1,//TODO: falta enviar como una opcion desde que se crea la reservacion
-                Passage = reservation.infoDriver.data.rideFare.fare.idUser,
+                Passage = ObjectId.Parse(reservation.infoDriver.data.rideFare.idUser),
                 State = new State
                 {
                     General = "En curso",
@@ -168,9 +158,9 @@ namespace MicroServicio.Reservaciones.Services
             //! crear respuesta para devolver el mensaje
             var messageResponse = new
             {
-                idReservations = newReservation.Id,
-                idClient = newReservation.Passage,
-                idDriver = newReservation.Driver,
+                idReservations = newReservation.Id.ToString(),
+                idClient = newReservation.Passage.ToString(),
+                idDriver = newReservation.Driver.ToString(),
             };
 
             string messageJson = JsonSerializer.Serialize(messageResponse);

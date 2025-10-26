@@ -24,26 +24,43 @@ public class MongoService : IMongoService
 
     public async Task<bool> ExisteViaje(string idViaje)
     {
-        var reserva = await _reservas.Find(r => r.Id == idViaje).FirstOrDefaultAsync();
-        return reserva != null;
+        var reserva = await _reservas.Find(r => r.Id == ObjectId.Parse(idViaje)).FirstOrDefaultAsync();
+
+        return reserva == null;
     }
 
     public async Task<InfoDriver> GuardarCodigoVerificacion(string idViaje, string codigo, string idDriver)
     {
-        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, idViaje);
-        var update = Builders<Reservation>.Update.Set(r => r.Security.CodeVerification, codigo);
-        await _reservas.UpdateOneAsync(filter, update);
+        Console.WriteLine("id Viaje:" + idViaje.ToString());
+
+        var filter = Builders<Reservation>.Filter.Eq(r => r.Id, ObjectId.Parse(idViaje));
+
+        var update = Builders<Reservation>.Update
+            .Set(r => r.Security, new Security
+            {
+                CodeVerification = codigo,
+                IsVerified = false
+            })
+            .CurrentDate(r => r.UpdatedAt);
+
+        var result = await _reservas.UpdateOneAsync(filter, update);
+
+        Console.WriteLine($"Matched: {result.MatchedCount}, Modified: {result.ModifiedCount}");
+
+
+
         var filterDriver = Builders<Driver>.Filter.Eq(f => f.Id, ObjectId.Parse(idDriver));
         var driver = await _drivers.Find(filterDriver).FirstOrDefaultAsync();
 
         return new InfoDriver
         {
-            idDriver = idDriver,
+            idDriver = idDriver.ToString(),
             LicensePlate = driver.Unit.LicensePlate,
+            name = driver.BasicInfo.Name,
             Phone = driver.BasicInfo.Phone.Number,
             PhotoDriver = driver.BasicInfo.ProfilePicture,
-            numberUnit = driver.Unit.Number == null?0:driver.Unit.Number
+            numberUnit = driver.Unit.Number == null ? 0 : driver.Unit.Number
         };
-        
+
     }
 }

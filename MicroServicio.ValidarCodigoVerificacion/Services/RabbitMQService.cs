@@ -12,7 +12,7 @@ using RabbitMQ.Client.Events;
 
 namespace MicroServicio.ValidarCodigoVerificacion.Services
 {
-    public class RabbitMQService:IDisposable
+    public class RabbitMQService : IDisposable
     {
         private readonly IConnection _connection;
         private readonly IChannel _channel;
@@ -34,7 +34,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
             _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
             _queueName = settings.Value.QueueName;
-            _queueResponse = settings.Value.QueueName;
+            _queueResponse = settings.Value.QueueResponse;
 
         }
 
@@ -43,10 +43,11 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             await _channel.ExchangeDeclareAsync(_queueResponse, ExchangeType.Fanout, durable: false);
             var messge = JsonSerializer.Serialize<ResponseValidateCode>(response);
             var body = Encoding.UTF8.GetBytes(messge);
+            Console.WriteLine("Enviado informacion");
 
             await _channel.BasicPublishAsync(
-                exchange: string.Empty,
-                routingKey: _queueResponse,
+                exchange: _queueResponse,
+                routingKey: string.Empty,
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body
@@ -55,7 +56,12 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
 
         public async Task ConsumeAsync(Func<string, Task> handler)
         {
+            await _channel.ExchangeDeclareAsync(_queueName, ExchangeType.Fanout);
+
             await _channel.QueueDeclareAsync(queue: _queueName, durable: false, exclusive: false, autoDelete: false);
+
+            // Este binding es imprescindible
+            await _channel.QueueBindAsync(_queueName, _queueName, routingKey: string.Empty);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
@@ -65,7 +71,10 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
                 await handler(msg);
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
             };
+
+            await _channel.BasicConsumeAsync(queue: _queueName, autoAck: false, consumer);
         }
+
 
         public void Dispose()
         {
@@ -75,6 +84,6 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             _connection.Dispose();
 
             GC.SuppressFinalize(this);
+        }
     }
-  }
 }

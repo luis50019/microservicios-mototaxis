@@ -12,22 +12,22 @@ namespace MicroServicio.CodigoVerificacion.models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } //!esto lee para generera codigo verificacion
+        public  ObjectId Id { get; set; } //!esto lee para generera codigo verificacion
 
         [BsonElement("passage")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Passage { get; set; }
+        public  ObjectId Passage { get; set; }
 
         [BsonElement("numberPassage")]
         public int? NumberPassage { get; set; }
 
         [BsonElement("driver")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Driver { get; set; }
+        public  ObjectId Driver { get; set; }
 
         [BsonElement("rate")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Rate { get; set; }
+        public  ObjectId Rate { get; set; }
 
         [BsonElement("route")]
         public Route Route { get; set; }
@@ -94,6 +94,7 @@ namespace MicroServicio.CodigoVerificacion.models
     {
         [BsonElement("codeVerification")]
         public string CodeVerification { get; set; }
+        public bool IsVerified { get; set; }
     }
 
     public class Comments

@@ -4,6 +4,7 @@ using ServiceReservation.Infrastructure.Messaging;
 using ServiceReservation.Infrastructure.Messaging.Consumers;
 using ServiceReservation.Infrastructure.Messaging.Producers;
 using ServiceReservation.Presentation.Hubs;
+using ServiceReservation.Presentation.Listeners;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,11 +47,13 @@ builder.Services.AddSingleton<RabbitMQFindDriver>();
 builder.Services.AddSingleton<RabbitMqRideFareConsumer>();
 builder.Services.AddSingleton<RabbitMQDriverConsumer>();
 builder.Services.AddSingleton<RabbitMQCodeSecurity>();
+builder.Services.AddSingleton<RabbitMqValidateCodePublisher>();
 
 //! ocupamos singleton para poder ejecutar los listener de las respuestas de rabbit
 builder.Services.AddHostedService<FareResponseListener>();
 builder.Services.AddHostedService<DriverListener>();
 builder.Services.AddHostedService<CodeVerificationListener>();
+builder.Services.AddHostedService<ValidateCodeListener>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

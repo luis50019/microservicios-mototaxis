@@ -52,7 +52,7 @@ public class RabbitMQService : IDisposable
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var data = JsonSerializer.Deserialize<RequestCode>(message);
 
-                Console.WriteLine($"📩 Mensaje recibido: {data?.idReservations}");
+                Console.WriteLine($"📩 Mensaje recibido: {data?.idReservations.ToString()}");
 
                 if (OnMessageReceived != null)
                     await OnMessageReceived.Invoke(data);

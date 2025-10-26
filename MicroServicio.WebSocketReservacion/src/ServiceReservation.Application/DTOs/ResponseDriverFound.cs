@@ -14,13 +14,16 @@ namespace ServiceReservation.Application.DTOs
     public class Data
     {
         public string id { get; set; } = string.Empty;
+        public Coordinates locationStart { get; set; } = new Coordinates();
+        public Coordinates locationEnd { get; set; } = new Coordinates();
+        public double priceTraveled { get; set; } //*costo del viaje
         public string client { get; set; } = string.Empty;
-        public InfoPassenger infoPassenger { get; set; }
+        public InfoPassenger infoPassager { get; set; } = new InfoPassenger();
         public Coordinates coordinates { get; set; } = new Coordinates();
+        public InfoRideFare rideFare { get; set; } = new InfoRideFare();
         public string typeService { get; set; } = string.Empty;
-
-        public RequestFindDriver rideFare { get; set; }
     }
+    
 
 }
 

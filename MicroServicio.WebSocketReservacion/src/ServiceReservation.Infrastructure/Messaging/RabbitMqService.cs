@@ -35,16 +35,33 @@ namespace ServiceReservation.Infrastructure.Messaging
             var body = Encoding.UTF8.GetBytes(message);
 
             Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
+            Console.WriteLine("data: " + message);
 
             await _channel.BasicPublishAsync(
                 exchange: string.Empty,
-                routingKey: exchange, //se coloca el nombre de la cola
+                routingKey: exchange,
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = false },
                 body: body
             );
         }
+        public async Task PublicQueAsync(string exchange, string message)
+        {
 
+            await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
+            Console.WriteLine("data: " + message);
+
+            await _channel.BasicPublishAsync(
+                exchange: exchange,
+                routingKey: string.Empty,
+                mandatory: false,
+                basicProperties: new BasicProperties { Persistent = false },
+                body: body
+            );
+        }
         public async Task PulblicExchangeAsync(string exchange, string message)
         {
 

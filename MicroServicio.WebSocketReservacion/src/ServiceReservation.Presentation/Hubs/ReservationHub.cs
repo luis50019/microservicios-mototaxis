@@ -27,7 +27,8 @@ namespace ServiceReservation.Presentation.Hubs
         private readonly RabbitMqRideFareConsumer _consumerRideFare;
         private readonly RabbitMQDriverConsumer _consumerDriverInfo;
         private readonly RabbitMQCodeSecurity _consumerCodeSecurity;
-        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity, RabbitMqService service)
+        private readonly RabbitMqValidateCodePublisher _validateCode;
+        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity, RabbitMqService service,RabbitMqValidateCodePublisher validateCode)
         {
             _publisherRideFare = publisherRideFare;
             _consumerCodeSecurity = consumerCodeSecurity ?? throw new ArgumentNullException(nameof(consumerCodeSecurity));
@@ -35,6 +36,7 @@ namespace ServiceReservation.Presentation.Hubs
             _consumerRideFare = consumerRideFare ?? throw new ArgumentNullException(nameof(consumerRideFare));
             _userConnectionManager = UserConnectionManager;
             _consumerDriverInfo = consumerDriverInfo ?? throw new ArgumentNullException(nameof(consumerDriverInfo));
+            _validateCode = validateCode ?? throw new ArgumentNullException(nameof(validateCode));
 
         }
         public override async Task OnConnectedAsync()
@@ -140,21 +142,42 @@ namespace ServiceReservation.Presentation.Hubs
         {
             if (driverInfo == null)
             {
-                Console.WriteLine("❌ infoTraveled llegó nulo");
+                Console.WriteLine("infoTraveled llegó nulo");
                 return;
             }
 
             if (_publisherFindDriver == null)
             {
-                Console.WriteLine("❌ _publisherFindDriver es nulo (no fue inyectado)");
+                Console.WriteLine("_publisherFindDriver es nulo (no fue inyectado)");
                 return;
             }
 
-            Console.WriteLine($"✅ info recibida: {driverInfo.idDriver}");
+            Console.WriteLine($"info recibida: {driverInfo.idDriver}");
             await _publisherFindDriver.PublicRejectTripAsync(driverInfo);
             //?Metodo que espera para notificar que su viaje fue rechazado
+            //TODO: separa esta logica para evitar el cuello de botello
             await _consumerDriverInfo.ConsumerRejectTrip();
         }
+
+        //? Metodo para validar el codigo de verificacion
+        public async Task ValidateCode(RequestValidateCode infoCode)
+        {
+            try
+            {
+                if (infoCode == null)
+                {
+                    throw new Exception("no hay informacion sobre el codigo");
+                }
+
+                await _validateCode.PublicValidateCodeAsync(infoCode);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         //? Metodo que recibe la distancia que se le due enviada
         public async Task ReceiveDistance()
         {
