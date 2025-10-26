@@ -22,6 +22,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Workers
         {
             try
             {
+                Console.WriteLine("============== validar codigo ===============");
                 _service.StartAsync();
                 while (!stoppingToken.IsCancellationRequested)
                 {

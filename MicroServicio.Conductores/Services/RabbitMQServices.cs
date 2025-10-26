@@ -68,8 +68,10 @@ namespace MicroServicio.Conductores.Services
             {
                 try
                 {
+                    Console.WriteLine("============================== mensaje recibido=================");
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
+                    Console.WriteLine(message);
                     var rideFareMessage = JsonSerializer.Deserialize<RequestRideFareReady>(message);
                     if (rideFareMessage == null)
                     {
@@ -91,6 +93,7 @@ namespace MicroServicio.Conductores.Services
                         Console.WriteLine("no se encontro otro conductoro");
                     }
 
+                    Console.WriteLine("=====================================================");
                     Console.WriteLine("--- Publicando conductor encontrado ---");
                     //* publica al conductor encontrado para que despues el Hub le notitifica al dicho conductor, pero tambien le enviamos el id del cliente que realizo el viaje
                     Console.WriteLine(driver.id);
@@ -311,6 +314,9 @@ namespace MicroServicio.Conductores.Services
                 Data = new
                 {
                     id = driver.id,
+                    locationStart = infoRideFare.locationStart,
+                    locationEnd = infoRideFare.locationEnd,
+                    priceTraveled = infoRideFare.priceTraveled,
                     client = infoRideFare.fare.idUser,
                     infoPassager = infoRideFare.infoPassenger,
                     coordinates = driver.coordinates,

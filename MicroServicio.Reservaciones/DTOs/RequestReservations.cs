@@ -48,18 +48,50 @@ namespace MicroServicio.Reservaciones.DTOs
     }
     public class infoDriver
     {
-        public string Event { get; set; } = string.Empty;
+        public string message { get; set; } = string.Empty;
         public Data data { get; set; }
 
     }
+
+    public class DataRquest
+    {
+
+        public string id { get; set; } = string.Empty;
+        public Coordinates locationStart { get; set; } = new Coordinates();
+        public Coordinates locationEnd { get; set; } = new Coordinates();
+        public double priceTraveled { get; set; } //*costo del viaje
+        public string client { get; set; } = string.Empty;
+        public InfoPassenger infoPassager { get; set; } = new InfoPassenger();
+        public Coordinates coordinates { get; set; } = new Coordinates();
+        public InfoRideFare rideFare { get; set; } = new InfoRideFare();
+        public string typeService { get; set; } = string.Empty;
+
+    }
+
+    public class InfoPassenger
+  {
+    public string urlPhoto { get; set; }
+    public string name { get; set; }
+    public string phone { get; set; }
+    public string lada { get; set; }
+  }
+
     public class Data
     {
         public string id { get; set; } = string.Empty;
+        public Coordinates locationStart { get; set; } = new Coordinates();
+        public Coordinates locationEnd { get; set; } = new Coordinates();
+        public double priceTraveled { get; set; } //*costo del viaje
         public string client { get; set; } = string.Empty;
+        public InfoPassenger infoPassager { get; set; } = new InfoPassenger();
         public Coordinates coordinates { get; set; } = new Coordinates();
-        public RequestFindDriver rideFare { get; set; }
+        public InfoRideFare rideFare { get; set; } = new InfoRideFare();
+        public string typeService { get; set; } = string.Empty;
     }
 
+
+
+    //*! clases que no usamos al recibir la informcion del viaje
     public class RequestFindDriver
     {
         public Coordinates locationStart { get; set; }

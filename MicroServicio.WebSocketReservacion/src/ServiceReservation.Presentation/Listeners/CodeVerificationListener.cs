@@ -23,7 +23,7 @@ public class CodeVerificationListener:IHostedService
 
     public void Start()
     {
-        Console.WriteLine("====================== Listener codigo de verificacion =============");
+        Console.WriteLine("====================== CodeVerification =============");
 
         _ = Task.Run(async () =>
         {
@@ -34,16 +34,16 @@ public class CodeVerificationListener:IHostedService
 
                 try
                 {
-                    var response = JsonSerializer.Deserialize<ResponseDriverFound>(message);
+                    var response = JsonSerializer.Deserialize<ResponseCode>(message);
 
                     if (response != null)
                     {
-                        var connections = _userConnectionManager.GetConnections(response.Data.id);
-                        foreach (var connectionId in connections)
-                        {
-                            await _hubContext.Clients.Client(connectionId)
-                                .SendAsync("CodeGenerate", response);
-                        }
+                        var connections = _userConnectionManager.GetConnections(response.IdClient);
+                        var connectionDriver = _userConnectionManager.GetConnections(response.DataDriver.idDriver);
+                        //? enviamos la informacion al conductor
+                        await _hubContext.Clients.Clients(connectionDriver).SendAsync("ReservationRegister", response.IdViaje);
+                        //? enviamos la informacion al usuario
+                        await _hubContext.Clients.Clients(connections).SendAsync("CodeGenerate", response);
                     }
 
                     await channel.BasicAckAsync(ea.DeliveryTag, false);

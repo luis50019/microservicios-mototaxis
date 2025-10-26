@@ -8,6 +8,7 @@ using MicroServicio.ValidarCodigoVerificacion.Services;
 using MicroServicio.ValidarCodigoVerificacion.interfaces;
 using MicroServicio.ValidarCodigoVerificacion.Messages.Publisher;
 using MicroServicio.ValidarCodigoVerificacion.Messages.Consumers;
+using MicroServicio.ValidarCodigoVerificacion.Workers;
 
 class Program
 {
@@ -15,10 +16,10 @@ class Program
     {
         var builder = Host.CreateApplicationBuilder(args);
 
-        // ✅ Agregar appsettings.json explícitamente si quieres
+        // Agregar appsettings.json explícitamente si quieres
         builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-        // ✅ Registrar servicios
+        // Registrar servicios
         builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
         builder.Services.AddSingleton<MongoDbContext>();
 
@@ -30,8 +31,8 @@ class Program
         builder.Services.AddSingleton<ValidateCodeService>();
         builder.Services.AddSingleton<IMongoService, MongoService>();
 
-        // ✅ Registrar Worker si lo tienes
-        // builder.Services.AddHostedService<Worker>();
+        // Registrar Worker si lo tienes
+        builder.Services.AddHostedService<Worker>();
 
         var host = builder.Build();
 

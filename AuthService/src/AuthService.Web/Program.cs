@@ -118,7 +118,7 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
 //builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 app.Run();

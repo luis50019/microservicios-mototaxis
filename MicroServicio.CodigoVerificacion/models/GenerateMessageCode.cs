@@ -16,6 +16,7 @@ namespace MicroServicio.CodigoVerificacion.models
     public class InfoDriver
     {
         public string idDriver { get; set; }
+        public string name { get; set; }
         public string PhotoDriver { get; set; }
         public string LicensePlate { get; set; }
         public string Phone { get; set; }

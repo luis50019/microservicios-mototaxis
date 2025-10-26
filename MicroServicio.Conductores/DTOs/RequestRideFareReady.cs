@@ -24,8 +24,8 @@ namespace MicroServicio.Conductores.DTOs
 
     public class InfoPassenger
     {
-        public string urlFoto { get; set; }
-        public string nombre { get; set; }
+        public string urlPhoto { get; set; }
+        public string name { get; set; }
         public string phone { get; set; }
         public string lada { get; set; }
     }

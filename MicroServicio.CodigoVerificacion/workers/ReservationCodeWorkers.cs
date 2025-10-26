@@ -31,8 +31,11 @@ public class ReservationWorker : BackgroundService
         // Deserializar mensaje recibido
 
         // Validar viaje
-        if (await _mongoService.ExisteViaje(mensaje.idReservations))
+        if (!await _mongoService.ExisteViaje(mensaje.idReservations))
+        {
+                Console.WriteLine("La reservacuion no existe");
             return;
+       }
 
         // Generar codigo de verificación
         string codigo = CodigoVerificacion.GenerarCodigo();
@@ -44,8 +47,8 @@ public class ReservationWorker : BackgroundService
         var codigoMsg = new CodigoGeneradoMessage
         {
             Code = codigo,
-            IdViaje = mensaje.idReservations,
-            IdClient = mensaje.idClient,
+            IdViaje = mensaje.idReservations.ToString(),
+            IdClient = mensaje.idClient.ToString(),
             DataDriver = InfoDriver
         };
         

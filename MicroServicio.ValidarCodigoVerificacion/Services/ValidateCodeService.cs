@@ -19,6 +19,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
 
         public async Task StartAsync()
         {
+            Console.WriteLine(" ================== Escucahando mensajes ===============");
             _rabbitConsumer.StartConsumingAsync();
         }
 
@@ -28,4 +29,4 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             GC.SuppressFinalize(this);
         }
     }
-}
+}   

@@ -11,22 +11,22 @@ namespace MicroServicio.Reservaciones.models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public  ObjectId Id { get; set; }
 
         [BsonElement("passage")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Passage { get; set; }
+        public  ObjectId Passage { get; set; }
 
         [BsonElement("numberPassage")]
         public int? NumberPassage { get; set; }
 
         [BsonElement("driver")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Driver { get; set; }
+        public  ObjectId Driver { get; set; }
 
         [BsonElement("rate")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Rate { get; set; }
+        public  ObjectId Rate { get; set; }
 
         [BsonElement("route")]
         public Route Route { get; set; }

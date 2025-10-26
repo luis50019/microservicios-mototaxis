@@ -32,10 +32,10 @@ namespace MicroServicio.ValidarCodigoVerificacion.Messages.Consumers
                 var request = JsonSerializer.Deserialize<RequestValidateCode>(msg);
                 if (request != null)
                 {
-                    Console.WriteLine($"Mensaje recibido: {request.codeVerification}");
+                    Console.WriteLine($"Mensaje recibido: {request.idReservation}");
                     var response = await _service.validateCode(request);
                     //* despues publicamos la respuesta
-                    _rabbitMQ.PublisherAsync(response);
+                    await _rabbitMQ.PublisherAsync(response);
                 }
             });
         }

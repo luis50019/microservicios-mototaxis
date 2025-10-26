@@ -36,14 +36,20 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
                     idReservation = reservations.Id,
                     isCorrect = reservations != null,
                     idDriver = request.idDriver,
-                    Message = reservations != null?"Codigo valido":"Codigo no valido"
+                    Message = reservations != null ? "Codigo valido" : "Codigo no valido"
                 };
 
-            }
-            catch (MongoException ex)
+            }catch (MongoException ex)
             {
                 throw new ErrorMongo(ex.Message, "Error al validar el codigo");
-            }   
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Errro:"+ex);
+                throw new ErrorMongo(ex.Message,"Error");
+
+            }
+               
         }
     }
 }
