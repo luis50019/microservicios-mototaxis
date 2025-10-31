@@ -19,7 +19,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Data
             _database = client.GetDatabase(settings.Value.Database);
         }
 
-        public IMongoCollection<Reservation> reservations => _database.GetCollection<Reservation>("reservations");
+        public IMongoCollection<Reservation> reservations => _database.GetCollection<Reservation>("reservationsPrivate");
 
     }
 

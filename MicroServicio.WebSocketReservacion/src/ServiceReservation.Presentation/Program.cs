@@ -4,7 +4,6 @@ using ServiceReservation.Infrastructure.Messaging;
 using ServiceReservation.Infrastructure.Messaging.Consumers;
 using ServiceReservation.Infrastructure.Messaging.Producers;
 using ServiceReservation.Presentation.Hubs;
-using ServiceReservation.Presentation.Listeners;
 
 var builder = WebApplication.CreateBuilder(args);
 

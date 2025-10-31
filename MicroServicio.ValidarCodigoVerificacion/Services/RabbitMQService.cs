@@ -35,23 +35,39 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
             _queueName = settings.Value.QueueName;
             _queueResponse = settings.Value.QueueResponse;
-
         }
 
         public async Task PublisherAsync(ResponseValidateCode response)
         {
-            await _channel.ExchangeDeclareAsync(_queueResponse, ExchangeType.Fanout, durable: false);
-            var messge = JsonSerializer.Serialize<ResponseValidateCode>(response);
-            var body = Encoding.UTF8.GetBytes(messge);
-            Console.WriteLine("Enviado informacion");
+            try
+            {
+                //creamos una cola con el nombre codeValidate
+               await _channel.QueueDeclareAsync(
+                    queue: "codeValidate",
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null
+                );
 
-            await _channel.BasicPublishAsync(
-                exchange: _queueResponse,
-                routingKey: string.Empty,
-                mandatory: true,
-                basicProperties: new BasicProperties { Persistent = true },
-                body: body
-            );
+                var messge = JsonSerializer.Serialize<ResponseValidateCode>(response);
+                var body = Encoding.UTF8.GetBytes(messge);
+                Console.WriteLine("Enviado informacion");
+                Console.WriteLine(messge);
+
+                await _channel.BasicPublishAsync(
+                    exchange: string.Empty,
+                    routingKey: "codeValidate",
+                    mandatory: true,
+                    basicProperties: new BasicProperties { Persistent = false },
+                    body: body
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         public async Task ConsumeAsync(Func<string, Task> handler)

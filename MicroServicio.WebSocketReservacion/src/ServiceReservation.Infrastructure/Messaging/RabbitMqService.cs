@@ -24,6 +24,7 @@ namespace ServiceReservation.Infrastructure.Messaging
             };
             _connection = fatory.CreateConnectionAsync().GetAwaiter().GetResult();
             _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
+            _channel.ExchangeDeclareAsync(exchange: "codeValidate", type: ExchangeType.Fanout, durable: false, autoDelete: false);
         }
 
         //?Metodo para realizar publicaciones
@@ -72,7 +73,7 @@ namespace ServiceReservation.Infrastructure.Messaging
 
             await _channel.BasicPublishAsync(
                 exchange: exchange,
-                routingKey: string.Empty, //se coloca el nombre de la cola
+                routingKey: string.Empty,
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body
@@ -88,24 +89,46 @@ namespace ServiceReservation.Infrastructure.Messaging
 
             consumer.ReceivedAsync += async (model, ea) =>
             {
-                await handler(_channel, ea); // <-- aquí sí hacemos await real
+                await handler(_channel, ea);
+
             };
 
             await _channel.BasicConsumeAsync(queue, autoAck: false, consumer: consumer);
         }
 
-
-        /*public async Task ConsumeAsync(string queue, Func<string, Task> handler)
+        public async Task ConsumeValidateCodeAsync(string queue, Func<IChannel, BasicDeliverEventArgs, Task> handler)
         {
+            // Declarar la cola
+            await Task.Run(() => _channel.QueueDeclareAsync(queue, durable: false, exclusive: false, autoDelete: false));
+
+            // Bind de la cola al exchange Fanout
+            await Task.Run(() => _channel.QueueBindAsync(queue, "codeValidate", routingKey: string.Empty));
+
             var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += async (sender, ea) =>
+
+            consumer.ReceivedAsync += async (model, ea) =>
             {
-                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                await handler(message);
-                await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                try
+                {
+                    await handler(_channel, ea);
+                    await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error procesando mensaje: " + ex.Message);
+                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                }
             };
-            await _channel.BasicConsumeAsync(queue, autoAck: false, consumer: consumer);
-        }*/
+
+            await Task.Run(() =>
+            {
+                _channel.BasicConsumeAsync(queue: queue, autoAck: false, consumer: consumer);
+            });
+
+            Console.WriteLine($"Consumer listo en la cola '{queue}' ligado al exchange '{queue}'.");
+        }
+
+
 
 
         public void Dispose()

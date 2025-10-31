@@ -23,11 +23,11 @@ public class CodeVerificationListener:IHostedService
 
     public void Start()
     {
-        Console.WriteLine("====================== CodeVerification =============");
+        Console.WriteLine("====================== Resevation =============");
 
         _ = Task.Run(async () =>
         {
-            await _rabbitService.ConsumeAsync("codigo_generado", async (channel, ea) =>
+            await _rabbitService.ConsumeAsync("viaje_registrado_queue", async (channel, ea) =>
             {
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
                 Console.WriteLine("Mensaje recibido de RabbitMQ: " + message);
@@ -39,9 +39,9 @@ public class CodeVerificationListener:IHostedService
                     if (response != null)
                     {
                         var connections = _userConnectionManager.GetConnections(response.IdClient);
-                        var connectionDriver = _userConnectionManager.GetConnections(response.DataDriver.idDriver);
+                        var connectionDriver = _userConnectionManager.GetConnections(response.IdDriver);
                         //? enviamos la informacion al conductor
-                        await _hubContext.Clients.Clients(connectionDriver).SendAsync("ReservationRegister", response.IdViaje);
+                        await _hubContext.Clients.Clients(connectionDriver).SendAsync("ReservationRegister", response.IdReservation);
                         //? enviamos la informacion al usuario
                         await _hubContext.Clients.Clients(connections).SendAsync("CodeGenerate", response);
                     }
