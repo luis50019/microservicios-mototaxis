@@ -24,7 +24,6 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             var factory = new ConnectionFactory()
             {
                 Uri = new Uri("amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
-
                 RequestedHeartbeat = TimeSpan.FromSeconds(60),
                 RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
                 AutomaticRecoveryEnabled = true,
@@ -43,7 +42,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             {
                 //creamos una cola con el nombre codeValidate
                await _channel.QueueDeclareAsync(
-                    queue: "codeValidate",
+                    queue: _queueResponse,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -57,7 +56,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
 
                 await _channel.BasicPublishAsync(
                     exchange: string.Empty,
-                    routingKey: "codeValidate",
+                    routingKey: _queueResponse,
                     mandatory: true,
                     basicProperties: new BasicProperties { Persistent = false },
                     body: body
