@@ -6,6 +6,7 @@ using MicroServicio.Reservaciones.Config;
 using MicroServicio.Reservaciones.Data;
 using MicroServicio.Reservaciones.DTOs;
 using MicroServicio.Reservaciones.models;
+using MicroServicio.Reservaciones.utils;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -73,7 +74,7 @@ namespace MicroServicio.Reservaciones.Services
         {
             Console.WriteLine("Iniciando registro de reservación...");
             Console.WriteLine(JsonSerializer.Serialize(reservation));
-            
+
             //?Cres que haga falta validar una distancia maxima entre origen y destino en este servicio?
             //? o eso se deberia de validar en el servicio que calcula la tarifa?
             const double maxDistanceMeters = 500000; // 500 km max
@@ -86,6 +87,9 @@ namespace MicroServicio.Reservaciones.Services
                 .CurrentDate(d => d.UpdatedAt);
 
             var result = await _driver.UpdateOneAsync(filter, update);
+
+            //! generamos el codigo de verificacion
+            string code = VerificationCode.GenerarCodigo();
 
             //*Creamos la reservacion
             //TODO: separar esta logica a un metodo aparte
@@ -121,7 +125,7 @@ namespace MicroServicio.Reservaciones.Services
                 },
                 Security = new Security
                 {
-                    CodeVerification ="", 
+                    CodeVerification = code,
                     IsVerified = false
                 },
                 Comments = new Comments
@@ -134,14 +138,14 @@ namespace MicroServicio.Reservaciones.Services
                         {
                             Punctuality = 2,
                             Driving = 2,
-                            Vehicle= 2
+                            Vehicle = 2
                         }
                     }
                 },
                 Pay = new Pay
                 {
                     Methodo = "efectivo",
-                     State="Pendiente"
+                    State = "Pendiente"
                 },
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -155,12 +159,34 @@ namespace MicroServicio.Reservaciones.Services
             Console.WriteLine("======================================================");
             Console.WriteLine("\nPublicando mensaje en la cola...");
 
-            //! crear respuesta para devolver el mensaje
-            var messageResponse = new
+            var driver = await _driver.Find(d => d.Id == ObjectId.Parse(reservation.infoDriver.data.id))
+                          .FirstOrDefaultAsync();
+
+            if (driver == null)
             {
-                idReservations = newReservation.Id.ToString(),
-                idClient = newReservation.Passage.ToString(),
-                idDriver = newReservation.Driver.ToString(),
+                Console.WriteLine("No se encontró información del conductor con ese ID.");
+                throw new Exception("Conductor no encontrado en la base de datos.");
+            }
+
+
+
+            //! crear respuesta para devolver el mensaje
+            var messageResponse = new ResponseReservation
+            {
+                IdReservation = newReservation.Id.ToString(),
+                IdClient = newReservation.Passage.ToString(),
+                IdDriver = newReservation.Driver.ToString(),
+                CodeVerification = code,
+                InfoDriver = new InfoDriver
+                {
+                    idDriver = newReservation.Driver.ToString(),
+                    LicensePlate = driver.Unit.LicensePlate,
+                    name = driver.BasicInfo.Name,
+                    numberUnit = driver.Unit.Number,
+                    Phone = driver.BasicInfo.Phone.Number,
+                    PhotoDriver = driver.BasicInfo.ProfilePicture,
+                },
+
             };
 
             string messageJson = JsonSerializer.Serialize(messageResponse);

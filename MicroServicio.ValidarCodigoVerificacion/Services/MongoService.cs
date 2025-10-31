@@ -6,6 +6,8 @@ using MicroServicio.ValidarCodigoVerificacion.Data;
 using MicroServicio.ValidarCodigoVerificacion.DTOs;
 using MicroServicio.ValidarCodigoVerificacion.Errors;
 using MicroServicio.ValidarCodigoVerificacion.interfaces;
+using MicroServicio.ValidarCodigoVerificacion.Models.MicroServicio.Reservaciones.models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -24,32 +26,45 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
         {
             try
             {
-                //*Obtenemos la reservacion
-                //? debe de ser el mismo id y ademas debe de tener el mismo codigo de verificación
-                var reservations = await _context.reservations.AsQueryable().Where(reservations =>
-                    reservations.Id == request.idReservation && reservations.Security.CodeVerification == request.codeVerification
-                ).FirstOrDefaultAsync();
+                var reservation = await _context.reservations
+                    .Find(res=> res.Id == request.idReservation && res.Security.CodeVerification == request.codeVerification)
+                    .FirstOrDefaultAsync();
+
+                if (reservation == null)
+                {
+                    return CreateErrorResponse(request, "Código no válido");
+                }
 
                 return new ResponseValidateCode
                 {
                     idClient = request.idClient,
-                    idReservation = reservations.Id,
-                    isCorrect = reservations != null,
+                    idReservation = reservation.Id.ToString(),
                     idDriver = request.idDriver,
-                    Message = reservations != null ? "Codigo valido" : "Codigo no valido"
+                    isCorrect = true,
+                    Message = "Código válido"
                 };
-
-            }catch (MongoException ex)
+            }
+            catch (MongoException ex)
             {
-                throw new ErrorMongo(ex.Message, "Error al validar el codigo");
+                throw new ErrorMongo(ex.Message, "Error al validar el código");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Errro:"+ex);
-                throw new ErrorMongo(ex.Message,"Error");
-
+                throw new ErrorMongo(ex.Message, "Error interno del sistema");
             }
-               
         }
+
+        private ResponseValidateCode CreateErrorResponse(RequestValidateCode request, string message)
+        {
+            return new ResponseValidateCode
+            {
+                idClient = request.idClient,
+                idReservation = request.idReservation,
+                idDriver = request.idDriver,
+                isCorrect = false,
+                Message = message
+            };
+        }
+
     }
 }

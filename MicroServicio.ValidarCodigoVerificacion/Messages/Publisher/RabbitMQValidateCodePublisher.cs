@@ -25,6 +25,7 @@ namespace MicroServicio.ValidarCodigoVerificacion.Messages.Publisher
 
         public async Task PublicValidateCode(ResponseValidateCode response)
         {
+            Console.WriteLine("Enviando mensaje al websocker");
             await _rabbitMQ.PublisherAsync(response);
         }
 

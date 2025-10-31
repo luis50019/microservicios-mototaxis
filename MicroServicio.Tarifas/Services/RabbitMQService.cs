@@ -67,7 +67,7 @@ namespace MicroServicio.Tarifas.Services
             var body = System.Text.Encoding.UTF8.GetBytes(message);
             await _channel.BasicPublishAsync(
                 exchange: string.Empty,
-                routingKey: "solicitud_viaje", //se coloca el nombre de la cola
+                routingKey: "solicitud_viaje",
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = false }, //le decimos que el mensaje debe de persistir dentro de la cola
                 body: body
@@ -155,7 +155,7 @@ namespace MicroServicio.Tarifas.Services
                 }
 
                 //?buscamos la tarifa
-                var response = await _service.GetRideFareAsync(message.distanceTraveled,message.locality);
+                var response = await _service.GetRideFareAsync(message.distanceTraveled,"Ocotlan de Morelos");
 
                 if (response == null)
                 {

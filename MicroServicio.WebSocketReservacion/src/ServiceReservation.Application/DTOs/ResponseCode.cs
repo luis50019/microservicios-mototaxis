@@ -7,16 +7,17 @@ namespace ServiceReservation.Application.DTOs
 {
     public class ResponseCode
     {
-        public string Code { get; set; }
-        public string IdViaje { get; set; }
-        public string IdClient { get; set; }
-        public infoDriverCode DataDriver { get; set; }
+        public string IdClient { get; set; } = string.Empty;
+        public string IdDriver { get; set; } = string.Empty;
+        public string IdReservation { get; set; } = string.Empty;
+        public string CodeVerification { get; set; } = string.Empty;
+        public InfoData InfoDriver { get; set; } = new();
     }
-    public class infoDriverCode
+
+    public class InfoData
     {
         public string idDriver { get; set; }
         public string name { get; set; }
-        public double rating { get; set; }
         public string PhotoDriver { get; set; }
         public string LicensePlate { get; set; }
         public string Phone { get; set; }

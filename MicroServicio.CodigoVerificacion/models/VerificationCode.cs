@@ -8,7 +8,7 @@ using System.Text;
 public class CodigoVerificacion
 {
     private const string caracteres = "abcdefghijklmnopqrstuvwxyz0123456789";
-    private const int length = 6; // 🔹 lo hacemos constante
+    private const int length = 6;
 
     public static string GenerarCodigo()
     {
