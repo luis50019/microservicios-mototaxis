@@ -9,6 +9,8 @@ namespace MicroServicio.Reservaciones.UseCases
 {
     public class CreateReservations
     {
+
+        //? Metodo para generar un objeto de reservacion
         public Reservation createNewReservation(RequestReservations newReservation)
         {
 

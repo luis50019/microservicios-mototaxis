@@ -7,6 +7,8 @@ using MicroServicio.Reservaciones.Data;
 using MicroServicio.Reservaciones.Services;
 using MicroServicio.Reservaciones.Config;
 using MicroServicio.Reservaciones.Workers;
+using MicroServicio.Reservaciones.Messages.Consumers;
+using MicroServicio.Reservaciones.Messages.Producers;
 
 class Program
 {
@@ -22,19 +24,22 @@ class Program
             .ConfigureServices((context, services) =>
             {
                 // Inyectamos la configuración de MongoDB
-                services.Configure<MongoDBSettings>(
+                services.Configure<MongoDbSettings>(
                     context.Configuration.GetSection("MongoDb"));
 
                 // Registramos MongoDbContext
                 services.AddSingleton<MongoDBContext>();
+                services.AddSingleton<MongoService>();
+                services.AddSingleton<IMongoService, MongoService>();
 
                 // Registramos el servicio que hace operaciones en la DB
                 services.AddSingleton<ReservationService>();
-
                 //?añadimos RabbitMQ
                 services.Configure<RabbitMQSettings>(context.Configuration.GetSection("RabbitMQ"));
-
                 services.AddSingleton<RabbitMQService>();
+
+                services.AddSingleton<RabbitMQReservationConsumer>();
+                services.AddSingleton<RabbitMQReservationProducers>();
 
                 // Registramos el Worker que estará escuchando siempre
                 services.AddHostedService<Worker>();

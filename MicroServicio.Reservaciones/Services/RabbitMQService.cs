@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MicroServicio.Reservaciones.Config;
 using MicroServicio.Reservaciones.DTOs;
+using MicroServicio.Reservaciones.Errors;
 using MicroServicio.Reservaciones.models;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -16,10 +17,9 @@ namespace MicroServicio.Reservaciones.Services
         private readonly IConnection _connection;
         private readonly IChannel _channel;
         private readonly string _queueName;
-        private readonly ReservationService _reservationService;
         private readonly string _queueNameResponse = "viaje_registrado_queue";
 
-        public RabbitMQService(IOptions<RabbitMQSettings> settings, ReservationService reservationService)
+        public RabbitMQService(IOptions<RabbitMQSettings> settings)
         {
             var factory = new ConnectionFactory()
             {
@@ -33,53 +33,98 @@ namespace MicroServicio.Reservaciones.Services
             _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
             _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
             _queueName = settings.Value.QueueName;
+        }
 
-            Task.Run(async () =>
+        //? Metodo para eviar la informacion correcta
+        //? Informacion a enviar
+        public async Task PublishAsync(ResponseReservation responseReservation)
+        {
+            try
             {
-                await _channel.QueueDeclareAsync(_queueName, durable: false, exclusive: false, autoDelete: false);
-                await _channel.QueueDeclareAsync(_queueNameResponse, durable: false, exclusive: false, autoDelete: false);
-            }).Wait();
+                //** Declaramos la cola 
+                await _channel.QueueDeclareAsync(
+                    queue: _queueNameResponse,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null
+                );
 
-            _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
-            _reservationService = reservationService;
+                //** Serealizmos la informacion
+                var response = JsonSerializer.Serialize<ResponseReservation>(responseReservation);
+                var body = Encoding.UTF8.GetBytes(response);
+
+                //** enviamos la información
+                //? lo enviamos al exchange "" con el llave de la ruta _queueNameResponse
+                await _channel.BasicPublishAsync(
+                    exchange: "",
+                    routingKey: _queueNameResponse,
+                    mandatory: true,
+                    basicProperties: new BasicProperties { Persistent = true },
+                    body: body);
+            }
+            catch (Exception ex)
+            {
+                throw new ErrorResevation("Error al publicar el mensaje por rabbitMQ", "Intente mas tarde ...", responseReservation.IdDriver, responseReservation.IdClient, 500);
+            }
         }
 
-        public async Task PublishAsync(string message)
+        //? Método para la publicacion de errores
+        //? Parametros: Error a enviar, Nombre de la cola del error
+        public async Task PublishErrorAsync(ErrorResevation ErrorResponse, string queueNameError)
         {
-            var body = Encoding.UTF8.GetBytes(message);
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: "viaje_registrado_queue",
-                mandatory: true,
-                basicProperties: new BasicProperties { Persistent = true },
-                body: body);
+            try
+            {
+                //** Declaramos la cola 
+                await _channel.QueueDeclareAsync(
+                    queue: queueNameError,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null
+                );
+
+                //** Serealizmos la informacion
+                var response = JsonSerializer.Serialize<ErrorResevation>(ErrorResponse);
+                var body = Encoding.UTF8.GetBytes(response);
+
+                //** enviamos la información
+                //? lo enviamos al exchange "" con el llave de la ruta _queueNameResponse
+                await _channel.BasicPublishAsync(
+                    exchange: "",
+                    routingKey: queueNameError,
+                    mandatory: true,
+                    basicProperties: new BasicProperties { Persistent = true },
+                    body: body);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al publicar el mensaje de error");
+            }
         }
 
-        public async Task StartConsuming()
+
+        //? Método para consumir el mensaje publicado
+        //? Parametros: Handler para controlar y manejar el mensaje recibido
+        public async Task StartConsuming(Func<RequestReservations, Task> handler)
         {
+
+            //** Declaramos el queue al que debemos escuchar
+            await _channel.QueueDeclareAsync(queue: _queueName, durable: false, exclusive: false, autoDelete: false);
+
+            await _channel.QueueBindAsync(_queueName, _queueName, routingKey: string.Empty);
+
+            //** Declaramos el consumer y comenzamos a consumir los mensajes enviados
             var consumer = new AsyncEventingBasicConsumer(_channel);
-
             consumer.ReceivedAsync += async (sender, ea) =>
             {
                 try
                 {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    var reservationRequest = JsonSerializer.Deserialize<RequestReservations>(message);
-
-                    if (reservationRequest == null)
-                        throw new Exception("Mensaje de reserva inválido");
-
-                    /*var reservation = new Reservation
-                    {
-                        Passage = reservationRequest.IdClient,
-                        Driver = reservationRequest.IdDriver,
-                        Rate = reservationRequest.IdRideFare,
-                        Route = new Route { Distance = reservationRequest.Distance },
-                        State = new State { General = "Reservado" }
-                    };*/
-
-                    await _reservationService.RegisterReservationAsync(reservationRequest);
+                    var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+                    var request = JsonSerializer.Deserialize<RequestReservations>(message);
+                    //** Utilizamos el handler y le paso el mensaje recibido
+                    await handler(request);
+                    //** Confirmamos que el mensaje fue recibido
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
                 }
                 catch (Exception ex)
