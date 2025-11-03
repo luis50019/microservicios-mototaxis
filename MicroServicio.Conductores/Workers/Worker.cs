@@ -20,18 +20,30 @@ namespace MicroServicio.Conductores.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            Console.WriteLine("🚀 Iniciando servicio de consumo RabbitMQ...");
+
             try
             {
-                Console.WriteLine("🚀 Iniciando servicio de consumo RabbitMQ...");
+                try
+                {
+                    _ = _rabbitService.ConsumingRideFareReady();
+                    Console.WriteLine("✅ Consumidor de RabbitMQ iniciado correctamente");
+                }
+                catch (Exception ex)
+                {
+                    await HandleWorkerErrorAsync("Error iniciando ConsumingRideFareReady", ex);
+                }
 
-                // Iniciar consumo UNA SOLA VEZ (ejecutar en background)
-                _ = _rabbitService.ConsumingRideFareReady();
-                _ = _rabbitService.RejectTrip();
-                //* Por el momento no ocuparemos este metodo para ceptar los viajes de los conductores
-                //_rabbitService.AcceptedTrip();
-                Console.WriteLine("✅ Consumidor de RabbitMQ iniciado correctamente");
-                
-                // Mantener el worker activo sin bloquear
+                try
+                {
+                    _ = _rabbitService.RejectTrip();
+                    Console.WriteLine("✅ RejectTrip iniciado correctamente");
+                }
+                catch (Exception ex)
+                {
+                    await HandleWorkerErrorAsync("Error iniciando RejectTrip", ex);
+                }
+
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     await Task.Delay(1000, stoppingToken);
@@ -39,7 +51,32 @@ namespace MicroServicio.Conductores.Workers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error crítico en Worker: {ex.Message}");
+                await HandleWorkerErrorAsync("Error crítico en Worker", ex, isCritical: true);
+            }
+        }
+
+
+        public async Task HandleWorkerErrorAsync(string contextMessage, Exception ex, string? IdClient = "unknown", bool isCritical = false)
+        {
+            // System.Console.WriteLine();
+            try
+            {
+                await _rabbitService.PublishErrorDriverAsync(
+                    IdClient: IdClient ?? "unknown",
+                    MessageError: contextMessage,
+                    DetailError: ex.Message,
+                    Suggest: "Error de conductores intenta mas tarde",
+                    CodeStatus: 500
+                );
+            }
+            catch (Exception pubEx)
+            {
+                Console.WriteLine($"❌ Error al publicar el mensaje de error: {pubEx.Message}");
+            }
+
+            if (isCritical)
+            {
+                Console.WriteLine("🛑 Error crítico, deteniendo aplicación...");
                 _hostApplicationLifetime.StopApplication();
             }
         }
