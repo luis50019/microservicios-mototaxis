@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MicroServicio.ValidarCodigoVerificacion.Config;
 using MicroServicio.ValidarCodigoVerificacion.DTOs;
+using MicroServicio.ValidarCodigoVerificacion.Errors;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -41,14 +42,13 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             try
             {
                 //creamos una cola con el nombre codeValidate
-               await _channel.QueueDeclareAsync(
-                    queue: _queueResponse,
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null
-                );
-
+                await _channel.QueueDeclareAsync(
+                     queue: _queueResponse,
+                     durable: false,
+                     exclusive: false,
+                     autoDelete: false,
+                     arguments: null
+                 );
                 var messge = JsonSerializer.Serialize<ResponseValidateCode>(response);
                 var body = Encoding.UTF8.GetBytes(messge);
                 Console.WriteLine("Enviado informacion");
@@ -69,7 +69,36 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             }
         }
 
-        public async Task ConsumeAsync(Func<string, Task> handler)
+        public async Task PublisherErrorValidateCodeAsync(ErrorValidateCode response, string QueueNameError)
+        {
+            try
+            {
+                //** creamos una cola con el nombre codeValidate
+                await _channel.QueueDeclareAsync(
+                     queue: QueueNameError,
+                     durable: false,
+                     exclusive: false,
+                     autoDelete: false,
+                     arguments: null
+                 );
+                var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize<ErrorValidateCode>(response));
+
+                await _channel.BasicPublishAsync(
+                    exchange: string.Empty,
+                    routingKey: QueueNameError,
+                    mandatory: true,
+                    basicProperties: new BasicProperties { Persistent = false },
+                    body: body
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+        }
+
+        public async Task ConsumeAsync(Func<RequestValidateCode, Task> handler)
         {
             await _channel.ExchangeDeclareAsync(_queueName, ExchangeType.Fanout);
 
@@ -83,7 +112,8 @@ namespace MicroServicio.ValidarCodigoVerificacion.Services
             consumer.ReceivedAsync += async (model, ea) =>
             {
                 var msg = Encoding.UTF8.GetString(ea.Body.ToArray());
-                await handler(msg);
+                var request = JsonSerializer.Deserialize<RequestValidateCode>(msg);
+                await handler(request);
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
             };
 

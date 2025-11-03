@@ -8,12 +8,11 @@ namespace MicroServicio.Reservaciones.Workers
 {
     public class Worker : BackgroundService
     {
-        private readonly RabbitMQService _rabbitService;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
-        public Worker(RabbitMQService rabbitService, IHostApplicationLifetime hostApplicationLifetime)
+        private readonly ReservationService _service;
+        public Worker(ReservationService reservationService, IHostApplicationLifetime hostApplicationLifetime)
         {
-            _rabbitService = rabbitService;
+            _service = reservationService;
             _hostApplicationLifetime = hostApplicationLifetime;
         }
 
@@ -21,9 +20,9 @@ namespace MicroServicio.Reservaciones.Workers
         {
             try
             {
-                Console.WriteLine("🚀 Iniciando servicio de consumo RabbitMQ...");
-                await _rabbitService.StartConsuming();
-                Console.WriteLine("✅ Consumidor de RabbitMQ iniciado correctamente");
+                Console.WriteLine("Iniciando servicio de consumo RabbitMQ...");
+                await _service.StartAsync();
+                Console.WriteLine("Consumidor de RabbitMQ iniciado correctamente");
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
@@ -40,7 +39,7 @@ namespace MicroServicio.Reservaciones.Workers
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("🛑 Deteniendo servicio RabbitMQ...");
-            _rabbitService.Dispose();
+            _service.Dispose();
             await base.StopAsync(cancellationToken);
         }
     }
