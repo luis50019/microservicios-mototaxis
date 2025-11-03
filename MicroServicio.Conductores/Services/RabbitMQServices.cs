@@ -1,4 +1,5 @@
 using System;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -18,42 +19,78 @@ namespace MicroServicio.Conductores.Services
         private readonly string _queueName;
         private readonly string _queueAccept;
         private readonly string _queueReject;
-    private readonly MicroServicio.Conductores.Interfaces.IServiceDriver _service;
+        private readonly MicroServicio.Conductores.Interfaces.IServiceDriver _service;
         private readonly int _maxRetry;
         private readonly int _retryDelayMs;
         private readonly string QueueName = "accept_trip";
 
-    public RabbitMQServices(IOptions<RabbitMQSettings> settings, MicroServicio.Conductores.Interfaces.IServiceDriver service)
+        public RabbitMQServices(IOptions<RabbitMQSettings> settings, MicroServicio.Conductores.Interfaces.IServiceDriver service)
         {
-
-            var factory = new ConnectionFactory()
+            try
             {
-                Uri = new Uri("amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
-                RequestedHeartbeat = TimeSpan.FromSeconds(60),
-                RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
-                AutomaticRecoveryEnabled = true,
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
-            };
+                Console.WriteLine("🔄 Iniciando conexión con RabbitMQ...");
 
-            _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
-            _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
-            _queueName = settings.Value.QueueName;
-            _queueAccept = settings.Value.QueueAcceptTrip;
-            _queueReject = settings.Value.QueueRejectTrip;
-            _maxRetry = settings.Value.MaxRetryAttempts;
-            _retryDelayMs = settings.Value.RetryDelayMs;
+                var factory = new ConnectionFactory()
+                {
+                    Uri = new Uri(settings.Value.Uri ??
+                        "amqps://vcbmhysr:BdYuwAJ4qpXfRIapENgqZlbFtGda2wF0@fly.rmq.cloudamqp.com/vcbmhysr"),
+                    RequestedHeartbeat = TimeSpan.FromSeconds(60),
+                    RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
+                    AutomaticRecoveryEnabled = true,
+                    NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
+                };
 
-            Task.Run(async () =>
+                //! Intentando conexión
+                _connection = Task.Run(async () => await factory.CreateConnectionAsync()).Result;
+                _channel = Task.Run(async () => await _connection.CreateChannelAsync()).Result;
+
+                //! colas
+                _queueName = settings.Value.QueueName;
+                _queueAccept = settings.Value.QueueAcceptTrip;
+                _queueReject = settings.Value.QueueRejectTrip;
+                _maxRetry = settings.Value.MaxRetryAttempts;
+                _retryDelayMs = settings.Value.RetryDelayMs;
+                _service = service;
+
+                //!colas/exchanges 
+                try
+                {
+                    Task.Run(async () =>
+                    {
+                        await _channel.QueueDeclareAsync(_queueName, false, false, false, null);
+                        await _channel.ExchangeDeclareAsync(_queueAccept, ExchangeType.Fanout, durable: false);
+                        await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);
+                        await _channel.QueueBindAsync(queue: _queueName, exchange: _queueAccept, routingKey: string.Empty);
+                    }).Wait();
+
+                    _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
+
+                    // Console.WriteLine("✅ RabbitMQ configurado correctamente.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Error declarando colas o exchanges: {ex.Message}");
+
+                    try
+                    {
+                        await PublishErrorDriverAsync(
+                            IdClient: idClient ?? "unknown",
+                            MesageError: contextMessage,
+                            DetailError: ex.Message,
+                            Suggest: "Error de conductores intenta mas tarde",
+                            CodeStatus: 500
+                        );
+                    }
+                    catch (Exception innerEx)
+                    {
+                        Console.WriteLine($"⚠️ Falló al publicar error en WebSocket: {innerEx.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                await _channel.QueueDeclareAsync(_queueName, false, false, false, null);//?tarifa aceptada
-                await _channel.ExchangeDeclareAsync(_queueAccept, ExchangeType.Fanout, durable: false); ;//?viaje aceptado
-                await _channel.QueueDeclareAsync(_queueReject, false, false, false, null);//?viaje rechazado
-                await _channel.QueueBindAsync(queue: QueueName, exchange: _queueAccept, routingKey: string.Empty);
-
-            }).Wait();
-
-            _channel.BasicQosAsync(0, 1, false).GetAwaiter().GetResult();
-            _service = service;
+                throw new InvalidOperationException("No se pudo inicializar la conexión RabbitMQ.", ex);
+            }
         }
 
         ///!!metodo que escuha el mensaje tarifa calculada
@@ -90,7 +127,8 @@ namespace MicroServicio.Conductores.Services
                     }
                     else
                     {
-                        Console.WriteLine("no se encontro otro conductoro");
+                        throw new DriverStateError { };
+
                     }
 
                     Console.WriteLine("=====================================================");
@@ -104,6 +142,26 @@ namespace MicroServicio.Conductores.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error procesando mensaje: {ex}");
+                    string idClient = "";
+                    try
+                    {
+                        var body = ea.body.ToArray();
+                        var msgText = Encoding.UTF8.GetString(body);
+                        var parsed = JsonSerializer.Deserialize<RequestRideFareReady>(msgText);
+                        idClient = parsed?.fare?.idUser ?? "desconocido";
+                    }
+                    catch { idClient = "desconocido"; }
+
+                    //! publicar error en el websocket
+                    await PublishErrorDriverAsync(
+                        IdClient: idClient,
+                        MessageError: "Error procesando solicitud de tarifa",
+                        DetailError: ex.Message,
+                        Suggest: "Inténtalo nuevamente más tarde",
+                        CodeStatus: 500
+                    );
+
+                    //! rechazar mensaje para evitar intentos fallidos
                     await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
                 }
             };
@@ -117,19 +175,19 @@ namespace MicroServicio.Conductores.Services
         }
 
         //TODO: metodo que escucha el mensaje de conductor asignado
-         public async Task AcceptedTrip()
-         {
-             await _channel.BasicQosAsync(0, 1, false);
-             Console.WriteLine($"Esperando mensajes en la cola {_queueAccept}...");
+        public async Task AcceptedTrip()
+        {
+            await _channel.BasicQosAsync(0, 1, false);
+            Console.WriteLine($"Esperando mensajes en la cola {_queueAccept}...");
 
-             var consumer = new AsyncEventingBasicConsumer(_channel);
+            var consumer = new AsyncEventingBasicConsumer(_channel);
 
-             consumer.ReceivedAsync += async (sender, ea) =>
-             {
-                 try
-                 {
-                     var body = ea.Body.ToArray();
-                     var message = Encoding.UTF8.GetString(body);
+            consumer.ReceivedAsync += async (sender, ea) =>
+            {
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
                     var driverInfo = JsonSerializer.Deserialize<RequestAcceptTrip>(message);
                     if (driverInfo == null)
                     {
@@ -140,36 +198,53 @@ namespace MicroServicio.Conductores.Services
                     Console.WriteLine("metodo de aceptacion");
                     Console.WriteLine($"Mensaje recibido de la cola: ClienteID = {driverInfo.infoDriver?.data?.id}");
 
-                     //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
-                     var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
-                     if (driver != "")
-                     {
-                         Console.WriteLine($"Conductor asignado: {driver}");
-                     }
-                     else
-                     {
-                         Console.WriteLine("no se encontro otro conductoro");
-                     }
-                     //TODO: agregar el meotodo que publica que el conductor acepto el viaje
-                     //* recibe el id del conductor y el id del cliente al que se le debe de notificar
-                     await PublishDriverAcceptedAsync(driver, driverInfo.infoDriver.data.client);
+                    //* llamamos al metodo que se encarga de cambiar el estdo del conducor a aceptado
+                    var driver = await _service.AcceptRideAsync(driverInfo.infoDriver.data.id);
+                    if (driver != "")
+                    {
+                        Console.WriteLine($"Conductor asignado: {driver}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("no se encontro otro conductoro");
+                    }
+                    //TODO: agregar el meotodo que publica que el conductor acepto el viaje
+                    //* recibe el id del conductor y el id del cliente al que se le debe de notificar
+                    await PublishDriverAcceptedAsync(driver, driverInfo.infoDriver.data.client);
 
-                     await _channel.BasicAckAsync(ea.DeliveryTag, false);
-                 }
-                 catch (Exception ex)
-                 {
-                     Console.WriteLine($"Error procesando mensaje: {ex}");
-                     await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
-                 }
-             };
+                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error procesando mensaje: {ex.Message}");
 
-             // Aquí conectamos el consumer a la cola
-             await _channel.BasicConsumeAsync(
-                 queue: _queueAccept, // la cola donde llegan los mensajes
-                 autoAck: false,
-                 consumer: consumer
-             );
-         }
+                    //! enviar error al websocket
+                    string idClient = "unknown";
+
+                    if (driverInfo?.infoDriver?.data?.client != null)
+                    {
+                        idClient = driverInfo.infoDriver.data.client;
+                    }
+
+                    await PublishErrorDriverAsync(
+                        IdClient: idClient,
+                        MessageError: "Error procesando el mensaje en AcceptedTrip",
+                        DetailError: ex.ToString(),
+                        Suggest: "Inténtalo más tarde o revisa la información enviada",
+                        CodeStatus: 500
+                    );
+                    await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
+                }
+
+            };
+
+            // Aquí conectamos el consumer a la cola
+            await _channel.BasicConsumeAsync(
+                queue: _queueAccept, // la cola donde llegan los mensajes
+                autoAck: false,
+                consumer: consumer
+            );
+        }
 
         //TODO: metodo que escucha el mensaje de conductor asignado
         public async Task RejectTrip()
@@ -186,12 +261,24 @@ namespace MicroServicio.Conductores.Services
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     var driverInfo = JsonSerializer.Deserialize<RequestRejectTrip>(message);
+
+                    //! agregando envio de mensaje al websocket
                     if (driverInfo == null)
                     {
                         Console.WriteLine("Mensaje inválido en reject_trip: deserialización fallida");
+
+                        await PublishErrorDriverAsync(
+                            IdClient: "unknown",
+                            MessageError: "Deserialización fallida en RejectTrip",
+                            DetailError: "El mensaje recibido no pudo convertirse a RequestRejectTrip",
+                            Suggest: "Revisa el formato del mensaje enviado",
+                            CodeStatus: 400
+                        );
+
                         await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
                         return;
                     }
+
                     Console.WriteLine("metodo de rechazo");
                     Console.WriteLine($"Mensaje recibido: DriverID = {driverInfo.idDriver}, ClientID = {driverInfo.idClient}, Retry = {driverInfo.retryCount}");
 
@@ -246,9 +333,20 @@ namespace MicroServicio.Conductores.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error procesando mensaje: {ex}");
+                    Console.WriteLine($"Error procesando mensaje en RejectTrip: {ex.Message}");
+
+                    //! publicar en la cola ErrorDriver
+                    await PublishErrorDriverAsync(
+                        IdClient: driverInfo?.idClient ?? "unknown",
+                        MessageError: "Error procesando mensaje en RejectTrip",
+                        DetailError: ex.ToString(),
+                        Suggest: "Inténtalo más tarde o revisa la información enviada",
+                        CodeStatus: 500
+                    );
+
                     await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
                 }
+
             };
 
             // Aquí conectamos el consumer a la cola
@@ -263,77 +361,153 @@ namespace MicroServicio.Conductores.Services
         //? este metodo recibe el id del conductor que acepto el viaje demas del id del cliente del viaje
         public async Task PublishDriverAcceptedAsync(string driverId, string idClient)
         {
-            var result = await _service.AcceptRideAsync(driverId);
-            var message = JsonSerializer.Serialize(new
+            try
             {
-                Event = "DriverAccepted",
-                Data = result,
-                client = idClient
-            });
 
-            var body = Encoding.UTF8.GetBytes(message);
+                var result = await _service.AcceptRideAsync(driverId);
+                var message = JsonSerializer.Serialize(new
+                {
+                    Event = "DriverAccepted",
+                    Data = result,
+                    client = idClient
+                });
 
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: "tripAccept",
-                body: body
-            );
+                var body = Encoding.UTF8.GetBytes(message);
+
+                await _channel.BasicPublishAsync(
+                    exchange: "",
+                    routingKey: "tripAccept",
+                    body: body
+                );
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"❌ Error publicando DriverAccepted: {ex.Message}");
+
+                //! Publicar el error en la cola ErrorDriver
+                await PublishErrorDriverAsync(
+                    IdClient: idClient,
+                    MessageError: "Error publicando DriverAccepted",
+                    DetailError: ex.ToString(),
+                    Suggest: "Inténtalo más tarde",
+                    CodeStatus: 500
+                );
+
+            }
         }
 
         //! Publica un evento cuando el conductor rechaza el viaje
         //? este metodo recibe el id del conductor que rechazo el viaje demas del id del cliente del viaje
         public async Task PublishDriverRejectedAsync(string driverId, string idClient)
         {
-            var result = await _service.RejectRideAsync(driverId);
-            var message = JsonSerializer.Serialize(new
+            try
             {
-                Event = "DriverRejected",
-                Data = result,
-                Client = idClient
-            });
+                var result = await _service.RejectRideAsync(driverId);
+                var message = JsonSerializer.Serialize(new
+                {
+                    Event = "DriverRejected",
+                    Data = result,
+                    Client = idClient
+                });
 
-            var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            await _channel.BasicPublishAsync(
-                exchange: string.Empty,
-                routingKey: "tripReject",
-                body: body
-            );
+                await _channel.BasicPublishAsync(
+                    exchange: string.Empty,
+                    routingKey: "tripReject",
+                    body: body
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error publicando DriverRejected: {ex.Message}");
+
+                //! Publicamos el error al WebSocket en cola ErrorDriver
+                await PublishErrorDriverAsync(
+                    IdClient: idClient,
+                    MessageError: "Error publicando DriverRejected",
+                    DetailError: ex.ToString(),
+                    Suggest: "Inténtalo más tarde",
+                    CodeStatus: 500
+                );
+            }
+
         }
 
         //! Encuentra un conductor disponible y publica el evento en la cola
         //? este metodo recibe el id del conductor que fue asignado el viaje demas del id del cliente del viaje
-        public async Task PublishDriverFoundAsync(DriverFound driver,RequestRideFareReady infoRideFare)
+        public async Task PublishDriverFoundAsync(DriverFound driver, RequestRideFareReady infoRideFare)
         {
-            //* El mensaje contiene el id del conducto y sus coordenadas
-            Console.WriteLine("Publicando conductor encontrado...{driverFound}");
-            Console.WriteLine($"{driver}");
-            var message = JsonSerializer.Serialize(new
+            try
             {
-                Event = "DriverFound",
+                //* El mensaje contiene el id del conducto y sus coordenadas
+                Console.WriteLine("Publicando conductor encontrado...{driverFound}");
+                Console.WriteLine($"{driver}");
+                var message = JsonSerializer.Serialize(new
+                {
+                    Event = "DriverFound",
+                    Data = new
+                    {
+                        id = driver.id,
+                        locationStart = infoRideFare.locationStart,
+                        locationEnd = infoRideFare.locationEnd,
+                        priceTraveled = infoRideFare.priceTraveled,
+                        client = infoRideFare.fare.idUser,
+                        infoPassager = infoRideFare.infoPassenger,
+                        coordinates = driver.coordinates,
+                        rideFare = infoRideFare.fare,
+                        typeSerice = infoRideFare.typeService
+                    }
+                });
+
+                var body = Encoding.UTF8.GetBytes(message);
+                Console.WriteLine("Enviando mensaje");
+                Console.WriteLine(message);
+
+                await _channel.BasicPublishAsync(
+                    exchange: string.Empty,
+                    routingKey: "driverFound",
+                    body: body
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error publicando DriverFound: {ex.Message}");
+
+                //! Publicar el error en la cola ErrorDriver
+                await PublishErrorDriverAsync(
+                    IdClient: infoRideFare?.fare?.idUser ?? "unknown",
+                    MessageError: "Error publicando DriverFound",
+                    DetailError: ex.ToString(),
+                    Suggest: "Inténtalo más tarde",
+                    CodeStatus: 500
+                );
+            }
+        }
+        //! error publish
+        public async Task PublishErrorDriverAsync(string IdClient, string MessageError, string DetailError, string Suggest, int CodeStatus)
+        {
+            var errorMessage = new
+            {
+                Event = "Error Driver",
                 Data = new
                 {
-                    id = driver.id,
-                    locationStart = infoRideFare.locationStart,
-                    locationEnd = infoRideFare.locationEnd,
-                    priceTraveled = infoRideFare.priceTraveled,
-                    client = infoRideFare.fare.idUser,
-                    infoPassager = infoRideFare.infoPassenger,
-                    coordinates = driver.coordinates,
-                    rideFare = infoRideFare.fare,
-                    typeSerice = infoRideFare.typeService
+                    MessageError,
+                    DetailError,
+                    Suggest,
+                    IdClient,
+                    codeStatus
                 }
-            });
+            };
 
-            var body = Encoding.UTF8.GetBytes(message);
-            Console.WriteLine("Enviando mensaje");
-            Console.WriteLine(message);
-
+            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(errorMessage));
             await _channel.BasicPublishAsync(
                 exchange: string.Empty,
-                routingKey: "driverFound",
+                routingKey: "ErrorDriver", //! nombre de la cola de error
                 body: body
             );
+            Console.WriteLine($"❗ Error publicado en cola 'ErrorDriver': {MessageError}");
         }
         public void Dispose()
         {
@@ -342,5 +516,6 @@ namespace MicroServicio.Conductores.Services
             _channel?.Dispose();
             _connection?.Dispose();
         }
+
     }
 }
