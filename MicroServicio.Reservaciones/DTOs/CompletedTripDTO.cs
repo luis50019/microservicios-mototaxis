@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MicroServicio.Reservaciones.DTOs
+{
+    public class CompletedTripDTO
+    {
+        public string IdReservation { get; set; }
+        public string IdClient { get; set; }
+        public string IdDriver { get; set; }
+        public int SpacenNumber { get; set; }
+    }
+}

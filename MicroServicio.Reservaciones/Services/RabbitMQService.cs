@@ -37,13 +37,13 @@ namespace MicroServicio.Reservaciones.Services
 
         //? Metodo para eviar la informacion correcta
         //? Informacion a enviar
-        public async Task PublishAsync(ResponseReservation responseReservation)
+        public async Task PublishAsync<T>(T responseReservation, string queueName)
         {
             try
             {
                 //** Declaramos la cola 
                 await _channel.QueueDeclareAsync(
-                    queue: _queueNameResponse,
+                    queue: queueName,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
@@ -51,21 +51,21 @@ namespace MicroServicio.Reservaciones.Services
                 );
 
                 //** Serealizmos la informacion
-                var response = JsonSerializer.Serialize<ResponseReservation>(responseReservation);
+                var response = JsonSerializer.Serialize<T>(responseReservation);
                 var body = Encoding.UTF8.GetBytes(response);
 
                 //** enviamos la información
                 //? lo enviamos al exchange "" con el llave de la ruta _queueNameResponse
                 await _channel.BasicPublishAsync(
                     exchange: "",
-                    routingKey: _queueNameResponse,
+                    routingKey: queueName,
                     mandatory: true,
                     basicProperties: new BasicProperties { Persistent = true },
                     body: body);
             }
             catch (Exception ex)
             {
-                throw new ErrorResevation("Error al publicar el mensaje por rabbitMQ", "Intente mas tarde ...", responseReservation.IdDriver, responseReservation.IdClient, 500);
+                throw new Exception("Error al publicar el mensaje de respuesta");
             }
         }
 
@@ -106,13 +106,13 @@ namespace MicroServicio.Reservaciones.Services
 
         //? Método para consumir el mensaje publicado
         //? Parametros: Handler para controlar y manejar el mensaje recibido
-        public async Task StartConsuming(Func<RequestReservations, Task> handler)
+        public async Task StartConsuming<T>(string queueName,Func<T, Task> handler)
         {
 
             //** Declaramos el queue al que debemos escuchar
-            await _channel.QueueDeclareAsync(queue: _queueName, durable: false, exclusive: false, autoDelete: false);
+            await _channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false);
 
-            await _channel.QueueBindAsync(_queueName, _queueName, routingKey: string.Empty);
+            await _channel.QueueBindAsync(queueName, queueName, routingKey: string.Empty);
 
             //** Declaramos el consumer y comenzamos a consumir los mensajes enviados
             var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -121,7 +121,7 @@ namespace MicroServicio.Reservaciones.Services
                 try
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    var request = JsonSerializer.Deserialize<RequestReservations>(message);
+                    var request = JsonSerializer.Deserialize<T>(message);
                     //** Utilizamos el handler y le paso el mensaje recibido
                     await handler(request);
                     //** Confirmamos que el mensaje fue recibido
@@ -134,8 +134,8 @@ namespace MicroServicio.Reservaciones.Services
                 }
             };
 
-            await _channel.BasicConsumeAsync(_queueName, autoAck: false, consumer);
-            Console.WriteLine($"[*] Esperando mensajes en '{_queueName}'...");
+            await _channel.BasicConsumeAsync(queueName, autoAck: false, consumer);
+            Console.WriteLine($"[*] Esperando mensajes en '{queueName}'...");
         }
 
         public void Dispose()

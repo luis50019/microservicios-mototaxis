@@ -1,3 +1,4 @@
+using MicroServicio.Reservaciones.DTOs;
 using MicroServicio.Reservaciones.Errors;
 using MicroServicio.Reservaciones.Messages.Producers;
 using MicroServicio.Reservaciones.Services;
@@ -19,7 +20,7 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
 
         public async Task StartCosumingAsync()
         {
-            await _rabbitMQ.StartConsuming(async (msg) =>
+            await _rabbitMQ.StartConsuming<RequestReservations>("accept_trip",async (msg) =>
             {
                 
                 try
@@ -34,7 +35,7 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                     }
                     //** colocamos la logica de mongoService
                     var response = await _mongoService.Insert(msg);
-                    await _rabbitMQ.PublishAsync(response);
+                    await _rabbitMQ.PublishAsync<ResponseReservation>(response,"viaje_registrado_queue");
                 }
                 catch (ErrorResevation ex)
                 {
