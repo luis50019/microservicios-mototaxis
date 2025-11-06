@@ -24,8 +24,9 @@ namespace MicroServicio.Reservaciones.Messages.Producers
         }
 
         public async Task PublisResevation(ResponseReservation response)
-        {
-            await _rabbitMQ.PublishAsync(response);
+        {   
+            //!Creo que este ni se ocupa pero igual checa
+            await _rabbitMQ.PublishAsync<ResponseReservation>(response,"viaje_registrado_queue");
         }
     
     }

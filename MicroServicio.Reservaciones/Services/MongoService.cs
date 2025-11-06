@@ -18,7 +18,6 @@ namespace MicroServicio.Reservaciones.Services
         }
         public async Task<ResponseReservation> Insert(RequestReservations request)
         {
-            Console.WriteLine("Iniciando registro de reservación...");
             var newReservation = ReservationCase.CreateReservation(request);
             //* insertamos la nueva tarifa
             await _context.Reservations.InsertOneAsync(newReservation);
@@ -53,6 +52,22 @@ namespace MicroServicio.Reservaciones.Services
             return result.ModifiedCount > 0;
         }
 
+        public async Task<Boolean> RejectTrip(RejectTripDTO request)
+        {
+            var filter = Builders<Reservation>.Filter.Eq(r => r.Id, ObjectId.Parse(request.IdReservation));
+            var update = Builders<Reservation>.Update.Set(r => r.State, new State
+            {
+                Details = new StateDetails
+                {
+                    Detail = request.Details,
+                    SpacenNumber = 0
+                },
+                General = request.General
+            });
+
+            var result = await _context.Reservations.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
 
     }
 }
