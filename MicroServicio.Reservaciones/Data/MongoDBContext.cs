@@ -23,7 +23,7 @@ namespace MicroServicio.Reservaciones.Data
         }
 
         //** Obtenemos la colecciones con las que trabajaremos
-        public IMongoCollection<Reservation> RidesFares => _database.GetCollection<Reservation>("reservations");
+        public IMongoCollection<Reservation> Reservations => _database.GetCollection<Reservation>("reservations");
         public IMongoCollection<Driver> drivers => _database.GetCollection<Driver>("drivers");
     }
 }
