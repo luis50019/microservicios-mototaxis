@@ -18,6 +18,7 @@ namespace MicroServicio.Reservaciones.Services
         }
         public async Task<ResponseReservation> Insert(RequestReservations request)
         {
+            Console.WriteLine("Insertando nueva reserva...");
             var newReservation = ReservationCase.CreateReservation(request);
             //* insertamos la nueva tarifa
             await _context.Reservations.InsertOneAsync(newReservation);
@@ -43,17 +44,26 @@ namespace MicroServicio.Reservaciones.Services
                 Details = new StateDetails
                 {
                     Detail = "Se llego al destino de forma correcta",
-                    SpacenNumber = request.SpacenNumber
+                    SpacenNumber = 0
                 },
                 General = "Completado"
             });
 
+            var filterDriver = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse(request.IdDriver));
+            var updateDriver = Builders<Driver>.Update
+                .Set(d => d.StateDriver, "Disponible")
+                .Inc(d => d.Performance.AcceptanceRate, 1)
+                .CurrentDate(d => d.UpdatedAt);
+
+
+            var resultDriver = await _context.drivers.UpdateOneAsync(filterDriver, updateDriver);
             var result = await _context.Reservations.UpdateOneAsync(filter, update);
-            return result.ModifiedCount > 0;
+            return result.ModifiedCount > 0 && resultDriver.ModifiedCount > 0;
         }
 
         public async Task<Boolean> RejectTrip(RejectTripDTO request)
         {
+            Console.WriteLine("Rechazando la reserva..."+request.IdReservation);
             var filter = Builders<Reservation>.Filter.Eq(r => r.Id, ObjectId.Parse(request.IdReservation));
             var update = Builders<Reservation>.Update.Set(r => r.State, new State
             {
@@ -65,8 +75,16 @@ namespace MicroServicio.Reservaciones.Services
                 General = request.General
             });
 
+            var filterDriver = Builders<Driver>.Filter.Eq(d => d.Id, ObjectId.Parse("68ef3321a11a77b13aa17e0d"));
+            var updateDriver = Builders<Driver>.Update
+                .Set(d => d.StateDriver, "Disponible")
+                .Inc(d => d.Performance.CanceledTrips, 1)
+                .CurrentDate(d => d.UpdatedAt);
+
+            var resultDriver = await _context.drivers.UpdateOneAsync(filterDriver, updateDriver);
             var result = await _context.Reservations.UpdateOneAsync(filter, update);
-            return result.ModifiedCount > 0;
+
+            return result.ModifiedCount > 0 && resultDriver.ModifiedCount > 0;
         }
 
     }

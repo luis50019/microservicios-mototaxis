@@ -37,7 +37,8 @@ namespace MicroServicio.Tarifas.Services
 
                 Task.Run(async () =>
                 {
-                    await _channel.QueueDeclareAsync("solicitud_viaje", false, false, false, null);
+                    await _channel.ExchangeDeclareAsync("solicitud_viaje", ExchangeType.Direct, durable: true);
+
                     await _channel.QueueDeclareAsync("fare_response_queue", false, false, false, null);
                     await _channel.QueueDeclareAsync("ErrorRideFare", false, false, false, null);
                 }).Wait();
@@ -173,9 +174,13 @@ namespace MicroServicio.Tarifas.Services
             {
                 Console.WriteLine("Comenzando a consumir mensajes de RabbitMQ...");
 
-                await _channel.BasicQosAsync(0, 1, false);
+                await _channel.QueueDeclareAsync(queue: "solicitud_viaje", durable: false, exclusive: false, autoDelete: false);
 
+                await _channel.QueueBindAsync("solicitud_viaje", "solicitud_viaje", routingKey: string.Empty);
+
+                //** Declaramos el consumer y comenzamos a consumir los mensajes enviados
                 var consumer = new AsyncEventingBasicConsumer(_channel);
+
 
                 consumer.ReceivedAsync += async (sender, ea) =>
                 {

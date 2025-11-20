@@ -25,6 +25,7 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
         {
             Console.WriteLine("llegue al publisher");
             var json = JsonSerializer.Serialize<RequestDistanceTraveled>(data);
+            Console.WriteLine("informacion: " + json);
             await _rabbitMQ.PublicAsync(_exchangeName,json);
         }
         

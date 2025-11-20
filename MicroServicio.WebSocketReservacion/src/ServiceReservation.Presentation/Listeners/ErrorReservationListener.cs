@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using ServiceReservation.Application.DTOs;
+using ServiceReservation.Infrastructure.Messaging;
+using ServiceReservation.Presentation.Hubs;
 
 namespace ServiceReservation.Presentation.Listeners
 {
@@ -29,6 +33,7 @@ namespace ServiceReservation.Presentation.Listeners
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
                     Console.WriteLine("Mensaje recibido en ErrorReservation");
+                    Console.WriteLine(message);
                     try
                     {
                         var response = JsonSerializer.Deserialize<ResponseErrorReservation>(message);
@@ -38,7 +43,7 @@ namespace ServiceReservation.Presentation.Listeners
                             var connectionsDriver = _userConnectionManager.GetConnections(response.IdDriver);
 
                             //!mandar las conexiones para conductor y cliente agregado
-                            if (connectionsClient != null && connectionsClient.any())
+                            if (connectionsClient != null && connectionsClient.Any())
                             {
                                 foreach (var connectionId in connectionsClient)
                                 {
@@ -47,7 +52,7 @@ namespace ServiceReservation.Presentation.Listeners
                                 }
                             }
 
-                            if (connectionsDriver != null && connectionsDriver.any())
+                            if (connectionsDriver != null && connectionsDriver.Any())
                             {
                                 foreach (var connectionId in connectionsDriver)
                                 {
@@ -56,8 +61,6 @@ namespace ServiceReservation.Presentation.Listeners
                                 }
                             }
                             await channel.BasicAckAsync(ea.DeliveryTag, false);
-
-
                         }
 
                     }

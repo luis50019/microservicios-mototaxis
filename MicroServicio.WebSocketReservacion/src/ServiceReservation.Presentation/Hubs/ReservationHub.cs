@@ -137,26 +137,57 @@ namespace ServiceReservation.Presentation.Hubs
             //
         }
 
-        //?metodo para que el conductor rechace el viaje que se le asigno
+        //? metodo para que el conductor rechace el viaje que se le asigno
         public async Task RejectTrip(RequestRejectTrip driverInfo)
         {
-            if (driverInfo == null)
+            try
             {
-                Console.WriteLine("infoTraveled llegó nulo");
-                return;
-            }
+                if (driverInfo == null)
+                {
+                    throw new Exception("Informacion del conductor vacia");
+                    return;
+                }
 
-            if (_publisherFindDriver == null)
+                if (_publisherFindDriver == null)
+                {
+                    throw new Exception("publisherFindDriver es nulo (no fue inyectado)");
+                    return;
+                }
+
+                Console.WriteLine($"info recibida: {driverInfo.IdDriver}");
+                await _publisherFindDriver.PublicRejectTripAsync(driverInfo);
+                await _consumerDriverInfo.ConsumerRejectTrip();
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("_publisherFindDriver es nulo (no fue inyectado)");
-                return;
+                Console.WriteLine("Error en RejectTrip: " + ex.Message);
             }
+        }
 
-            Console.WriteLine($"info recibida: {driverInfo.idDriver}");
-            await _publisherFindDriver.PublicRejectTripAsync(driverInfo);
-            //?Metodo que espera para notificar que su viaje fue rechazado
-            //TODO: separa esta logica para evitar el cuello de botello
-            await _consumerDriverInfo.ConsumerRejectTrip();
+        //**Colocar el metodo par finaliazar el viaje
+        public async Task FinishTrip(RequestFinishTrip TravelInfo)
+        {
+            try
+            {
+                if (TravelInfo == null)
+                {
+                    throw new Exception("Informacion del conductor vacia");
+                    return;
+                }
+
+                if (_publisherFindDriver == null)
+                {
+                    throw new Exception("publisherFindDriver es nulo (no fue inyectado)");
+                    return;
+                }
+
+                Console.WriteLine($"info recibida: {TravelInfo.IdDriver}");
+                await _publisherFindDriver.PublicFinshTrip(TravelInfo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error en FinishTrip: " + ex.Message);
+            }
         }
 
         //? Metodo para validar el codigo de verificacion
@@ -183,7 +214,5 @@ namespace ServiceReservation.Presentation.Hubs
         {
             await _consumerRideFare.ConsumerRideAsync("d");
         }
-
-
     }
 }

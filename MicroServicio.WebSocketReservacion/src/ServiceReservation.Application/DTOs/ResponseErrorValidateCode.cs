@@ -7,10 +7,10 @@ namespace ServiceReservation.Application.DTOs
 {
     public class ResponseErrorValidateCode
     {
-        string MessageError { get; set; } = string.Empty;
-        string DetailError { get; set; } = string.Empty;
-        string Suggest { get; set; } = string.Empty;
-        string IdDriver { get; set; } = string.Empty;
-        int CodeStatus { get; set; }
+        public string MessageError { get; set; } = string.Empty;
+        public string DetailError { get; set; } = string.Empty;
+        public string Suggest { get; set; } = string.Empty;
+        public string IdDriver { get; set; } = string.Empty;
+        public int CodeStatus { get; set; }
     }
 }

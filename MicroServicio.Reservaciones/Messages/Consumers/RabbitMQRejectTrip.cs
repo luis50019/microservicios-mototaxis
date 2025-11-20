@@ -27,6 +27,7 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
             {
                 try
                 {
+                    Console.WriteLine("Consumiendo mensaje de viaje cancelado");
                     //** Validamos que el mensaje no sea nulo
                     if (msg == null)
                     {
@@ -37,11 +38,14 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                     }
                     //** colocamos la logica de mongoService
                     var response = await _mongoService.RejectTrip(msg);
+                    if(!response) Console.WriteLine("No se pudo cancelar el viaje");
+                    //* Enviamos el mensaje para indicar que el viaje ya fue cancelado
                     await _rabbitMQ.PublishAsync<ResponseCompletedTripDTO>(new ResponseCompletedTripDTO
                     {
                         IdClient = msg.IdClient,
                         IdDriver = msg.IdDriver,
                         Message = "Viaje " + msg.General,
+                        StateUpdate = response
 
                     }, "viaje_cancelado");
                 }
