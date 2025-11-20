@@ -95,11 +95,6 @@ namespace MicroServicio.Conductores.Services
                     };
 
                 //! Cambiamos a estado "En espera de aceptación"
-                var update = Builders<Driver>.Update
-                    .Set(d => d.StateDriver, "EnEspera")
-                    .CurrentDate(d => d.UpdatedAt);
-
-                await _context.Drivers.UpdateOneAsync(d => d.Id == driver.Id, update);
 
                 return new DriverFound
                 {

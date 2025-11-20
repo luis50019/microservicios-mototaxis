@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using ServiceReservation.Application.DTOs;
+using ServiceReservation.Infrastructure.Messaging;
+using ServiceReservation.Presentation.Hubs;
 
 namespace ServiceReservation.Presentation.Listeners
 {
@@ -35,7 +41,7 @@ namespace ServiceReservation.Presentation.Listeners
                             var connectionsDriver = _userConnectionManager.GetConnections(response.IdDriver);
 
                             //!mandar las conexiones para conductor y cliente agregado
-                            if (connectionsDriver != null && connectionsDriver.any())
+                            if (connectionsDriver != null && connectionsDriver.Any())
                             {
                                 foreach (var connectionId in connectionsDriver)
                                 {

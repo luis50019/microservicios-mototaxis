@@ -71,9 +71,12 @@ namespace MicroServicio.Conductores.Services
         ///!!metodo que escuha el mensaje tarifa calculada
         public async Task ConsumingRideFareReady()
         {
-            await _channel.BasicQosAsync(0, 1, false);
-            Console.WriteLine($"Esperando mensajes en la cola {_queueName}...");
+            Console.WriteLine($"Esperando mensajes en la cola calculated_ratd e...");
+            await _channel.QueueDeclareAsync(queue: "calculated_rate", durable: false, exclusive: false, autoDelete: false);
 
+            await _channel.QueueBindAsync("calculated_rate", "calculated_rate", routingKey: string.Empty);
+
+                //** Declaramos el consumer y comenzamos a consumir los mensajes enviados
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
             consumer.ReceivedAsync += async (sender, ea) =>

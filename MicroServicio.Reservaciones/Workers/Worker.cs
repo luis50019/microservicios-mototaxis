@@ -31,7 +31,7 @@ namespace MicroServicio.Reservaciones.Workers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error crítico en Worker: {ex.Message}");
+                Console.WriteLine($"❌ Error crítico en Worker princuila: {ex.Message}");
                 _hostApplicationLifetime.StopApplication();
             }
         }

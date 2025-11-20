@@ -7,12 +7,12 @@ namespace ServiceReservation.Application.DTOs
 {
     public class ResponseErrorReservation
     {
-        string MessageErrorClient { get; set; } = string.Empty;
-        string MessageErrorDriver { get; set; } = string.Empty;
-        string DetailError { get; set; } = string.Empty;
-        string Suggest { get; set; } = string.Empty;
-        string IdDriver { get; set; } = string.Empty;
-        string IdClient { get; set; } = string.Empty;
-        int CodeStatus { get; set; }
+        public string MessageErrorClient { get; set; } = string.Empty;
+        public string MessageErrorDriver { get; set; } = string.Empty;
+        public string DetailError { get; set; } = string.Empty;
+        public string Suggest { get; set; } = string.Empty;
+        public string IdDriver { get; set; } = string.Empty;
+        public string IdClient { get; set; } = string.Empty;
+        public int CodeStatus { get; set; }
     }
 }

@@ -10,14 +10,12 @@ namespace ServiceLocation.Presentation.Controllers
 	[Route("api/[controller]")]
 	public class LocationController : ControllerBase
 	{
-
 		private readonly ILocationService _locationService;
 		public LocationController(ILocationService locationService)
 		{
 			//?Inicializamos el servicio de ubicación
 			_locationService = locationService ?? throw new ArgumentNullException(nameof(locationService));
 		}
-
 		//?Endpoint para actualizar la ubicacion de un usuario
 		//?Se recibe un objeto con el id del usuario, el tipo de usuario y las nuevas coordenadas
 		[HttpPut("/location/update")]

@@ -32,15 +32,12 @@ namespace ServiceReservation.Infrastructure.Messaging
         public async Task PublicAsync(string exchange, string message)
         {
 
-            await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
+            await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Direct, durable: true);
             var body = Encoding.UTF8.GetBytes(message);
-
-            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
-            Console.WriteLine("data: " + message);
-
+            
             await _channel.BasicPublishAsync(
-                exchange: string.Empty,
-                routingKey: exchange,
+                exchange: exchange,
+                routingKey: string.Empty,
                 mandatory: true,
                 basicProperties: new BasicProperties { Persistent = false },
                 body: body
@@ -51,9 +48,6 @@ namespace ServiceReservation.Infrastructure.Messaging
 
             await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
             var body = Encoding.UTF8.GetBytes(message);
-
-            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
-            Console.WriteLine("data: " + message);
 
             await _channel.BasicPublishAsync(
                 exchange: exchange,
@@ -68,8 +62,6 @@ namespace ServiceReservation.Infrastructure.Messaging
 
             await _channel.ExchangeDeclareAsync(exchange, ExchangeType.Fanout, durable: false);
             var body = Encoding.UTF8.GetBytes(message);
-
-            Console.WriteLine("ahora estoy aqui enviando mensaje " + exchange);
 
             await _channel.BasicPublishAsync(
                 exchange: exchange,

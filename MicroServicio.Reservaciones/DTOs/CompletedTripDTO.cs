@@ -8,8 +8,9 @@ namespace MicroServicio.Reservaciones.DTOs
     public class CompletedTripDTO
     {
         public string IdReservation { get; set; }
-        public string IdClient { get; set; }
         public string IdDriver { get; set; }
-        public int SpacenNumber { get; set; }
+        public string IdClient { get; set; }
+        public string Details { get; set; }
+        public string General { get; set; }
     }
 }

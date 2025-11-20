@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using MicroServicio.Reservaciones.DTOs;
 using MicroServicio.Reservaciones.Errors;
@@ -11,15 +12,13 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
 {
     public class RabbitMQCompletedTripConsumer
     {
-        private readonly RabbitMQService _rabbitMQ;
-        private readonly RabbitMQErrorReservation _rabbitMQErro;
+        private readonly RabbitMQService _rabbitMQ;        
         private readonly RabbitMQErrorReservation _rabbitMQError;
         private readonly MongoService _mongoService;
 
         public RabbitMQCompletedTripConsumer(RabbitMQService service, RabbitMQErrorReservation rabbitMQErro, MongoService mongoService, RabbitMQErrorReservation rabbitMQError)
         {
             _rabbitMQ = service;
-            _rabbitMQErro = rabbitMQErro;
             _rabbitMQError = rabbitMQError;
             _mongoService = mongoService;
         }
@@ -33,9 +32,12 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
             {
                 try
                 {
+                    Console.WriteLine("Recibimos la respuesta de la cola de RabbitMQ");
+                    Console.WriteLine("mensahje:"+JsonSerializer.Serialize<CompletedTripDTO>(msg));
                     //** Validamos que el mensaje no sea nulo
                     if (msg == null)
                     {
+                        Console.WriteLine("El mensaje no contiene informacion");
                         throw new ErrorResevation(
                         "El mensaje no contiene informacion",
                         "Intente mas tarde ...", msg.IdDriver,
@@ -45,9 +47,10 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                     var response = await _mongoService.CompletedTrip(msg);
                     if (!response)
                     {
+                        Console.WriteLine("Error al guardar la reservacion");
                         throw new Exception("Error al guardar la reservacion");
                     }
-
+                    //** Enviamos la respuesta que indica que el viaje ya fue finalizado
                     await _rabbitMQ.PublishAsync<ResponseCompletedTripDTO>(new ResponseCompletedTripDTO
                     {
                         IdClient = msg.IdClient,
@@ -58,6 +61,7 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                 }
                 catch (ErrorResevation ex)
                 {
+                    Console.WriteLine(ex.Message);
                     _rabbitMQError.PublishErrorReservationAsync(ex);
                 }
                 catch (ErrorMongoService ex)

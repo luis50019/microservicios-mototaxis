@@ -4,6 +4,7 @@ using ServiceReservation.Infrastructure.Messaging;
 using ServiceReservation.Infrastructure.Messaging.Consumers;
 using ServiceReservation.Infrastructure.Messaging.Producers;
 using ServiceReservation.Presentation.Hubs;
+using ServiceReservation.Presentation.Listeners;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,13 @@ builder.Services.AddHostedService<FareResponseListener>();
 builder.Services.AddHostedService<DriverListener>();
 builder.Services.AddHostedService<CodeVerificationListener>();
 builder.Services.AddHostedService<ValidateCodeListener>();
+builder.Services.AddHostedService<RejectTripListener>();
+builder.Services.AddHostedService<FinishTripListener>();
+
+///! Listener para los errores de los microservicios
+builder.Services.AddHostedService<ErrorReservationListener>();
+builder.Services.AddHostedService<ErrorRideFareListener>();
+builder.Services.AddHostedService<ErrorValidationCodeListener>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

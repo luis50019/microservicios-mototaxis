@@ -11,8 +11,9 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
     {
         private readonly RabbitMqService _rabbitMQ;
         private readonly string _exchangeName = "calculated_rate";
+        private readonly string _queueFinishTravled ="FinishTrip";
         private readonly string _queueAccepTraveled = "accept_trip";
-        private readonly string _queueRejectTraveled = "reject_trip";
+        private readonly string _queueRejectTraveled = "rejectTrip";
 
         public RabbitMQFindDriver(RabbitMqService rabbitMq)
         {
@@ -36,10 +37,16 @@ namespace ServiceReservation.Infrastructure.Messaging.Producers
             await _rabbitMQ.PulblicExchangeAsync(_queueAccepTraveled, json);
             Console.WriteLine("================================================");
         }
+
+        public async Task PublicFinshTrip(RequestFinishTrip data){
+            Console.WriteLine("Viaje finalizado...");
+            var json = JsonSerializer.Serialize<RequestFinishTrip>(data);
+            await _rabbitMQ.PublicAsync(_queueFinishTravled, json);
+        }
         
         public async Task PublicRejectTripAsync(RequestRejectTrip data)
         {
-            Console.WriteLine("Llegue al publisher");
+            Console.WriteLine("Cancelando el viaje...");
             var json = JsonSerializer.Serialize<RequestRejectTrip>(data);
             await _rabbitMQ.PublicAsync(_queueRejectTraveled, json);          
         }
