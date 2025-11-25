@@ -22,17 +22,14 @@ public class ValidateCodeListener : IHostedService
 
     public void Start()
     {
-        Console.WriteLine("============================ Validate Code Listener ===================");
         _ = Task.Run(async () =>
         {
             await _rabbitMQService.ConsumeAsync("codeValidate", async (channel, ea) =>
             {
-                Console.WriteLine("======================================== codigo validado ==============");
 
                 try
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    Console.WriteLine("Mensaje codeigo de validacion de RabbitMQ: " + message);
                     var response = JsonSerializer.Deserialize<ResponseValidateCode>(message);
                     Console.WriteLine(response.idClient);
                     if (response != null)
@@ -49,7 +46,6 @@ public class ValidateCodeListener : IHostedService
                         await _hubContext.Clients.Clients(allConnections).SendAsync("Code", response);
 
                     }
-                    Console.WriteLine("======================================================");
                 }
                 catch (Exception ex)
                 {

@@ -99,20 +99,10 @@ namespace MicroServicio.Conductores.Services
 
                     //* llamamos al metodo que se encarga de buscar a un conductor
                     var driver = await _service.FoundConductorAsync();
-                    if (driver.id != "")
-                    {
-                        Console.WriteLine($"Conductor asignado: {driver.id}");
-                    }
-                    else
-                    {
-                        throw new Exception("Conductor no encontrado");
-
-                    }
 
                     Console.WriteLine("=====================================================");
                     Console.WriteLine("--- Publicando conductor encontrado ---");
                     //* publica al conductor encontrado para que despues el Hub le notitifica al dicho conductor, pero tambien le enviamos el id del cliente que realizo el viaje
-                    Console.WriteLine(driver.id);
                     await PublishDriverFoundAsync(driver, rideFareMessage);
 
                     await _channel.BasicAckAsync(ea.DeliveryTag, false);

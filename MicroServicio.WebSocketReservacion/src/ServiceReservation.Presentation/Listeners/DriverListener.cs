@@ -23,26 +23,34 @@ public class DriverListener:IHostedService
 
     public void Start()
     {
-        Console.WriteLine("====================== Listener drivers =============");
 
         _ = Task.Run(async () =>
         {
             await _rabbitService.ConsumeAsync("driverFound", async (channel, ea) =>
             {
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                Console.WriteLine("Mensaje recibido de RabbitMQ: " + message);
 
                 try
                 {
                     var response = JsonSerializer.Deserialize<ResponseDriverFound>(message);
-                    Console.WriteLine(response.Data.infoPassager.urlPhoto);
+                    Console.WriteLine("]Mensaje recibido:   "+message);
                     if (response != null)
                     {
-                        var connections = _userConnectionManager.GetConnections(response.Data.id);
+                        if (string.IsNullOrEmpty(response.Data.id))
+                        {
+                            Console.WriteLine($"Conductor encontrado: {response.Data.id}");
+                        }
+                  
+
+                        var connections = _userConnectionManager.GetConnections(string.IsNullOrEmpty(response.Data.id) ? response.Data.client : response.Data.id);
                         foreach (var connectionId in connections)
                         {
                             await _hubContext.Clients.Client(connectionId)
-                                .SendAsync("ReceiveDriver", response);
+                                .SendAsync("ReceiveDriver", string.IsNullOrEmpty(response.Data.id) ?new 
+                                {
+                                    Message = "No hay conductores disponibles",
+                                    Suggest =" Intenta nuevamente más tarde"
+                                }:(object) response);
                         }
                     }
 

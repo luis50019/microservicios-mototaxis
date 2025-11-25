@@ -26,14 +26,11 @@ namespace ServiceReservation.Presentation.Listeners
 
         public void Start()
         {
-            Console.WriteLine("=======Error Reservation Listener Iniciado==================");
             _ = Task.Run(async () =>
             {
                 await _rabbitService.ConsumeAsync("ErrorReservation", async (channel, ea) =>
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    Console.WriteLine("Mensaje recibido en ErrorReservation");
-                    Console.WriteLine(message);
                     try
                     {
                         var response = JsonSerializer.Deserialize<ResponseErrorReservation>(message);

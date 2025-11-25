@@ -23,14 +23,12 @@ public class CodeVerificationListener:IHostedService
 
     public void Start()
     {
-        Console.WriteLine("====================== Resevation =============");
 
         _ = Task.Run(async () =>
         {
             await _rabbitService.ConsumeAsync("viaje_registrado_queue", async (channel, ea) =>
             {
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                Console.WriteLine("Mensaje recibido de RabbitMQ: " + message);
 
                 try
                 {
