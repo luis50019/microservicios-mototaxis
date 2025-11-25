@@ -28,14 +28,12 @@ namespace ServiceReservation.Presentation.Listeners
 
         public void Start()
         {
-            Console.WriteLine("====================== Listener error ride fare iniciado =============");
 
             _ = Task.Run(async () =>
             {
                 await _rabbitService.ConsumeAsync("ErrorRideFare", async (channel, ea) =>
                 {
                     var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                    Console.WriteLine("Mensaje errorRideFare recibido de RabbitMQ: " + message);
 
                     try
                     {

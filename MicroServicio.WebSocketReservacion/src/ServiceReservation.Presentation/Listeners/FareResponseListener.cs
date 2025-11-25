@@ -23,14 +23,12 @@ public class FareResponseListener:IHostedService
 
     public void Start()
     {
-        Console.WriteLine("====================== Listener iniciado =============");
 
         _ = Task.Run(async () =>
         {
             await _rabbitService.ConsumeAsync("fare_response_queue", async (channel, ea) =>
             {
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                Console.WriteLine("Mensaje recibido de RabbitMQ: " + message);
 
                 try
                 {

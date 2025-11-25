@@ -27,17 +27,14 @@ namespace ServiceReservation.Presentation.Listeners
         }
         public void Start()
         {
-            Console.WriteLine("============================ escuchando Viaje Finalizado ===================");
             _ = Task.Run(async () =>
             {
                 await _rabbitMQService.ConsumeAsync("FinishReservation", async (channel, ea) =>
                 {
-                    Console.WriteLine("======================================== Viaje Finalizado ==============");
 
                     try
                     {
                         var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                        Console.WriteLine("Mensaje de viaje completado de RabbitMQ: " + message);
                         var response = JsonSerializer.Deserialize<ResponseCompletedTripDTO>(message);
                         Console.WriteLine(response.IdClient);
                         if (response != null)
@@ -54,7 +51,6 @@ namespace ServiceReservation.Presentation.Listeners
                             await _hubContext.Clients.Clients(allConnections).SendAsync("TripFinish", response);
 
                         }
-                        Console.WriteLine("======================================================");
                     }
                     catch (Exception ex)
                     {

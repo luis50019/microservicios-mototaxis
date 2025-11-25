@@ -27,17 +27,14 @@ namespace ServiceReservation.Presentation.Listeners
         }
         public void Start()
         {
-            Console.WriteLine("============================ Validate Viaje Cancelado ===================");
             _ = Task.Run(async () =>
             {
                 await _rabbitMQService.ConsumeAsync("viaje_cancelado", async (channel, ea) =>
                 {
-                    Console.WriteLine("======================================== Viaje Cancelado ==============");
 
                     try
                     {
                         var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                        Console.WriteLine("Mensaje cancelado con RabbitMQ: " + message);
                         var response = JsonSerializer.Deserialize<ResponseCompletedTripDTO>(message);
                         Console.WriteLine(response.IdClient);
                         if (response != null)
@@ -54,7 +51,6 @@ namespace ServiceReservation.Presentation.Listeners
                             await _hubContext.Clients.Clients(allConnections).SendAsync("TripReject", response);
 
                         }
-                        Console.WriteLine("======================================================");
                     }
                     catch (Exception ex)
                     {
