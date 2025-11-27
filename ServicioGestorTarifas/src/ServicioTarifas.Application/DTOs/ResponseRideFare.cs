@@ -12,10 +12,11 @@ namespace ServicioTarifas.Application.DTOs
 
         public double? Price { get; set; } = 0;
         public double PricePrivate { get; set; } = 0;
-        public string locality { get; set; } = string.Empty;
+        public string Locality { get; set; } = string.Empty;
 
         public double DistanceMin { get; set; }
         public double DistanceMax { get; set; }
+        public string FareType { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

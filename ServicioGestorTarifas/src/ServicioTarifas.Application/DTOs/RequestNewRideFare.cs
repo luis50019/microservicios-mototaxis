@@ -11,6 +11,7 @@ namespace ServicioTarifas.Application.DTOs
         public double distamceMin { get; set; } = 0;
         public double price { get; set; } = 0;
         public int stopLimit { get; set; } = 0;
+        public string type { get; set; } = string.Empty;
         public double stopLimitPrice { get; set; } = 0;
         public string nameLocality { get; set; } = string.Empty;
 

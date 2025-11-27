@@ -7,6 +7,7 @@ using ServicioTarifas.Application.Exceptions;
 using ServicioTarifas.Application.Interfaces;
 using ServicioTarifas.Domain;
 using ServicioTarifas.Domain.Interfaces;
+using ServicioTarifas.Domain.Models;
 
 namespace ServicioTarifas.Application.Services
 {
@@ -26,39 +27,30 @@ namespace ServicioTarifas.Application.Services
             {
                 var newRideFare = new Fare
                 {
-                    locality = newFare.nameLocality,
+                    Locality = newFare.nameLocality,
                     DistanceMax = newFare.distanceMax,
                     DistanceMin = newFare.distamceMin,
-                    FareType = new FareType
-                    {
-                        Global = new GlobalFare { Price = newFare.price, IsActive = true },
-                        Private = new PrivateFare{ Price = newFare.priceServicePrivate,isActive = true}
-                    },
-                    StopFare = new StopFare
-                    {
-                        PricePerStop = newFare.stopLimitPrice,
-                        MaxStopsAllowed = newFare.stopLimit,
-                        IsActive = true
-                    },
-                    AcceptedPaymentMethods = new List<string> { "efectivo" },
+                    FareType = newFare.type == "private" ? FareType.Private :
+                    newFare.type == "stop" ? FareType.Stop :
+                                          FareType.Global,
+                    Price = newFare.price,
                     IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    LastUpdated = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow
                 };
                 Fare result = await _rideFareRepository.addRideFare(newRideFare);
 
                 return new ResponseRideFare
                 {
-                    Id = result.Id,
+                    Id = result.Id.ToString(),
                     CreatedAt = result.CreatedAt,
-                    locality = result.locality,
-                    PricePrivate = result.FareType.Private.Price,
+                    Locality = result.Locality,
                     DistanceMax = result.DistanceMax,
                     DistanceMin = result.DistanceMin,
-                    Price = result.FareType.Global.Price,
+                    Price = result.Price,
+                    FareType = result.FareType.ToString(),
                     IsActive = result.IsActive
                 };
+
             }
             catch (Exception ex)
             {
@@ -77,7 +69,7 @@ namespace ServicioTarifas.Application.Services
         {
             try
             {
-                var result = await _rideFareRepository.getRideFare(Id);
+                var result = await _rideFareRepository.getRideFare(Guid.Parse(Id));
                 if (result == null)
                 {
                     throw new Exception("La tarifa no fue encontrda");
@@ -85,11 +77,12 @@ namespace ServicioTarifas.Application.Services
 
                 return new ResponseRideFare
                 {
-                    Id = result.Id,
+                    Id = result.Id.ToString(),
+                    FareType  = result.FareType.ToString(),
                     CreatedAt = result.CreatedAt,
                     DistanceMax = result.DistanceMax,
                     DistanceMin = result.DistanceMin,
-                    Price = result.FareType.Global.Price,
+                    Price = result.Price,
                     IsActive = result.IsActive
                 };
             }
@@ -110,7 +103,7 @@ namespace ServicioTarifas.Application.Services
         {
             try
             {
-                var result = await _rideFareRepository.UpdateDistanceRideFare(id,distanceMin,distanceMax);
+                var result = await _rideFareRepository.UpdateDistanceRideFare(Guid.Parse(id), distanceMin, distanceMax);
                 if (result == null)
                 {
                     throw new Exception("No se logro actualizar la tarifa");
@@ -118,11 +111,12 @@ namespace ServicioTarifas.Application.Services
 
                 return new ResponseRideFare
                 {
-                    Id = result.Id,
+                    Id = result.Id.ToString(),
                     CreatedAt = result.CreatedAt,
                     DistanceMax = result.DistanceMax,
                     DistanceMin = result.DistanceMin,
-                    Price = result.FareType.Global.Price,
+                    FareType = result.FareType.ToString(),
+                    Price = result.Price,
                     IsActive = result.IsActive
                 };
             }
@@ -142,9 +136,9 @@ namespace ServicioTarifas.Application.Services
 
         public async Task<ResponseRideFare> UpdatePriceAsync(string Id, double newPrice)
         {
-           try
+            try
             {
-                var result = await _rideFareRepository.UpdatePriceRideFare(Id,newPrice);
+                var result = await _rideFareRepository.UpdatePriceRideFare(Guid.Parse(Id), newPrice);
                 if (result == null)
                 {
                     throw new Exception("No se logro actualizar la tarifa");
@@ -152,11 +146,12 @@ namespace ServicioTarifas.Application.Services
 
                 return new ResponseRideFare
                 {
-                    Id = result.Id,
+                    Id = result.Id.ToString(),
                     CreatedAt = result.CreatedAt,
                     DistanceMax = result.DistanceMax,
                     DistanceMin = result.DistanceMin,
-                    Price = result.FareType.Global.Price,
+                    FareType = result.FareType.ToString(),
+                    Price = result.Price,
                     IsActive = result.IsActive
                 };
             }
