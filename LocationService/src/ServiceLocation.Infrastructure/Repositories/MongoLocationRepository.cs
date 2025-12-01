@@ -30,8 +30,8 @@ namespace ServiceLocation.Infrastructure.Repositories
 
 			return user == null?null: new Coordinates
 			{
-				Lat = user.Location.Current.Lat,
-				Lng = user.Location.Current.Lng
+				Lat = user.Location.Current.Coordinates.Lat,
+				Lng = user.Location.Current.Coordinates.Lng
 			};
 		}
 
@@ -41,8 +41,8 @@ namespace ServiceLocation.Infrastructure.Repositories
 			var driver = await _driverCollection.Find(driver => driver.Id == MongoDB.Bson.ObjectId.Parse(id)).FirstOrDefaultAsync();
 			return driver==null?null:new Coordinates
 			{
-				Lat = driver.Location.Current.Lat,
-				Lng = driver.Location.Current.Lng
+				Lat = driver.Location.Current.Coordinates.Lat,
+				Lng = driver.Location.Current.Coordinates.Lng
 			};
 		}
 
@@ -52,7 +52,7 @@ namespace ServiceLocation.Infrastructure.Repositories
 			//!Buscamos y actualizamos la ubicacion del usuario
 			var userFound = _userCollection.FindOneAndUpdate(
 					user => user.Id == MongoDB.Bson.ObjectId.Parse(id),
-					Builders<User>.Update.Set("Location.Current", coordinates),
+					Builders<User>.Update.Set("Location.Current.Coordinates", coordinates),
 					new FindOneAndUpdateOptions<User>
 					{
 						ReturnDocument = ReturnDocument.After
@@ -76,7 +76,7 @@ namespace ServiceLocation.Infrastructure.Repositories
 			//!Buscamos y actualizamos la ubicacion del usuario
 			var driverFound = _driverCollection.FindOneAndUpdate(
 					user => user.Id == MongoDB.Bson.ObjectId.Parse(id),
-					Builders<Driver>.Update.Set("Location.Current", coordinates),
+					Builders<Driver>.Update.Set(d => d.Location.Current.Coordinates, coordinates),
 					new FindOneAndUpdateOptions<Driver>
 					{
 						ReturnDocument = ReturnDocument.After

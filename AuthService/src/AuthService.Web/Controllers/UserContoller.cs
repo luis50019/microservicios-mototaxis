@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AuthService.Core.DTOs;
 using AuthService.Core.Entities;
@@ -78,7 +79,7 @@ namespace AuthService.Web.Controllers
 		{
 			try
 			{
-				Console.WriteLine("data: " + dto.password);
+				Console.WriteLine("data: " + JsonSerializer.Serialize(dto));
 				if (!ModelState.IsValid)
 				{
 					var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();

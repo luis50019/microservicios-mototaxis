@@ -32,6 +32,8 @@ namespace MicroServicio.Reservaciones.Services
             var driver = await _context.drivers.Find(d => d.Id == ObjectId.Parse(request.infoDriver.data.id))
                           .FirstOrDefaultAsync();
 
+            Console.WriteLine("Reserva insertada correctamente.");
+
             if (driver == null) throw new ErrorMongoService(404, "Conductor no encontrado en la base de datos.");
             return ReservationCase.CreateResponseReservation(newReservation, driver);
         }

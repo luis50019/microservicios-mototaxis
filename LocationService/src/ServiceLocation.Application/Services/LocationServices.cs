@@ -53,11 +53,22 @@ namespace ServiceLocation.Application.Services
 		//? metodo para actualizar la ubicacion de un usuario por sus id
 		public async Task UpdateLocationAsync(string id, string type, Coordinates coordinates)
 		{
+
+			Console.WriteLine("Valor lat: "+coordinates.Lat);
+			if (coordinates.Lat == null || coordinates.Lng == null)
+			{
+				coordinates = new Coordinates
+				{
+					Lat = 0,
+					Lng = 0
+				};
+			}
+				
 			if (type == "client")
 			{
+				
 				await _locationRepository.UpdateLocationAsyn(id, coordinates);
-			}
-			if (type == "driver")
+			}else if (type == "driver")
 			{
 				await _locationRepository.UpdateDriverLocationAsync(id, coordinates);
 			}

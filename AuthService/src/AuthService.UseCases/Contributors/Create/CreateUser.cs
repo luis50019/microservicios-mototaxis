@@ -23,6 +23,14 @@ namespace AuthService.UseCases.Contributors.Create
                     Password = passwordHash,
                     ProfilePicture = urlPhoto,
                 },
+                Location = new Location
+                {
+                    Current = new CurrentLocation
+                    {
+                        Coordinates = { Lat = 0, Lng = 0 },
+                    },
+                    FrequentPlaces = new List<FrequentPlace>(),
+                },
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

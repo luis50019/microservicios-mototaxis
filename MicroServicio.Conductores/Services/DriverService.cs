@@ -80,7 +80,19 @@ namespace MicroServicio.Conductores.Services
             try
             {
                 var filter = Builders<Driver>.Filter.Eq(d => d.StateDriver, "Disponible");
-                var driver = await _context.Drivers.Find(filter).FirstOrDefaultAsync();
+
+                var update = Builders<Driver>.Update
+                    .Set(d => d.StateDriver, "En espera de aceptación")
+                    .Set(d => d.UpdatedAt, DateTime.Now);
+
+                var driver = await _context.Drivers.FindOneAndUpdateAsync(
+                    filter,
+                    update,
+                    new FindOneAndUpdateOptions<Driver>
+                    {
+                        ReturnDocument = ReturnDocument.After
+                    }
+                );
 
                 if (driver == null)
                     return new DriverFound
@@ -91,34 +103,28 @@ namespace MicroServicio.Conductores.Services
                         infoBasic = null,
                         unit = null,
                         State = "No hay conductores disponibles"
-
                     };
-
-                //! Cambiamos a estado "En espera de aceptación"
 
                 return new DriverFound
                 {
                     succes = true,
                     id = driver.Id.ToString(),
-                    coordinates = driver.Location.Current.Coordinates,
+                    coordinates = new Coordinates
+                    {
+                        Lat = driver.Location.Current.Coordinates.Lat,
+                        Lng = driver.Location.Current.Coordinates.Lng
+                    },
                     infoBasic = driver.BasicInfo,
                     unit = driver.Unit,
                     State = "Conductor encontrado, esperando aceptación"
-
                 };
-            }
-            catch (MongoException ex)
-            {
-                //! Error de MongoDB
-                throw new MongoConnectionError(ex.Message, "Error al buscar o actualizar conductor disponible");
             }
             catch (Exception ex)
             {
-                // Otros errores inesperados
-                Console.WriteLine($"Error inesperado en FoundConductorAsync: {ex}");
-                throw new MongoConnectionError(ex.Message, "Error interno al procesar la solicitud");
+                throw new MongoConnectionError(ex.Message, "Error al buscar o actualizar conductor");
             }
         }
+
 
         //! Conductor rechaza el viaje. Estado vuelve a "Disponible".
         public async Task<object> RejectRideAsync(string driverId)

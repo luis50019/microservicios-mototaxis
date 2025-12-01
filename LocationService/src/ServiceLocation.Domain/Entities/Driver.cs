@@ -73,11 +73,13 @@ namespace ServiceLocation.Domain.Entities
     }
     public class Unit
     {
-        public string? Number { get; set; }
+        public double? Number { get; set; }
         public string? Type { get; set; }
         public string? LuggageCapacity { get; set; }
         public int? PassengerLimit { get; set; }
         public string? Status { get; set; }
+        public string LicensePlate { get; set; } = string.Empty;
+
     }
 
     public class Performance
