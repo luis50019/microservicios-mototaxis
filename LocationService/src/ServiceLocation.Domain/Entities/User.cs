@@ -115,8 +115,7 @@ namespace ServiceLocation.Domain.Entities
     public class CurrentLocation
     {
         //public Coordinates Coordinates { get; set; } = new();
-        public double? Lat { get; set; }
-        public double? Lng { get; set; }
+        public Coordinates Coordinates { get; set; } = new();
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime LastUpdated { get; set; } = DateTime.Now;
     }

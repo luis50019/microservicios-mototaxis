@@ -39,10 +39,12 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                 }
                 catch (ErrorResevation ex)
                 {
+                    Console.WriteLine(ex);
                     _rabbitMQError.PublishErrorReservationAsync(ex);
                 }
                 catch (ErrorMongoService ex)
                 {
+                    Console.WriteLine(ex);
                     _rabbitMQError.PublishErrorReservationAsync(new ErrorResevation(
                         ex.Detail,
                         "Intente mas tarde ...", msg.infoDriver.data.id,
@@ -50,6 +52,7 @@ namespace MicroServicio.Reservaciones.Messages.Consumers
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                     _rabbitMQError.PublishErrorReservationAsync(new ErrorResevation(
                         "Error de servidor",
                         "Intente mas tarde ...", msg.infoDriver.data.id,
