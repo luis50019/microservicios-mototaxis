@@ -1,18 +1,18 @@
+# Build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copiar toda la carpeta del microservicio
+# Copiar todo el microservicio al contenedor
 COPY . .
 
-# Restauramos el proyecto de presentación
-RUN dotnet restore src/ServiceReservation.Presentation/ServiceReservation.Presentation.csproj
+# Restaurar dependencias de la solución completa
+RUN dotnet restore MicroServicio.WebSocketReservacion.sln
 
-# Compilamos y publicamos
+# Publicar el proyecto de Presentation
 RUN dotnet publish src/ServiceReservation.Presentation/ServiceReservation.Presentation.csproj -c Release -o /app/publish
 
 # Runtime final
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
-
 WORKDIR /app
 COPY --from=build /app/publish .
 
