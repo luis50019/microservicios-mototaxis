@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using ServiceLocation.Application.DTOs;
 using ServiceLocation.Application.Exceptions;
@@ -56,36 +52,29 @@ namespace ServiceLocation.Presentation.HubLocation
         {
             try
             {
-                Console.WriteLine($"Ubicación actualizada: {request.newLocation.Lat}");
                 await _locationService.UpdateLocationAsync(
                     request.Id,
                     request.TypeUser,
                     request.newLocation
                 );
-
                 var response = await _cacheService.UpdateLocation(request);
-
                 //TODO: Enviar la ubicacion actualizada al cliente
-
                 if (response.ConnectionClient == "" || request.IdClient == "")
-                {
-                    //* No se regresa las coordenadas a nadie
+                {//* No se regresa las coordenadas a nadie
                     await Clients.Client(response.ConnectionString).SendAsync("UpdateOwner", "Ubicacion actualizada");
                 }
                 else
-                {
+                {//* Se regresa las coordenadas a los clientes
                     await Clients.Client(response.ConnectionClient).SendAsync("Update", new ResponseUpdateClient
                     {
                         NewLocation =
-                        {
+                        { 
                             Lat = request.newLocation.Lat,
                             Lng = request.newLocation.Lng
                         },
                         Message = "Nueva ubicacion"
                     });
-
                 }
-
             }
             catch (UpdateException exUpd)
             {

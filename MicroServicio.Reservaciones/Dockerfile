@@ -1,30 +1,29 @@
-# Etapa de build
+# Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 8080
+
+# Build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copiar solo el csproj para restaurar dependencias
-COPY ./MicroServicio.Reservaciones.csproj ./
+# Copiamos solo el .csproj primero (mejora cache)
+COPY ./*.csproj ./
+RUN dotnet restore
 
-# Restaurar paquetes
-RUN dotnet restore ./MicroServicio.Reservaciones.csproj
-
-# Copiar todo el código fuente
+# Copiamos todo el microservicio
 COPY . .
 
-# Publicar la app en Release
-RUN dotnet publish ./MicroServicio.Reservaciones.csproj -c Release -o /app
+# Publicamos
+RUN dotnet publish -c Release -o /app
 
-# ---------------------------
-# Etapa runtime
-# ---------------------------
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS runtime
+# Runtime final
+FROM base AS final
 WORKDIR /app
 
-# Copiar la app publicada
 COPY --from=build /app .
 
-# Copiar appsettings.json al contenedor
+# Appsettings.json está en la misma carpeta del Dockerfile ✔
 COPY ./appsettings.json .
 
-# ENTRYPOINT
-ENTRYPOINT ["dotnet", "MicroServicio.Reservaciones.dll"]
+ENTRYPOINT ["dotnet", "$(basename $(pwd)).dll"]

@@ -44,7 +44,7 @@ namespace ServiceReservation.Presentation.Hubs
             await Clients.Caller.SendAsync("ReceiveConnectionId", Context.ConnectionId);
             await base.OnConnectedAsync();
         }
-        public Task registerUSer(string idUser)
+        public Task registerUser(string idUser)
         {
             _userConnectionManager.AddConnection(idUser, Context.ConnectionId);
             Console.WriteLine("\n=============== usuarios registrado ====================");
@@ -207,12 +207,6 @@ namespace ServiceReservation.Presentation.Hubs
             {
                 Console.WriteLine(ex.Message);
             }
-        }
-
-        //? Metodo que recibe la distancia que se le due enviada
-        public async Task ReceiveDistance()
-        {
-            await _consumerRideFare.ConsumerRideAsync("d");
         }
     }
 }

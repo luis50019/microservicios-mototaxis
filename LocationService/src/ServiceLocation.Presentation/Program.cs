@@ -52,6 +52,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(Int32.Parse(port));
+});
+
 app.UseCors("AllowReactNative");
 app.MapHub<LocationHub>("/locations");
 app.Run();

@@ -119,7 +119,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
-//builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(Int32.Parse(port));
+});
+
 
 app.Run();
 

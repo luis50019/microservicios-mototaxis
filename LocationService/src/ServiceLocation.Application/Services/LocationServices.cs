@@ -63,12 +63,13 @@ namespace ServiceLocation.Application.Services
 					Lng = 0
 				};
 			}
-				
+
 			if (type == "client")
 			{
-				
+
 				await _locationRepository.UpdateLocationAsyn(id, coordinates);
-			}else if (type == "driver")
+			}
+			else if (type == "driver")
 			{
 				await _locationRepository.UpdateDriverLocationAsync(id, coordinates);
 			}

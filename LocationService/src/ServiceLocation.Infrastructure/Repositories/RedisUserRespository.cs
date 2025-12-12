@@ -15,10 +15,11 @@ namespace ServiceLocation.Infrastructure.Repositories
             _db = redis.GetDatabase();
         }
 
-        private string UserKey(string id) => $"user:{id}";
-        private string LocationKey(string id) => $"user:{id}:location";
+        //? formatos de almacenamiento de datos en redis
+        private string UserKey(string id) => $"user:{id}"; //? Formato par la info de usuario
+        private string LocationKey(string id) => $"user:{id}:location"; //? Formato para la información de la ubicacion
 
-        public async Task<UserRedis?> SaveUserConnected(string id, string typeUser, Coordinates location,string connectionId)
+        public async Task<UserRedis?> SaveUserConnected(string id, string typeUser, Coordinates location, string connectionId)
         {
             try
             {
@@ -31,11 +32,13 @@ namespace ServiceLocation.Infrastructure.Repositories
                 };
 
                 var jsonUser = JsonSerializer.Serialize(user);
+                Console.WriteLine("id: ==========================" + id);
 
                 // Guardar usuario con TTL
                 await _db.StringSetAsync(UserKey(id), jsonUser, TimeSpan.FromHours(1));
 
                 // Guardar ubicación con TTL
+
                 await _db.StringSetAsync(LocationKey(id), JsonSerializer.Serialize(location), TimeSpan.FromHours(1));
 
                 return user;
@@ -72,16 +75,18 @@ namespace ServiceLocation.Infrastructure.Repositories
             }
         }
 
-        public async Task<UserRedis> SetLocationUser(string Id, Coordinates location,string IdClient)
+        public async Task<UserRedis> SetLocationUser(string Id, Coordinates location, string IdClient)
         {
             try
             {
-                await _db.StringSetAsync(LocationKey(Id), JsonSerializer.Serialize(location));
+                Console.WriteLine("hola: id ===: " + IdClient.ToString());
+                await _db.StringSetAsync(LocationKey(Id), JsonSerializer.Serialize<Coordinates>(location)); //?Guardamos la ubicación del usuario
                 //? Obtenemos el idDe connection del usuarios
                 var userConnection = await _db.StringGetAsync($"user:{Id}:connectionId");
                 string connectionClient = "";
-                if (IdClient == "")
-                {
+
+                if (IdClient != "")
+                {//!Aqui se podrian tener un error ya qte el id llega vacio
                     connectionClient = await _db.StringGetAsync($"user:{IdClient}:connectionId");
                 }
 
@@ -91,7 +96,7 @@ namespace ServiceLocation.Infrastructure.Repositories
                     TypeUser = "",
                     State = "Connected",
                     ConnectionString = userConnection.ToString(),
-                    ConnectionClient = connectionClient
+                    ConnectionClient = connectionClient.ToString()
                 };
             }
             catch (Exception ex)
@@ -99,5 +104,5 @@ namespace ServiceLocation.Infrastructure.Repositories
                 throw new Exception("Error al actualizar la ubicación en Redis", ex);
             }
         }
-  }
+    }
 }

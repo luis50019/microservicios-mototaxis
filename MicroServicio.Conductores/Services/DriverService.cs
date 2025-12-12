@@ -82,7 +82,6 @@ namespace MicroServicio.Conductores.Services
                 var filter = Builders<Driver>.Filter.Eq(d => d.StateDriver, "Disponible");
 
                 var update = Builders<Driver>.Update
-                    .Set(d => d.StateDriver, "En espera de aceptación")
                     .Set(d => d.UpdatedAt, DateTime.Now);
 
                 var driver = await _context.Drivers.FindOneAndUpdateAsync(

@@ -40,6 +40,7 @@ namespace ServiceReservation.Presentation.Listeners
                         if (response != null)
                         {
                             List<string> connectionCliente = new();
+                            
                             if (response != null)
                             {
                                 connectionCliente = _userConnectionManager.GetConnections(response.IdClient).ToList();

@@ -42,11 +42,19 @@ public class ConnectionUserService : ICacheService
     }
   }
 
-  public Task<UserRedis?> UpdateLocation(RequestUpdateLocation locationUpdate)
+  public async Task<UserRedis?> UpdateLocation(RequestUpdateLocation locationUpdate)
   {
     try
     {
-      return _userRespository.SetLocationUser(locationUpdate.Id, locationUpdate.newLocation, locationUpdate.IdClient);
+      var resposneRepository = await _userRespository.SetLocationUser(locationUpdate.Id, locationUpdate.newLocation, locationUpdate.IdClient);
+
+      if (resposneRepository == null)
+      {
+        throw new Exception("Error the repository");
+      }
+
+      return resposneRepository;
+
     }
       catch (Exception ex)
     {
