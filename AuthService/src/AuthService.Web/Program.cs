@@ -99,6 +99,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // wire up commands
 //builder.Services.AddTransient<ICommandHandler<CreateContributorCommand2,Result<int>>, CreateContributorCommandHandler2>();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(Int32.Parse(port));
+});
 
 builder.AddServiceDefaults();
 
@@ -113,12 +119,7 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(Int32.Parse(port));
-});
 
 
 app.Run();
