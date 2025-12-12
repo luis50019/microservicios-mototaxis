@@ -14,11 +14,12 @@ builder.Services.AddOpenApi();
 //!añadimos swaager para el mapeo de las rutas
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5000);
+    options.ListenAnyIP(Int32.Parse(port));
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactNative", policy =>
@@ -71,12 +72,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "3040";
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(Int32.Parse(port));
-});
 
 app.UseWebSockets();
 app.UseRouting();
