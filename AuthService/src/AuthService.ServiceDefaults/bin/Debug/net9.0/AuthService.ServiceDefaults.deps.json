@@ -145,7 +145,6 @@
           }
         }
       },
-      "Microsoft.Extensions.Features/8.0.15": {},
       "Microsoft.Extensions.FileProviders.Abstractions/9.0.6": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "9.0.6"
@@ -193,8 +192,7 @@
           "Microsoft.Extensions.DependencyInjection.AutoActivation": "9.6.0",
           "Microsoft.Extensions.Http": "9.0.6",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.6",
-          "Microsoft.Extensions.Telemetry": "9.6.0",
-          "System.IO.Pipelines": "9.0.6"
+          "Microsoft.Extensions.Telemetry": "9.6.0"
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Http.Diagnostics.dll": {
@@ -323,7 +321,6 @@
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.6",
           "Microsoft.Extensions.Configuration.Binder": "9.0.6",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.6",
-          "Microsoft.Extensions.Features": "8.0.15",
           "Microsoft.Extensions.Http": "9.0.6",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.6",
           "Microsoft.Extensions.Options": "9.0.6",
@@ -342,7 +339,6 @@
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.6",
           "Microsoft.Extensions.Configuration.Binder": "9.0.6",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.6",
-          "Microsoft.Extensions.Features": "8.0.15",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.6",
           "Microsoft.Extensions.Options": "9.0.6",
           "Microsoft.Extensions.Primitives": "9.0.6"
@@ -397,9 +393,6 @@
         }
       },
       "OpenTelemetry.Api/1.12.0": {
-        "dependencies": {
-          "System.Diagnostics.DiagnosticSource": "9.0.0"
-        },
         "runtime": {
           "lib/net9.0/OpenTelemetry.Api.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -500,8 +493,7 @@
       },
       "Polly.RateLimiting/8.4.2": {
         "dependencies": {
-          "Polly.Core": "8.4.2",
-          "System.Threading.RateLimiting": "8.0.0"
+          "Polly.Core": "8.4.2"
         },
         "runtime": {
           "lib/net8.0/Polly.RateLimiting.dll": {
@@ -509,17 +501,7 @@
             "fileVersion": "8.4.2.3950"
           }
         }
-      },
-      "System.Diagnostics.DiagnosticSource/9.0.0": {},
-      "System.IO.Pipelines/9.0.6": {
-        "runtime": {
-          "lib/net9.0/System.IO.Pipelines.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.625.26613"
-          }
-        }
-      },
-      "System.Threading.RateLimiting/8.0.0": {}
+      }
     }
   },
   "libraries": {
@@ -604,13 +586,6 @@
       "sha512": "sha512-cquw9eHjO7sJ+t6hC++Zd+UjelvxfAnmmfwIq7KnGllcxBg24VEsmIq5gODxYhxXN4rWOvmnIwix0ze2p5GbgA==",
       "path": "microsoft.extensions.diagnostics.exceptionsummarization/9.6.0",
       "hashPath": "microsoft.extensions.diagnostics.exceptionsummarization.9.6.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Features/8.0.15": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-QUBxyUDGAyHppX5lDgE5XogfQ9fFtm3o4Un8cb46OMinto5hgYfKj3zZTR68QHAqKIM1iOoO6qrh1UbHUZkDQw==",
-      "path": "microsoft.extensions.features/8.0.15",
-      "hashPath": "microsoft.extensions.features.8.0.15.nupkg.sha512"
     },
     "Microsoft.Extensions.FileProviders.Abstractions/9.0.6": {
       "type": "package",
@@ -807,27 +782,6 @@
       "sha512": "sha512-ehTImQ/eUyO07VYW2WvwSmU9rRH200SKJ/3jku9rOkyWE0A2JxNFmAVms8dSn49QLSjmjFRRSgfNyOgr/2PSmA==",
       "path": "polly.ratelimiting/8.4.2",
       "hashPath": "polly.ratelimiting.8.4.2.nupkg.sha512"
-    },
-    "System.Diagnostics.DiagnosticSource/9.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ddppcFpnbohLWdYKr/ZeLZHmmI+DXFgZ3Snq+/E7SwcdW4UnvxmaugkwGywvGVWkHPGCSZjCP+MLzu23AL5SDw==",
-      "path": "system.diagnostics.diagnosticsource/9.0.0",
-      "hashPath": "system.diagnostics.diagnosticsource.9.0.0.nupkg.sha512"
-    },
-    "System.IO.Pipelines/9.0.6": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-0nlr0reXrRmkZNKifKqh2DgGhQgfkT7Qa3gQxIn/JI7/y3WDiTz67M+Sq3vFhUqcG8O5zVrpqHvIHeGPGUBsEw==",
-      "path": "system.io.pipelines/9.0.6",
-      "hashPath": "system.io.pipelines.9.0.6.nupkg.sha512"
-    },
-    "System.Threading.RateLimiting/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-7mu9v0QDv66ar3DpGSZHg9NuNcxDaaAcnMULuZlaTpP9+hwXhrxNGsF5GmLkSHxFdb5bBc1TzeujsRgTrPWi+Q==",
-      "path": "system.threading.ratelimiting/8.0.0",
-      "hashPath": "system.threading.ratelimiting.8.0.0.nupkg.sha512"
     }
   }
 }

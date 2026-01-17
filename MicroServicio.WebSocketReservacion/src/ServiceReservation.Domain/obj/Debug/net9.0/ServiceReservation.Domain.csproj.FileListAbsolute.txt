@@ -10,3 +10,15 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/obj/Debug/net9.0/refint/ServiceReservation.Domain.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/obj/Debug/net9.0/ServiceReservation.Domain.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/obj/Debug/net9.0/ref/ServiceReservation.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\bin\Debug\net9.0\ServiceReservation.Domain.deps.json
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\bin\Debug\net9.0\ServiceReservation.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\bin\Debug\net9.0\ServiceReservation.Domain.pdb
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.AssemblyInfoInputs.cache
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.AssemblyInfo.cs
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.csproj.CoreCompileInputs.cache
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.sourcelink.json
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\refint\ServiceReservation.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ServiceReservation.Domain.pdb
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\MicroServicio.WebSocketReservacion\src\ServiceReservation.Domain\obj\Debug\net9.0\ref\ServiceReservation.Domain.dll

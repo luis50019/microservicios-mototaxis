@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Conductores/MicroServicio.Conductores.csproj": {}
+    "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.Conductores\\MicroServicio.Conductores.csproj": {}
   },
   "projects": {
-    "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Conductores/MicroServicio.Conductores.csproj": {
+    "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.Conductores\\MicroServicio.Conductores.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Conductores/MicroServicio.Conductores.csproj",
+        "projectUniqueName": "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.Conductores\\MicroServicio.Conductores.csproj",
         "projectName": "MicroServicio.Conductores",
-        "projectPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Conductores/MicroServicio.Conductores.csproj",
-        "packagesPath": "/home/luis/.nuget/packages/",
-        "outputPath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.Conductores/obj/",
+        "projectPath": "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.Conductores\\MicroServicio.Conductores.csproj",
+        "packagesPath": "C:\\Users\\teddi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.Conductores\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/luis/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\teddi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -36,9 +42,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -100,12 +106,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[9.0.11, 9.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[9.0.11, 9.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[9.0.11, 9.0.11]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[9.0.11, 9.0.11]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/luis/dotnet9/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

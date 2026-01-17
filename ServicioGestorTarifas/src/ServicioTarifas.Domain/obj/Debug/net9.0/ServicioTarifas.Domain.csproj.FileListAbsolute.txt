@@ -11,3 +11,16 @@
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Domain/obj/Debug/net9.0/refint/ServicioTarifas.Domain.dll
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Domain/obj/Debug/net9.0/ServicioTarifas.Domain.pdb
 /home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Domain/obj/Debug/net9.0/ref/ServicioTarifas.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\bin\Debug\net9.0\ServicioTarifas.Domain.deps.json
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\bin\Debug\net9.0\ServicioTarifas.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\bin\Debug\net9.0\ServicioTarifas.Domain.pdb
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.csproj.AssemblyReference.cache
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.AssemblyInfoInputs.cache
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.AssemblyInfo.cs
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.csproj.CoreCompileInputs.cache
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.sourcelink.json
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\refint\ServicioTarifas.Domain.dll
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ServicioTarifas.Domain.pdb
+C:\Users\teddi\Documents\SistemaMototaxis\microservicios-mototaxis\ServicioGestorTarifas\src\ServicioTarifas.Domain\obj\Debug\net9.0\ref\ServicioTarifas.Domain.dll

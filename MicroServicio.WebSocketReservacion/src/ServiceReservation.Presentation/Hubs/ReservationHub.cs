@@ -28,7 +28,7 @@ namespace ServiceReservation.Presentation.Hubs
         private readonly RabbitMQDriverConsumer _consumerDriverInfo;
         private readonly RabbitMQCodeSecurity _consumerCodeSecurity;
         private readonly RabbitMqValidateCodePublisher _validateCode;
-        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity, RabbitMqService service,RabbitMqValidateCodePublisher validateCode)
+        public ReservationHub(UserConnectionManager UserConnectionManager, RabbitMqRideFarePublisher publisherRideFare, RabbitMQDriverConsumer consumerDriverInfo, RabbitMqRideFareConsumer consumerRideFare, RabbitMQFindDriver finDriver, RabbitMQCodeSecurity consumerCodeSecurity, RabbitMqService service, RabbitMqValidateCodePublisher validateCode)
         {
             _publisherRideFare = publisherRideFare;
             _consumerCodeSecurity = consumerCodeSecurity ?? throw new ArgumentNullException(nameof(consumerCodeSecurity));
@@ -58,16 +58,31 @@ namespace ServiceReservation.Presentation.Hubs
         {
             try
             {
-                Console.WriteLine("\n==============Publicando distancia...===============");
+                if (data == null)
+                {
+                    Console.WriteLine("RequestDistanceTraveled llegó NULL");
+                    throw new Exception("Data null");
+                }
+
+                if (_publisherRideFare == null)
+                {
+                    Console.WriteLine("_publisherRideFare es NULL");
+                    throw new Exception("_publisherRideFare no fue inyectado");
+                }
+
+                Console.WriteLine("Publicando distancia:");
+                Console.WriteLine(JsonSerializer.Serialize(data));
+
                 await _publisherRideFare.PublicAsync(data);
-                Console.WriteLine("==================================\n");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error en SendDistanceTraveled: " + ex.Message);
+                Console.WriteLine("Error en SendDistanceTraveled:");
+                Console.WriteLine(ex.ToString());
                 throw;
             }
         }
+
 
 
         //* Metodo que se encarga de mandar el mensaje para que comiencen a buscar a un conductor

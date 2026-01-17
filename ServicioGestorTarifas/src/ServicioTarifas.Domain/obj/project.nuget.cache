@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "bU7wd8yKWH4=",
+  "dgSpecHash": "DnajHq9Dj/E=",
   "success": true,
-  "projectFilePath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/ServicioGestorTarifas/src/ServicioTarifas.Domain/ServicioTarifas.Domain.csproj",
+  "projectFilePath": "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\ServicioGestorTarifas\\src\\ServicioTarifas.Domain\\ServicioTarifas.Domain.csproj",
   "expectedPackageFiles": [
-    "/home/luis/.nuget/packages/mongodb.bson/3.4.3/mongodb.bson.3.4.3.nupkg.sha512",
-    "/home/luis/.nuget/packages/system.memory/4.5.5/system.memory.4.5.5.nupkg.sha512",
-    "/home/luis/.nuget/packages/system.runtime.compilerservices.unsafe/5.0.0/system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+    "C:\\Users\\teddi\\.nuget\\packages\\mongodb.bson\\3.4.3\\mongodb.bson.3.4.3.nupkg.sha512",
+    "C:\\Users\\teddi\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\teddi\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

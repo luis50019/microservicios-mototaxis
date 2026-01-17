@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "fn6FBaRHnYem8euGlgYezwq7C+DsHZBQAi322x4Jybs=",
-  "Source": "ServicioTarifas.Presentation",
-  "BasePath": "_content/ServicioTarifas.Presentation",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"jeaXyOtijopan9vHrKe1AS0C054Kba9DNUF+7joK9bo=","Source":"ServicioTarifas.Presentation","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

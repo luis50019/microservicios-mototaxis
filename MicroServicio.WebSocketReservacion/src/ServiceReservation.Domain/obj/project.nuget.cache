@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "W/rAG4iiSFo=",
+  "dgSpecHash": "v6SW3Qb0A5Y=",
   "success": true,
-  "projectFilePath": "/home/luis/Documents/Proyectos/Sistema-mototaxis/Back-end/MicroServicio.WebSocketReservacion/src/ServiceReservation.Domain/ServiceReservation.Domain.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\teddi\\Documents\\SistemaMototaxis\\microservicios-mototaxis\\MicroServicio.WebSocketReservacion\\src\\ServiceReservation.Domain\\ServiceReservation.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\teddi\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.11\\microsoft.netcore.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\teddi\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.11\\microsoft.windowsdesktop.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\teddi\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.11\\microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512"
+  ],
   "logs": []
 }
