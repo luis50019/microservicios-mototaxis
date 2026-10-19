@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MicroServicio.Tarifas.Errors
 {
-    public class MongoConnectionError
+    public class MongoConnectionError : Exception
     {
-        public string Details { get; set; }
+        public string Details { get; }
 
         public MongoConnectionError(string message, string details) : base(message)
         {
